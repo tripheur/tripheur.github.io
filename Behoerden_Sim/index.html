@@ -750,10 +750,8 @@ Nach 3 Jahren hast du deine Ausbildung mit Bravour bestanden! Leider kann dein A
 &lt;&lt;/if&gt;&gt;\
 </tw-passagedata><tw-passagedata pid="14" name="Happy End" tags="Ende" position="1100,500" size="100,100">
 
-&lt;&lt;set$jobTitle to &quot;Pfand sammeln&quot;&gt;&gt;\
-&lt;&lt;set $jobObj.Name to $jobTitle&gt;&gt;\
-&lt;&lt;set$salary to 573.00&gt;&gt;\
-&lt;&lt;set $happiness to 100&gt;&gt;\
+
+
 
 &lt;&lt;if $jobObj.Name is &quot;arbeitslos&quot;&gt;&gt;\
 Du hast dich dagegen entschieden, in den öffentlichen Dienst zu gehen - der Kelch ist noch einmal an dir vorrübergegangen. Genieße den Rest deines Lebens.
@@ -763,6 +761,10 @@ Das ist der Start.
 Der Start deines neuen Lebens... diesmal aber wirklich!
 &lt;&lt;/if&gt;&gt;\
 Das sind deine Werte:
+&lt;&lt;set$jobTitle to &quot;Pfand sammeln&quot;&gt;&gt;\
+&lt;&lt;set $jobObj.Name to $jobTitle&gt;&gt;\
+&lt;&lt;set$salary to 573.00&gt;&gt;\
+&lt;&lt;set $happiness to 100&gt;&gt;\
 
 Lebenslauf
 Name: $player
@@ -772,7 +774,7 @@ Geschlecht: $gender
 Schwanger: $pregnant
 &lt;&lt;/if&gt;&gt;\
 Kinder: $children
-Beruf: $jobObj.Name
+Beruf: &lt;&lt;print $jobObj.Name&gt;&gt;
 Ausbildung:  $eduObj.Name
 Abschluss:   $eduObj.Abschluss
 Laufbahn:   $eduObj.Laufbahn
