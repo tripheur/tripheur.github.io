@@ -100,8 +100,8 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 	</div>
 	<tw-storydata name="Bier_Sim" startnode="1" creator="Twine" creator-version="2.7.1" format="SugarCube" format-version="2.36.1" ifid="EAB95198-37B2-42FE-AA31-CDA1E1372BEC" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Intro" tags="" position="100,200" size="100,100">
 
-&quot;Boah, war ich gestern blau&quot; - hast du es auch satt, nie mitreden zu können, weil du Bier nicht magst und auch sonst nicht gern trinkst? 
-Oder bist du normalerweise jedes Wochenende voll wie eine Ubahn Richtung Oktoberfest, kannst dir die Kopfschmerzen am nächsten Tag aber gerade nicht leisten, weil Prüfungsphase ist?
+&quot;Boah, war ich gestern blau&quot; - Hast du es auch satt, nie mitreden zu können, weil du Bier nicht magst und auch sonst nicht gern trinkst? 
+Oder bist du normalerweise jedes Wochenende voll wie eine U-Bahn Richtung Oktoberfest, kannst dir die Kopfschmerzen am nächsten Tag aber gerade nicht leisten, weil Prüfungsphase ist?
 Dann spiel jetzt den 
 &lt;br&gt;
 &lt;h1&gt;Bier-Simulator&lt;/h1&gt;
@@ -122,6 +122,8 @@ Es ist Freitagabend und du bist in deiner Lieblingskneipe. Die üblichen Verdäc
 Es ist Mittwoch - Bergfest - und deine Kumpels wollen nach der Arbeit noch einen Löten gehen. Als du in die Kneipe kommst, geht es am Tisch bereits hoch her.
 &lt;&lt;elseif $numb ==2&gt;&gt;\
 Es ist Jahrmarkt in der Stadt und du hast dich mit alten Schulfreunden verabredet. Als du ankommst, findest du deine Freunde im Festzelt an einem der Holztische.
+&lt;&lt;elseif $numb ==3&gt;&gt;\
+Heute ist Stammtisch der Partei Die PARTEI. 
 &lt;&lt;else&gt;&gt;\
 Du bist auf die Geburtstagsparty deines besten Freundes eingeladen und er steuert direkt auf dich zu und fragt, was du trinken möchtest.
 &lt;&lt;/if&gt;&gt;\
@@ -129,7 +131,7 @@ Die anderen haben alle schon ein Glas Bier in der Hand. Du bestellst:
 &lt;br&gt;
 [[ein Bier|Bier]]
 
-[[ein Spezi|Spezi]]</tw-passagedata><tw-passagedata pid="3" name="Bier" tags="" position="600,300" size="100,100">&lt;&lt;set $promille += 0.3&gt;&gt;\
+[[ein Spezi|Spezi]]</tw-passagedata><tw-passagedata pid="3" name="Bier" tags="" position="600,300" size="100,100">&lt;&lt;set $promille += 0.35&gt;&gt;\
 &lt;&lt;set $beer += 1&gt;&gt;\
 
 &lt;&lt;if $drink_tog == 1&gt;&gt;\
@@ -139,7 +141,7 @@ Du machst dir eine Flasche flüssiges Brot auf und füllst es in ein Bierglas (e
 &lt;&lt;/if&gt;&gt;\
 Es schmeckt großartig und der Pegel in deinem Glas sinkt schneller als die Umfragewerte der SPD.
 
-[[Gluck, gluck, gluck...|Bestellung]]</tw-passagedata><tw-passagedata pid="4" name="Spezi" tags="" position="600,100" size="100,100">&lt;&lt;if $promille &gt; 0.00&gt;&gt;\
+[[Gluck, gluck, gluck...|Bestellung]]</tw-passagedata><tw-passagedata pid="4" name="Spezi" tags="" position="600,100" size="100,100">&lt;&lt;if $promille &gt;= 0.5&gt;&gt;\
 &lt;&lt;set $promille  -=0.5&gt;&gt;\
 Erstmal ein Spezi zwischendurch! Du merkst, wie dein Kopf wieder klarer wird.
 
@@ -174,12 +176,12 @@ Du trinkst
 &lt;&lt;elseif $promille == 0&gt;&gt;\
 Du weißt schon, dass das hier ein BIER-Simulator ist? Spezi kannst du auch im echten Leben saufen!
 [[Bier trinken|Bier]]
-&lt;&lt;elseif $promille &gt;= 1.2 and $promille &lt; 2.5&gt;&gt;\
+&lt;&lt;elseif $promille &gt;= 1.2 and $promille &lt; 2.8&gt;&gt;\
 Okay, das mit dem Sprechen ging schon mal einfacher - und wo kommt plötzlich der Zwilling deines Gegenübers her? Wo eben nur einer saß, sitzen jetzt zwei. Oder doch nur einer? Aber egal, beide prosten dir zu und du stellst fest, das dein Glas  schon wieder leer ist... Du trinkst
 [[ein Bier|Bier]]
-[[ein Schnaps|Schnaps]]
+[[einen Schnaps|Schnaps]]
 [[nichts. Für heute reicht es dir.|Ende]]
-&lt;&lt;elseif $promille &gt;= 2.5&gt;&gt;\
+&lt;&lt;elseif $promille &gt;= 2.8&gt;&gt;\
 Du versuchst dein frisches Bier zu trinken, aber in dem Moment machen sich all die anderen Biere in deinem Bauch bemerkbar und wollen wieder raus. Du stürzt vor die Tür, aber die kühle Nachtluft gibt dir endgültig den Rest. Du liegst in einer Pfütze aus Erbrochenen und versuchst zu schlafen, bis deine Freunde dich aufsammeln und nach Hause [[bringen.|Ende]]
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;else&gt;&gt;\
@@ -190,13 +192,13 @@ Du holst dir
 &lt;&lt;if $promille &lt; 1&gt;&gt;\
 [[ein Spezi|Spezi]]
 &lt;&lt;else&gt;&gt;\
-[[ein Schnaps|Schnaps]]
+[[einen Schnaps|Schnaps]]
 &lt;&lt;/if&gt;&gt;\
 [[nichts. Für heute reicht es dir.|Ende]]
 &lt;&lt;elseif $promille == 0&gt;&gt;\
 Du weißt schon, dass das hier ein BIER-Simulator ist? Spezi kannst du auch im echten Leben saufen!
 [[Bier trinken|Bier]]
-&lt;&lt;elseif $promille &gt;= 1.2 and $promille &lt; 2.5&gt;&gt;\
+&lt;&lt;elseif $promille &gt;= 1.2 and $promille &lt; 2.8&gt;&gt;\
 Du postest ein bisschen in Social Media, schreibst unglaublich witzige und feinsinnige Kommentare (deine Meinung) und beschließt schließlich mal bei deinem/deiner Ex anzurufen. Ihr habt seit 3 Jahren kein Wort gewechselt, aber es ist sicher eine gute Idee.
 Bevor du anrufst, musst du aber noch was trinken. Du wählst
 [[ein Bier|Bier]]
@@ -207,7 +209,7 @@ Bevor du anrufst, musst du aber noch was trinken. Du wählst
 &lt;&lt;/if&gt;&gt;\
 [[nichts. Für heute reicht es dir.|Ende]]
 
-&lt;&lt;elseif $promille &gt;= 2.5&gt;&gt;\
+&lt;&lt;elseif $promille &gt;= 2.8&gt;&gt;\
 Das Telefonat mit der/ dem Ex ist nicht so toll gelaufen. Plötzlich fällt dir auch der Hund wieder ein, den du als Kind hattest - du beginnst zu weinen. Außerdem ist dir schlecht. Nachdem du deinen Kummer (und das Bier) in die Kloschüssel geröhrt hast, schläfst du [[ein.|Ende]]
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
@@ -229,22 +231,22 @@ Du hattest $beer Gläser Bier und etwa $promille Promille.
 Es war ein schöner Abend mit deinen Freunden.
 Wohlbefinden: 100%
 &lt;&lt;elseif $promille &gt;= 1.2 and $promille &lt; 2.5&gt;&gt;\
-Okay, du bist gestern ziemlich blau gewesen. Aber du hast wenigstens nichts Schlimmes angestellt. Du checkst dein Handy: deine Freunde haben dir einige Bilder geteilt, die dein Chef besser nicht sehen sollte. Und dein Gesprächspartner vom Vorabend hat dir auch geschrieben: &quot;Schätzelein, ich freu mich auf unsere Verabredung. Küsschen dein Horst&quot; Stöhnend lässt du dich zurück ins Bett fallen und ziehst dir die Decke über den Kopf.
+Okay, du bist gestern ziemlich blau gewesen, entsprechend mies fühlst du dich gerade. Aber du hast gestern wenigstens nichts Schlimmes angestellt, oder? Du checkst dein Handy: deine Freunde haben dir einige Bilder geteilt, die dein Chef besser nicht sehen sollte. Und dein Gesprächspartner vom Vorabend hat dir auch geschrieben: &quot;Schätzelein, ich freu mich auf unsere Verabredung. Küsschen dein Horst&quot; Stöhnend lässt du dich zurück ins Bett fallen und ziehst dir die Decke über den Kopf.
 Wohlbefinden: 10%
-&lt;&lt;elseif $promille &gt;= 2.5&gt;&gt;\
-Dein Kopf hämmert - wie bist du eigentlich heimgekommen? Wahrscheinlich haben deine Freunde dich heimgebracht. Vielleicht solltest du es die nächsten Tage etwas ruhiger angehen lassen. Heute bleibst du jedenfalls im Bett. Dein Handy vibriert, aber eigentlich willst du gar nicht wissen, wer das ist. Oder was du gestern noch angestellt hast.
+&lt;&lt;elseif $promille &gt;= 2.8&gt;&gt;\
+Dein Kopf hämmert - wie bist du eigentlich heimgekommen? Wahrscheinlich haben deine Freunde dich heimgebracht. Vielleicht solltest du es die nächsten Tage etwas ruhiger angehen lassen. Heute bleibst du jedenfalls im Bett. Dein Handy vibriert, aber eigentlich willst du gar nicht wissen, wer das ist. Oder was du gestern noch angestellt hast. Nie wieder Alkohol!
 Wohlbefinden: -100%
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;if $promille &gt; 0 and $promille &lt; 1.1&gt;&gt;\
 Du bist froh, dass du dich gestern abend wieder in den Griff bekommen hast. 
 Wohlbefinden: 100%
-&lt;&lt;elseif $promille &gt;= 1.1 and $promille &lt; 2.5&gt;&gt;\
-Mißtrauisch beäugst du dein Handy - hast du deine/ deinen Ex gestern noch angerufen? EIn Blick in die Anrufliste verrät, dass du es nicht getan hast. Brian sei Dank! Aber dafür hast du allen anderen geschrieben, wie es scheint. Jede Menge Antworten, auf deine &quot;brillianten&quot; Kommentare vom Vorabend, ein paar besorgte Anfragen via Messenger, ob bei dir alles gut ist und eine sehr wütende Nachricht deiner besten Freundin, der du anscheinend letzte Nacht mal die Meinung sagen wolltest...
+&lt;&lt;elseif $promille &gt;= 1.1 and $promille &lt; 2.8&gt;&gt;\
+Du hast Kopfweh und dir ist schlecht. Außerdem erinnerst du dich dunkel an dein Vorhaben von letzter Nacht. Mißtrauisch beäugst du dein Handy - hast du deine/ deinen Ex gestern noch angerufen? EIn Blick in die Anrufliste verrät, dass du es nicht getan hast. Zum Glück! Aber dafür hast du allen anderen geschrieben, wie es scheint. Jede Menge Antworten, auf deine &quot;brillianten&quot; Kommentare vom Vorabend, ein paar besorgte Anfragen via Messenger, ob bei dir alles gut ist und eine sehr wütende Nachricht deiner besten Freundin, der du anscheinend letzte Nacht mal die Meinung sagen wolltest...
 Stöhnend lässt du dich zurück ins Bett fallen und ziehst dir die Decke über den Kopf.
 Wohlbefinden: 10%
-&lt;&lt;elseif $promille &gt;= 2.5&gt;&gt;\
-Dein Kopf hämmert und dir ist unglaublich schlecht. Du versuchst dich - immer noch ziemlich blau wieder auf die Reihe zu schaffen und beschließt, erstmal deine Nachrichten zu checken. Der/Die Neue deines/deiner Ex hat geschrieben - offenbar sollst du Ruhe geben, sonst gibts richtig Ärger. Oje... Dazu noch etliche Nachrichten von Leuten, die wissen wollen, ob du noch richtig tickst, jede Menge Benachrichtigungen auf Social Media und mittendrin eine Mail mit dem Betreff: &quot;Eingangsbestätigung/ Ihr Mitgliedsantrag CSU&quot;. Du lässt das Handy fallen und rennst ins Bad, um dich erneut zu übergeben.
+&lt;&lt;elseif $promille &gt;= 2.8&gt;&gt;\
+Dein Kopf hämmert und dir ist unglaublich schlecht. Du versuchst dich - immer noch ziemlich blau wieder auf die Reihe zu schaffen und beschließt, erstmal deine Nachrichten zu checken. Der/Die Neue deines/deiner Ex hat geschrieben - offenbar sollst du Ruhe geben, sonst gibts richtig Ärger. Oje... Dazu noch etliche Nachrichten von Leuten, die wissen wollen, ob du noch richtig tickst, jede Menge Benachrichtigungen auf Social Media und mittendrin eine Mail mit dem Betreff: &quot;Eingangsbestätigung/ Ihr Mitgliedsantrag CSU&quot;. Du lässt das Handy fallen und rennst ins Bad, um dich erneut zu übergeben. Nie wieder Alkohol!
 Wohlbefinden: -100%
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
@@ -253,7 +255,7 @@ Wohlbefinden: -100%
 </tw-passagedata><tw-passagedata pid="7" name="Start" tags="" position="300,200" size="100,100">&lt;&lt;set $beer to 0&gt;&gt;\
 &lt;&lt;set $schnaps to 0&gt;&gt;\
 &lt;&lt;set $promille to 0.00&gt;&gt;\
-&lt;&lt;set $numb to random(0,3)&gt;&gt;\
+&lt;&lt;set $numb to random(0,4)&gt;&gt;\
 
 Möchtest du [[allein]] oder [[in Gesellschaft|Gesellschaft]] trinken?</tw-passagedata><tw-passagedata pid="8" name="allein" tags="" position="450,225" size="100,100">&lt;&lt;set $drink_tog to 0&gt;&gt;\
 &lt;&lt;if $numb == 0&gt;&gt;\
@@ -262,6 +264,8 @@ Es ist Freitagabend und du hast keinerlei Verpflichtungen, Verabredungen oder so
 Nach einem Streit mit deinem Partner/ deiner Partnerin, sitzt du allein zuhause. Alles ist doof und du willst einfach nur saufen.
 &lt;&lt;elseif $numb ==2&gt;&gt;\
 Heute ist alles schief gelaufen, deswegen hast du einen Großeinkauf beim örtlichen Getränkemarkt getätig und möchtest deine Sorgen vielleicht nicht ertränken, aber zumindest baden.
+&lt;&lt;elseif $numb ==3&gt;&gt;\
+Eigentlich wolltest du heute etwas Sinnvolles machen. Also so richtig sinnvoll und wertvoll. Aber stattdessen fällt dein Blick auf die Vorratskammer.
 &lt;&lt;else&gt;&gt;
 Du sitzt an einem typischen Wochentag gelangweilt zuhause rum, als dir der Kasten Bier einfällt, der von der letzten Party noch übrig ist..
 &lt;&lt;/if&gt;&gt;\
@@ -271,16 +275,16 @@ Du machst eine kurze Inventur deiner Getränkebestände und entscheidest dich sc
 
 [[ein Spezi|Spezi]]</tw-passagedata><tw-passagedata pid="9" name="Schnaps" tags="" position="700,200" size="100,100">&lt;&lt;set $promille  +=0.5&gt;&gt;\
 &lt;&lt;set $schnaps += 1&gt;&gt;\
-
-Bier ist ja ganz nett, aber, jetzt brauchst du was härteres.
+Bier ist ja ganz nett, aber, jetzt brauchst du was Härteres.
 &lt;&lt;if $promille &gt; 2.5&gt;&gt;\
+
 &lt;&lt;linkreplace &quot;Der letzte Schnaps war anscheinend nicht mehr gut...&quot;&gt;&gt;
 ...denn als du aufstehen willst, knicken dir die Beine weg und du fällst vornüber. Das letzte, was du siehst, ist der Boden, der auf dich [[zukommt.|Ende]].
 &lt;&lt;/linkreplace&gt;&gt;\
 &lt;&lt;else&gt;&gt;\
-&lt;&lt;if $drink_tog == 1&gt;&gt; 
+&lt;&lt;if $drink_tog == 1&gt;&gt; \
 Deine Freunde stoßen jubelnd mit dir an.
-&lt;&lt;/if&gt;&gt;
+&lt;&lt;/if&gt;&gt;\
 [[Gluck, gluck, gluck...|Bestellung]]
 &lt;&lt;/if&gt;&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
