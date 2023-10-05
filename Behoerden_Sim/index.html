@@ -365,6 +365,8 @@ Bereite dich darauf vor, geschickt zu handeln, um deinen Platz zu finden und erf
 &lt;/div&gt;
 
 &lt;&lt;set $event to 0&gt;&gt; \
+&lt;&lt;set $event to 0&gt;&gt; \
+&lt;&lt;set $bea to 0&gt;&gt;\
 &lt;&lt;set $startEdu to 0&gt;&gt;\
 &lt;&lt;set $isFemale to false&gt;&gt;\
 &lt;&lt;set $isMale to false&gt;&gt;    \
@@ -768,7 +770,8 @@ Außerdem stehst du für mindestens ein Jahr der Arbeitswelt nicht zur Verfügun
 &lt;&lt;set $pregnant to &quot;Nein&quot;&gt;&gt;\
 &lt;&lt;set $madness += 5&gt;&gt;\
 
-&lt;&lt;if $jobObj.jname is not &quot;arbeitslos&quot; and $jobObj.jname is not &quot;Student/-in&quot; and $jobObj.jname is not &quot;Auszubildende/-r&quot; &gt;&gt;/
+
+&lt;&lt;if $jobObj.jname is not &quot;arbeitslos&quot; and $jobObj.jname is not &quot;Student/-in&quot; and $jobObj.jname is not &quot;Auszubildende/-r&quot; &gt;&gt;\
 [[zurück ins Büro|Arbeitsplatz]]
 
 &lt;&lt;elseif $jobObj.Abschluss is &quot;kein Abschluss&quot;&gt;&gt;\
@@ -996,7 +999,7 @@ Du bist leider [[wahnsinnig|Ende_Wahn]] geworden...
 &lt;&lt;elseif $happiness &lt;= 0&gt;&gt;\
 Sieht so aus, als hättest du dir eine handfeste [[Depression|Ende_Depression]] eingefangen...
 &lt;&lt;elseif $age &gt; 66&gt;&gt;\
-Es ist dein 67. Geburtstag! Alles Gute zum EIntritt in den [[Ruhestand]]!
+Es ist dein 67. Geburtstag! Alles Gute zum Eintritt in den [[Ruhestand]]!
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;set $event = random(0, 25)&gt;&gt;\
 &lt;&lt;if $event is 6 and $isFemale is true and $age &lt; 45&gt;&gt;\
@@ -1006,12 +1009,12 @@ Es ist dein 67. Geburtstag! Alles Gute zum EIntritt in den [[Ruhestand]]!
 
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;set $age +=1&gt;&gt;\
-&lt;&lt;set $numb to random(0,27)&gt;&gt;\
+&lt;&lt;set $numb to random(0,17)&gt;&gt;\
 &lt;&lt;if $numb == 0&gt;&gt;\
 Du denkst darüber nach, nochmal eine Ausbildung oder ein Studium zu machen und ganz von vorne anzufangen.
 &lt;&lt;link &quot;Nochmal die Schulbank drücken&quot;&gt;&gt;
   &lt;&lt;set $startEdu to 0&gt;&gt;\
-  &lt;&lt;goto &quot;Bewerbung&quot;&gt;&gt;
+  &lt;&lt;goto &quot;Bildung&quot;&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 &lt;&lt;elseif $numb == 1&gt;&gt;\
 &lt;&lt;set $madness +=5&gt;&gt;\
@@ -1027,7 +1030,7 @@ Du wurdest befördert (auch wenn du nicht weißt wieso) und bekommst eine Gehalt
 &lt;&lt;set $happiness -= 10&gt;&gt;\ 
 Die Behörde wird umstrukturiert. Niemand weiß mehr, was er tut oder warum.
 &lt;&lt;elseif $numb == 4&gt;&gt;\
-&lt;&lt;if $LaufbahnWrong == 1&gt;&gt;\
+&lt;&lt;if $jobObj.elaufb is not $jobObj.jlaufb&gt;&gt;\
 &lt;&lt;set $madness +=10&gt;&gt;\
 &lt;&lt;set $happiness -= 10&gt;&gt;\ 
 Du fragst bei der Personalabteilung wegen der versprochenen Eingruppierung in deine eigentliche Laufbahn an. Das schallende Lachen des zuständigen Bearbeiters hört man im ganzen Gebäude.
@@ -1043,7 +1046,7 @@ Du beantragst eine Versetzung in eine andere Behörde, diese wird aber abgelehnt
 &lt;&lt;elseif $numb == 5&gt;&gt;\
 &lt;&lt;set $madness +=10&gt;&gt;\
 &lt;&lt;set $happiness -= 10&gt;&gt;\ 
-&lt;&lt;if $jobObj.efachr is not jobObj.jfachr&gt;&gt;\
+&lt;&lt;if $jobObj.efachr is not $jobObj.jfachr&gt;&gt;\
 Du versuchst, ein Bewerbungsgespräch in deiner eigentlichen Fachrichtung $jobObj.efachr zu bekommen. Deine Vorgesetzten in der Abteilung machen personalrechtlich zwingende Gründe geltend, warum du bei Ihnen bleiben musst. 
 &lt;&lt;else&gt;&gt;
 Deine Kollegin wechselt in deine Wunschabteilung. Du hast dich ebenfalls auf die Stelle beworben, wurdest aber nicht genommen, weil die Ausschreibung angeblich &quot;aus personalwirtschaftlichen Gründen&quot; geschlossen werden musste.
@@ -1059,7 +1062,9 @@ Jahr für Jahr.
 &lt;&lt;/if&gt;&gt;
 
 [[weiterarbeiten|Arbeitsplatz]] 
+
 [[Das Gespräch mit dem Vorgesetzten suchen|Personalgespräch]]
+
 &lt;&lt;if $bea is 0&gt;&gt;\
 [[Mir reichts! Ich kündige!|Happy End]]
 &lt;&lt;/if&gt;&gt;\
@@ -1253,9 +1258,9 @@ Ausbildung:  $jobObj.ename
 Abschluss:   $jobObj.Abschluss
 Laufbahn:   $jobObj.jlaufb
 Fachrichtung: $jobObj.jfachr
-&lt;&lt;if $isFemale is true and $children is &quot;Ja&quot; and $jobObj.jsalary&gt; 0.00&gt;&gt;\
-&lt;&lt;set  $jobObj.jsalary to ($jobObj.jsalary - (($jobObj.jsalary/100)*40))&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\
+&lt;&lt;if $isfemale is true and $children is &quot;Ja&quot; and $jobObj.jsalary &gt; 0&gt;&gt;\
+&lt;&lt;set $jobObj.jsalary  = ($jobObj.jsalary/100*60)&gt;&gt;\
+&lt;&lt;/if&gt;&gt;
 Einkommen:  &lt;&lt;print $jobObj.jsalary + &quot; €&quot;&gt;&gt;
 
 Wohlbefinden: $happiness %
@@ -1589,7 +1594,7 @@ Du bist zwar kein Jurist, aber es gelingt dir dennoch, eine großzügige Abfindu
 
 [[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="31" name="Ende_Wahn" tags="Ende" position="1200,600" size="100,100">Einige Wochen später: 
 
-&quot;Abendbrot!, Tablettenausgabe!&quot; Eine Krankenschwester reicht dir ein Tablett mit Krankenhausessen und einen kleinen Behälter voller bunter Pillen.
+&quot;Abendbrot! Tablettenausgabe!&quot; Eine Krankenschwester reicht dir ein Tablett mit Krankenhausessen und einen kleinen Behälter voller bunter Pillen.
 
 Seit du in einer geschlossenen Einrichtung untergebracht bist, ist dein Leben einfacher geworden.
 &lt;&lt;if $jobObj.jlaufb == &quot;Höherer Dienst&quot;&gt;&gt;\
