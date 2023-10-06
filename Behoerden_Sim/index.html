@@ -1054,6 +1054,8 @@ Deine Kollegin wechselt in deine Wunschabteilung. Du hast dich ebenfalls auf die
 &lt;&lt;elseif $numb == 6&gt;&gt;\
 &lt;&lt;set $madness +=4&gt;&gt;\
 Digitaloffensive: Urlaubsanträge werden jetzt am PC ausgefüllt und digital unterschrieben, bevor man sie in zweifacher Kopie ausdruckt und zu den Akten legt. Der Umwelt zuliebe!
+&lt;&lt;elseif $numb == 7&gt;&gt;\
+Dein Vorgesetzter bittet dich zum [[Personalführungsgespräch|Personalgespräch]]
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;set $madness +=2&gt;&gt;\
 &lt;&lt;set $happiness -= 2&gt;&gt;\ 
@@ -1062,9 +1064,7 @@ Jahr für Jahr.
 &lt;&lt;/if&gt;&gt;
 
 [[weiterarbeiten|Arbeitsplatz]] 
-
 [[Das Gespräch mit dem Vorgesetzten suchen|Personalgespräch]]
-
 &lt;&lt;if $bea is 0&gt;&gt;\
 [[Mir reichts! Ich kündige!|Happy End]]
 &lt;&lt;/if&gt;&gt;\
@@ -1311,10 +1311,9 @@ Bald darauf kommt eine Zusage und du hast deinen ersten [[Arbeitstag|Erster Arbe
 
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief der Behörde in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
-
-&lt;&lt;if $event &lt;3&gt;&gt;
+&lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
-&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;
+&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
 
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
@@ -1390,10 +1389,9 @@ Fassungslos lässt du den Brief sinken - du hast doch überhaupt keine Ahnung, w
 
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief von deinem künftigen Arbeitgeber in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
-
-&lt;&lt;if $event &lt;3&gt;&gt;
+&lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
-&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;
+&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
 
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
@@ -1469,10 +1467,9 @@ Fassungslos lässt du den Brief sinken - du hast doch überhaupt keine Ahnung, w
 
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief von deinem künftigen Arbeitgeber in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
-
-&lt;&lt;if $event &lt;3&gt;&gt;
+&lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
-&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;
+&lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
 
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
@@ -1577,7 +1574,8 @@ Bis du schließlich in deinem künftigen Büro sitzt, ist es später Nachmittag.
 Mit hängenden Schultern gehst du nach Hause.
 &lt;&lt;set $madness += 10&gt;&gt;\
 &lt;&lt;set $happiness -= 5&gt;&gt;\
-[[Der nächste Tag im Büro|Arbeitsplatz]]
+
+[[Ein Jahr später...|Arbeitsplatz]]
  &lt;&lt;/linkreplace&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="30" name="Ende_Depression" tags="Ende" position="1100,600" size="100,100">EInige Monate später:
 
@@ -1586,10 +1584,11 @@ Du erinnerst dich an die Tage, als du zwischen den Aktenbergen schier versunken 
 
 Deine Entscheidung, dem Büro-Wahnsinn Lebewohl zu sagen, war der erste Schritt in Richtung Selbstrettung. Auch wenn du dafür einige Monate Therapie benötigt hast -
 du hast gelernt, dass es da draußen eine Welt gibt, die nicht nur aus Formularen und Schreibkram besteht.
-&lt;&lt;if bea is 1&gt;&gt;\
+&lt;&lt;if $bea is 1&gt;&gt;\
 Und, Verbeamtung sei Dank, kannst du die nächsten Jahre bei vollen Bezügen zuhause bleiben und dir überlegen, was du stattdessen mit deinem Leben anfangen willst. Zumindest, bis du deine Schuld mit dem Teufel begleichen musst...
 &lt;&lt;else&gt;&gt;\
 Du bist zwar kein Jurist, aber es gelingt dir dennoch, eine großzügige Abfindung von deiner Behörde zu erhalten. &quot;Schmerzensgeld&quot;, sagst du dir und lehnst dich entspannt in deinem Fernsehseesel zurück, um zu schauen, was es heute so im Frühstücksfernsehen gibt.
+&lt;&lt;/if&gt;&gt;\
                                            (Ende 3: Dauerhaft arbeitsunfähig)
 
 [[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="31" name="Ende_Wahn" tags="Ende" position="1200,600" size="100,100">Einige Wochen später: 
@@ -1626,10 +1625,28 @@ Herzlichen Glückwunsch, du hast gewonnen!
 
                                          (Ende 5: Ruhestand)
 
-[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="33" name="Personalgespräch" tags="" position="1000,1225" size="100,100">Hier entsteht demnächst weiterer Content.
+[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="33" name="Personalgespräch" tags="" position="1000,1225" size="100,100">&lt;&lt;set $numb to random(0,6)&gt;&gt;\
+Eigentlich wolltest du deinem Vorgesetzten jetzt mal so richtig die Meinung geigen und versuchen, deine für dich unerträgliche Arbeitssituation etwas angenehmer zu gestalten. Aber er lässt dich gar nicht zu Wort kommen:
 
+&lt;&lt;if $numb is 0&gt;&gt;\
+&quot;Können Sie mir erklären, warum Sie in Ihrer Freizeit Kaffee trinken? Das könnte zu einem Interessenkonflikt führen.&quot;
+&lt;&lt;elseif $numb is 1&gt;&gt;\
+&quot;Ihr Bericht über die optimale Stapelhöhe von Papieren war äußerst interessant. Allerdings fehlte eine schriftliche Zusammenfassung in Versform.&quot;
+&lt;&lt;elseif $numb is 2&gt;&gt;\
+&quot;Ihre Aktenverschiebungszeit liegt über dem Durchschnitt. Wir erwarten eine sofortige Verbesserung.&quot;
+&lt;&lt;elseif $numb is 3&gt;&gt;\
+&quot;Mir ist aufgefallen, dass Sie bei unserem letzten Meeting nur 23 Mal genickt haben, während der Durchschnitt bei 27 lag. Gibt es eine besondere Ursache dafür?&quot;
+&lt;&lt;elseif $numb is 4&gt;&gt;\
+&quot;Können Sie mir bitte erklären, warum Sie die Faxabdeckung geöffnet haben? Nur autorisiertes Personal hat Zugang zu diesem Bereich.&quot;
+&lt;&lt;elseif $numb is 5&gt;&gt;\
+ &quot;Ihre Übersetzung des &#39;Memo zur Verwendung von Aktenordnern&#39; war höchst ungenau. Wir sprechen hier von lebenswichtigen Informationen!&quot;
+&lt;&lt;else&gt;&gt;
+&quot;Ihre Stempeluhr-Aktivitäten sind höchst ungewöhnlich. An manchen Tagen stempeln Sie sogar zwei Minuten zu früh ein!&quot;
+&lt;&lt;/if&gt;&gt;\
+Fassungslos stehst du wieder auf und verlässt wortlos das Büro.
+&lt;&lt;set $madness += 5&gt;&gt;\
 [[zurück|Arbeitsplatz]]
-[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="34" name="Ende_Jura" tags="" position="1300,500" size="100,100">Als vor dir der Teufel auftaucht, in perfektem Anzug und einem Grinsen, das selbst den teuflischsten Anwalt blass aussehen lässt, bleibst du erstaunlich gelassen. Irgendwie hast du immer geahnt, dass deine Seele irgendwann eingefordert wird.
+[Mir reichts! Ich kündige!|Happy End]]</tw-passagedata><tw-passagedata pid="34" name="Ende_Jura" tags="" position="1300,500" size="100,100">Als vor dir der Teufel auftaucht, in perfektem Anzug und einem Grinsen, das selbst den teuflischsten Anwalt blass aussehen lässt, bleibst du erstaunlich gelassen. Irgendwie hast du immer geahnt, dass deine Seele irgendwann eingefordert wird.
 
 Der Teufel versichert dir, dass sich an deinem beruflichen Alltag nicht viel ändern wird. VIelleicht bekommst du sogar eine Stelle in der Personalabteilung angeboten. 
 &quot;Im Grunde genommen ändert sich ja nicht viel&quot;, überlegst du, &quot;wenn man bedenkt, wie manch eine Personalabteilung so tickt.&quot;
