@@ -1308,13 +1308,11 @@ Leider bist du nach kurzer Zeit im Amt völlig wahnsinnig geworden. Aber wer bra
 Du füllst den Wisch aus und gibst ihn ab. 
 
 Bald darauf kommt eine Zusage und du hast deinen ersten [[Arbeitstag|Erster Arbeitstag]]. </tw-passagedata><tw-passagedata pid="25" name="Einstellung md" tags="" position="825,900" size="100,100">&lt;&lt;set $event to random (1,24)&gt;&gt;
-
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief der Behörde in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
 &lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
 &lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
-
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
 &lt;b&gt;Zusage zur Position als &lt;&lt;print $jobTitle&gt;&gt;&lt;/b&gt;
@@ -1386,13 +1384,11 @@ Fassungslos lässt du den Brief sinken - du hast doch überhaupt keine Ahnung, w
 
 &lt;&lt;/if&gt;&gt;
 </tw-passagedata><tw-passagedata pid="26" name="Einstellung gd" tags="" position="975,900" size="100,100">&lt;&lt;set $event to random (1,24)&gt;&gt;
-
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief von deinem künftigen Arbeitgeber in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
 &lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
 &lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
-
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
 &lt;b&gt;Zusage zur Position als &lt;&lt;print $jobTitle&gt;&gt;&lt;/b&gt;
@@ -1464,13 +1460,11 @@ Fassungslos lässt du den Brief sinken - du hast doch überhaupt keine Ahnung, w
 
 &lt;&lt;/if&gt;&gt;
 </tw-passagedata><tw-passagedata pid="27" name="Einstellung hd" tags="" position="1125,900" size="100,100">&lt;&lt;set $event to random (1,24)&gt;&gt;
-
 Dein gutes Gefühl hat dich nicht getäuscht - schon nach wenigen Wochen ist ein Brief von deinem künftigen Arbeitgeber in der Post. Deine Bewerbungsunterlagen haben sie jedenfalls nicht zurückgeschickt, dafür ist der Brief zu klein.
 Du kannst es kaum abwarten ihn zu lesen:
 &lt;&lt;if $event &lt;8&gt;&gt;\
 &lt;&lt;set $jobObj.jname to $jobTitle&gt;&gt;\
 &lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
-
 &lt;i&gt;
 &lt;div style=&quot;text-align: center&quot;&gt;
 &lt;b&gt;Zusage zur Position als &lt;&lt;print $jobTitle&gt;&gt;&lt;/b&gt;
@@ -1640,13 +1634,14 @@ Eigentlich wolltest du deinem Vorgesetzten jetzt mal so richtig die Meinung geig
 &quot;Können Sie mir bitte erklären, warum Sie die Faxabdeckung geöffnet haben? Nur autorisiertes Personal hat Zugang zu diesem Bereich.&quot;
 &lt;&lt;elseif $numb is 5&gt;&gt;\
  &quot;Ihre Übersetzung des &#39;Memo zur Verwendung von Aktenordnern&#39; war höchst ungenau. Wir sprechen hier von lebenswichtigen Informationen!&quot;
-&lt;&lt;else&gt;&gt;
+&lt;&lt;else&gt;&gt;\
 &quot;Ihre Stempeluhr-Aktivitäten sind höchst ungewöhnlich. An manchen Tagen stempeln Sie sogar zwei Minuten zu früh ein!&quot;
 &lt;&lt;/if&gt;&gt;\
+
 Fassungslos stehst du wieder auf und verlässt wortlos das Büro.
-&lt;&lt;set $madness += 5&gt;&gt;\
+&lt;&lt;set $madness += 5&gt;&gt;
 [[zurück|Arbeitsplatz]]
-[Mir reichts! Ich kündige!|Happy End]]</tw-passagedata><tw-passagedata pid="34" name="Ende_Jura" tags="" position="1300,500" size="100,100">Als vor dir der Teufel auftaucht, in perfektem Anzug und einem Grinsen, das selbst den teuflischsten Anwalt blass aussehen lässt, bleibst du erstaunlich gelassen. Irgendwie hast du immer geahnt, dass deine Seele irgendwann eingefordert wird.
+[[Mir reichts! Ich kündige!|Happy End]]</tw-passagedata><tw-passagedata pid="34" name="Ende_Jura" tags="" position="1300,500" size="100,100">Als vor dir der Teufel auftaucht, in perfektem Anzug und einem Grinsen, das selbst den teuflischsten Anwalt blass aussehen lässt, bleibst du erstaunlich gelassen. Irgendwie hast du immer geahnt, dass deine Seele irgendwann eingefordert wird.
 
 Der Teufel versichert dir, dass sich an deinem beruflichen Alltag nicht viel ändern wird. VIelleicht bekommst du sogar eine Stelle in der Personalabteilung angeboten. 
 &quot;Im Grunde genommen ändert sich ja nicht viel&quot;, überlegst du, &quot;wenn man bedenkt, wie manch eine Personalabteilung so tickt.&quot;
