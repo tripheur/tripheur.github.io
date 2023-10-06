@@ -181,8 +181,8 @@ Mit einem knarrenden Geräusch öffnet sich die Tür und ihr betretet eine gehei
 &quot;Willkommen, junge Schüler&quot;, spricht der Zaubermeister, &quot;Ihr seid auserwählt, die Geheimnisse der Magie zu erlernen und die Balance zwischen Wissen und Macht zu finden. Gemeinsam werden wir eine Reise antreten, die euch zu den faszinierendsten Orten dieser Welt führen wird.&quot;
 
 Er sieht dir tief in die Augen. &quot;$player&quot;, sagt er und winkt dich zu sich heran.
-&quot;Deine magische Aura ist stark. Folge mir und lerne fleißig, denn du und deine Gefährten sind vielleicht die Einzigen, die diese Welt noch retten können.&quot; 
-Er reicht dir einen funkelnden Stein: &quot;Dies ist ein Zauberstein. Ihr benötigt 5 dieser Steine, um in das Herz des Schwarzen Forsts zu gelangen, wo sich eine mächtige Festung befindet. Es heißt, ein böser Magier hat sich dort niedergelassen. Findet ihn und löst das Geheimnis.&quot;
+&quot;Deine magische Aura ist stark. Folge mir und lerne fleißig, denn du und deine Gefährten seit vielleicht die Einzigen, die diese Welt noch retten können.&quot; 
+Er reicht dir einen funkelnden Stein: &quot;Dies ist ein Zauberstein. Ihr benötigt 5 dieser Steine, um in das Herz des Schwarzen Forsts zu gelangen, wo sich eine mächtige Festung befindet. Es heißt, ein böser Magier hat sich dort niedergelassen. Findet die Festung und löst das Rätsel um ihren Besitzer.&quot;
 &lt;&lt;set $stones +=1&gt;&gt;\
 Und so beginnt dein Abenteuer als Zauberlehrling, angeleitet vom weisen Zaubermeister, um die Geheimnisse dieser zauberhaften Welt zu enthüllen.
 
@@ -193,9 +193,15 @@ Der Zaubermeister führt euch in einen geräumigen Raum, der mit leuchtenden Kri
 
 Ihr setzt euch gespannt in einen Kreis um die Tafel, und der Zaubermeister beginnt zu lehren:
 &lt;&lt;else&gt;&gt;\
-Ihr kehrt in den Raum der Erkenntnis zurück, um weiteres Wissen zu elangen.
+Ihr kehrt in den Raum der Erkenntnis zurück, um weiteres Wissen zu erlangen.
+&lt;&lt;if $cave is 0&gt;&gt;\
+&lt;&lt;set $channel to 5&gt;&gt;\
+&lt;&lt;elseif $bridge is 0&gt;&gt;\
+&lt;&lt;set $hand to 5&gt;&gt;\
+&lt;&lt;elseif $spellstone is 0&gt;&gt;\
+&lt;&lt;set $spells to 5&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
-
+&lt;&lt;/if&gt;&gt;\
 &lt;&lt;if $essence &lt; 5&gt;&gt;\
  &lt;&lt;linkreplace &quot;Die Essenz der Magie&quot;&gt;&gt;\
  &lt;b&gt;Die Essenz der Magie&lt;/b&gt;
@@ -251,7 +257,7 @@ Ihr könnt euch jetzt duellieren.
 
 
 &lt;&lt;if $essence &gt; 0 or $channel &gt; 0 or $spells &gt; 0 or $hand &gt; 0&gt;&gt; 
-Nachdem die Lektion abgeschlossen ist, spürt ihr eine neue Energie in euch. Ihr fühlt euch bereit, eure neu erworbenen Fähigkeiten in der Welt der Magie einzusetzen:
+Nachdem ihre eure Lektion abgeschlossen habt, spürt ihr eine neue Energie in euch. Ihr fühlt euch bereit, eure neu erworbenen Fähigkeiten in der Welt der Magie einzusetzen:
 
 [[weiter|Waldrand]]
 &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="Essenz" tags="" position="800,200" size="100,100">Der Zaubermeister bittet euch, die Augen zu schließen und euch auf eure eigene Mitte zu konzentrieren. 
@@ -542,7 +548,7 @@ Ihr schaut euch ratlos an - Duellieren habt ihr noch nicht gelernt. Außerdem si
 &lt;&lt;else&gt;&gt;\
 Die Gesten, die ihr beherrscht, sind kraftvoll und präzise. Mit beeindruckender Geschwindigkeit und Eleganz führt ihr die Bewegungen aus und formt dabei die Energie um euch herum. Der Brückenwächter erkennt eure Meisterschaft und zieht sich ehrerbietig zurück.
 
-„Ihr seid würdig“, sagt er und neigt respektvoll den Kopf. Er überreicht $player einen funkelnden magischen Stein. „Möge euer Weg von Erfolg begleitet sein.“
+„Ihr seid würdig“, sagt er und neigt respektvoll den Kopf. Er überreicht dir einen funkelnden magischen Stein. „Möge euer Weg von Erfolg begleitet sein.“
 
 Ihr spürt, wie die Energie des Steins sich mit eurer eigenen verbindet, und fühlt euch gestärkt.
 &lt;&lt;set $stones +=1&gt;&gt;\
