@@ -98,7 +98,7 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="Behörden Sim" startnode="6" creator="Twine" creator-version="2.7.1" format="SugarCube" format-version="2.36.1" ifid="92C466AE-B38A-4DCD-956B-C7BB1273843A" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-tag name="data" color="red"></tw-tag><tw-tag name="Ende" color="blue"></tw-tag><tw-tag name="Ende2" color="blue"></tw-tag><tw-passagedata pid="1" name="StoryInit" tags="data" position="100,50" size="100,100">&lt;&lt;set $event to 0&gt;&gt; \
+	<tw-storydata name="Behörden Sim" startnode="6" creator="Twine" creator-version="2.8.1" format="SugarCube" format-version="2.36.1" ifid="92C466AE-B38A-4DCD-956B-C7BB1273843A" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-tag name="data" color="red"></tw-tag><tw-tag name="Ende" color="blue"></tw-tag><tw-tag name="Ende2" color="blue"></tw-tag><tw-passagedata pid="1" name="StoryInit" tags="data" position="100,50" size="100,100">&lt;&lt;set $event to 0&gt;&gt; \
 &lt;&lt;set $startEdu to 0&gt;&gt;\
 &lt;&lt;set $isFemale to false&gt;&gt;\
 &lt;&lt;set $isMale to false&gt;&gt;    \
@@ -355,7 +355,7 @@ suchen?
 &lt;/div&gt;
 &lt;h2&gt;Willkommen im aufregenden Abenteuer des öffentlichen Dienstes!&lt;/h2&gt;
 
-Glückwunsch zum bestandenen Abitur! Jetzt stehst du vor der entscheidenden Weichenstellung für deine Zukunft im öffentlichen Dienst. Dieses Spiel dreht sich um kluge Entscheidungen, die richtige Ausbildung und die Wahl des perfekten Jobs.
+Glückwunsch zum bestandenen Abitur! Jetzt stehst du vor der entscheidenden Weichenstellung für deine Zukunft im öffentlichen Dienst. Dieses Spiel dreht sich um kluge Entscheidungen, die richtige Ausbildung und die Wahl des perfekten Jobs. 
 
 Finde heraus, wo deine Talente am besten aufblühen und wie du sie am effektivsten für die Gemeinschaft einsetzen kannst. Halte Ausschau nach den Fallstricken des Systems, um nicht von seinem Wahnsinn überrollt zu werden.
 
@@ -558,7 +558,7 @@ Dein Ziel ist es, dir eine Karriere im öffentlichen Dienst aufzubauen. Laufbahn
 &lt;&lt;if $age == 18&gt;&gt;\
 Wie gehts es nach der Schule weiter?
 
-Nachdem du nun dein Abitur erfolgreich abgeschlossen hast, steht die nächste wichtige Entscheidung an: Solltest du dich für eine Ausbildung oder ein Studium entscheiden? Die Wahl, die du jetzt triffst, wird einen maßgeblichen Einfluss auf deine berufliche Zukunft im öffentlichen Dienst haben.
+Nachdem du nun dein Abitur erfolgreich abgeschlossen hast, steht die nächste wichtige Entscheidung an: Solltest du dich für eine Ausbildung oder ein Studium entscheiden? 
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;linkreplace &quot;Ausbildung oder Studium?&quot;&gt;&gt;\
 Eine [[Ausbildung]] bietet dir die Möglichkeit, direkt praktische Erfahrungen zu sammeln und dich in einem spezifischen Berufsfeld zu spezialisieren. Du wirst die Chance haben, dich intensiv mit den Aufgaben des öffentlichen Dienstes auseinanderzusetzen und dein Fachwissen kontinuierlich zu erweitern. Eine Ausbildung ermöglicht es dir, schnell in den Beruf einzusteigen und wertvolle praktische Fähigkeiten zu entwickeln.
@@ -571,8 +571,6 @@ Laut einer Studie des Insituts für Diversity- &amp; Antidiskriminierungsforschu
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;/linkreplace&gt;&gt;\
 &lt;br&gt;\
-Bei der Entscheidungsfindung ist es wichtig, deine Interessen, Fähigkeiten und Ziele zu berücksichtigen. Überlege, welche Art von Lernen für dich am besten geeignet ist und welche Perspektiven du in der Zukunft haben möchtest.
-Wähle mit Weitsicht und Bedacht, denn es ist der erste Schritt auf deinem Weg zu einer erfüllenden Karriere im öffentlichen Dienst. Vertraue darauf, dass deine Entscheidung dich auf den richtigen Pfad führen wird und dass du mit deinem Engagement und deiner Entschlossenheit große Erfolge erzielen wirst!
 &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="Ausbildung" tags="" position="700,350" size="100,100">&lt;&lt;set $event = random(0, 25)&gt;&gt;\
 &lt;&lt;if $event is 6 and $isFemale is true and $age &lt; 45&gt;&gt;\
 &lt;&lt;set $ispregnant to true&gt;&gt;\ 
@@ -1057,10 +1055,7 @@ Digitaloffensive: Urlaubsanträge werden jetzt am PC ausgefüllt und digital unt
 &lt;&lt;elseif $numb == 7&gt;&gt;\
 Dein Vorgesetzter bittet dich zum [[Personalführungsgespräch|Personalgespräch]]
 &lt;&lt;else&gt;&gt;\
-&lt;&lt;set $madness +=2&gt;&gt;\
-&lt;&lt;set $happiness -= 2&gt;&gt;\ 
 Einatmen, Ausatmen, Kaffeetrinken, Stempeln.
-Jahr für Jahr.
 &lt;&lt;/if&gt;&gt;
 
 [[weiterarbeiten|Arbeitsplatz]] 
@@ -1576,8 +1571,7 @@ Mit hängenden Schultern gehst du nach Hause.
 Seit du die Behörde fluchtartig verlassen hast, hat sich einiges getan.
 Du erinnerst dich an die Tage, als du zwischen den Aktenbergen schier versunken warst. Doch jetzt, wo du draußen bist, siehst du, dass die Sonne immer noch am Himmel steht.
 
-Deine Entscheidung, dem Büro-Wahnsinn Lebewohl zu sagen, war der erste Schritt in Richtung Selbstrettung. Auch wenn du dafür einige Monate Therapie benötigt hast -
-du hast gelernt, dass es da draußen eine Welt gibt, die nicht nur aus Formularen und Schreibkram besteht.
+Deine Entscheidung, dem Büro-Wahnsinn Lebewohl zu sagen, war der erste Schritt in Richtung Selbstrettung. Auch wenn du dafür einige Monate Therapie benötigt hast - du hast gelernt, dass es da draußen eine Welt gibt, die nicht nur aus Formularen und Schreibkram besteht.
 &lt;&lt;if $bea is 1&gt;&gt;\
 Und, Verbeamtung sei Dank, kannst du die nächsten Jahre bei vollen Bezügen zuhause bleiben und dir überlegen, was du stattdessen mit deinem Leben anfangen willst. Zumindest, bis du deine Schuld mit dem Teufel begleichen musst...
 &lt;&lt;else&gt;&gt;\
@@ -1585,30 +1579,38 @@ Du bist zwar kein Jurist, aber es gelingt dir dennoch, eine großzügige Abfindu
 &lt;&lt;/if&gt;&gt;\
                                            (Ende 3: Dauerhaft arbeitsunfähig)
 
-[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="31" name="Ende_Wahn" tags="Ende" position="1200,600" size="100,100">Einige Wochen später: 
+[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="31" name="Ende_Wahn" tags="Ende" position="1200,600" size="100,100">Einige Wochen später:
 
 &quot;Abendbrot! Tablettenausgabe!&quot; Eine Krankenschwester reicht dir ein Tablett mit Krankenhausessen und einen kleinen Behälter voller bunter Pillen.
 
 Seit du in einer geschlossenen Einrichtung untergebracht bist, ist dein Leben einfacher geworden.
-&lt;&lt;if $jobObj.jlaufb == &quot;Höherer Dienst&quot;&gt;&gt;\
-Auch wenn sich in deinem Alltag scheinbar gar nicht soviel geändert hat - meistens starrst du aus dem Fenster und wartest auf die nächste Mahlzeit.
-Immerhin bist du von der Gruppentherapie befreit, da sie einer typischen Besprechung einfach zu ähnlich war und nicht enden wollende Schreikrämpfe bei dir ausgelöst hat. Und die Menschen um dich herum sind sympathischer.
-Deine Therapeutin sagt, du machst große Fortschritte - beim Monopoly spielen im Beschäftigungsraum kaufst du dir manchmal sogar schon Grundstücke, ohne sie vorher europaweit auszuschreiben. 
-&lt;&lt;elseif $jobObj.jlaufb == &quot;Gehobener Dienst&quot;&gt;&gt;\
-Am Anfang musste dich das Personal zwar regelmäßig vom Kopierer wegzerren und alle Stempel verstecken, aber mit der richtigen Medikation hast du das ganz gut in den Griff bekommen. Und das du  in der Gruppentherapie die &quot;Vertretung&quot; für bereits entlassene Patientinnen und Patienten übernimmst, geht vielleicht auch irgendwann weg. Manchmal schläfst du sogar schon mehr als 4 Stunden am Stück.
-Deine Therapeutin sagt, du machst große Fortschritte - mittlerweise holst du dir am Nachmittag auch mal einen Kaffee, ohne deinen Vorgesetzten um Erlaubnis zu fragen.
-&lt;&lt;else&gt;&gt;\
-Obwohl sich in deinem Alltag scheinbar kaum etwas verändert hat - du wirst oft herumkommandiert und fühlst dich entmündigt - gibt es einen Hauch von Befreiung. 
-Die endlosen Besprechungen und die bürokratische Bürokratie gehören der Vergangenheit an. Die Menschen um dich herum sind vielleicht nicht freundlicher, aber zumindest sind sie ehrlich in ihrer Gleichgültigkeit.
-Dein Therapeut sagt, du machst große Fortschritte - beim Schachspiel im Gemeinschaftsraum überlegst du nun manchmal sogar einen Zug im Voraus, ohne dass er dir von oben diktiert wird.
-&lt;&lt;/if&gt;&gt;\
-Du schließt Frieden mit deinem Schicksal. Nie wieder wirst du in der Behörde arbeiten. Du wirst ein ruhiges Leben führen, wo Wahnsinn und Genie sich vermischen.
 
-Deine Geschichte endet mit einem Lächeln der Erleichterung. Der Schlussakt ist da, und du bist frei.
+&lt;&lt;if $jobObj.jlaufb == &quot;Höherer Dienst&quot;&gt;&gt;
+Dein Alltag hat sich kaum verändert – du starrst aus dem Fenster und wartest auf die nächste Mahlzeit. Immerhin bleibst du von der Gruppentherapie verschont. Der Grund? Die Atmosphäre erinnerte dich zu sehr an eine typische Besprechung und führte zu unkontrollierbaren Schreikrämpfen. Zum Glück sind die Menschen hier unkomplizierter – niemand schreibt E-Mails mit „wie besprochen“.
 
-                                        (Ende 4: Zwangseinweisung)
+Deine Therapeutin nennt es Fortschritt: Beim Monopoly im Beschäftigungsraum kaufst du inzwischen Grundstücke, ohne sie vorher europaweit auszuschreiben.
 
-[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="32" name="Ruhestand" tags="Ende" position="1300,600" size="100,100">&lt;&lt;set $salary to ($jobObj.jsalary/100*70)&gt;&gt;\ 
+&lt;&lt;elseif $jobObj.jlaufb == &quot;Gehobener Dienst&quot;&gt;&gt;
+Anfangs musste das Personal dich regelmäßig vom Kopierer zerren und alle Stempel vor dir verstecken. Aber mit der richtigen Medikation hast du das inzwischen besser im Griff. Nur deine Angewohnheit, in der Gruppentherapie die „Vertretung“ für bereits entlassene Patienten zu übernehmen, ist noch nicht ganz verschwunden.
+
+Deine Therapeutin nennt es Fortschritt: Du holst dir jetzt am Nachmittag auch mal einen Kaffee – ohne vorher eine Genehmigung einzuholen. Und manchmal schläfst du sogar mehr als vier Stunden am Stück.
+
+&lt;&lt;else&gt;&gt;
+Obwohl sich nicht viel verändert hat – du wirst herumkommandiert und fühlst dich entmündigt – spürst du eine unerwartete Erleichterung. Keine sinnlosen Meetings mehr, keine Excel-Tabellen voller Formulare. Die Menschen hier mögen nicht freundlicher sein, aber wenigstens sind sie ehrlich in ihrer Gleichgültigkeit.
+
+Dein Therapeut nennt es Fortschritt: Beim Schach im Gemeinschaftsraum planst du jetzt manchmal einen Zug im Voraus – ohne dass er dir von oben diktiert wird.
+
+&lt;&lt;/if&gt;&gt;
+
+Und dann, eines Morgens, während du das fade Frühstücksbrot kaust, trifft es dich: Du bist endlich frei. Keine Anweisungen mehr. Keine Vorschriften. Keine Unterschriftsmappen mit Priorität „dringend“.
+
+Das System hat dich gebrochen – und in seiner Abwesenheit hast du Frieden gefunden.
+
+Du lächelst. Es ist vorbei.
+
+(Ende 4: Zwangseinweisung)
+
+[[nochmal spielen?|Start]]</tw-passagedata><tw-passagedata pid="32" name="Ruhestand" tags="Ende" position="1300,600" size="100,100">&lt;&lt;set $salary to (($jobObj.jsalary*7000/10000))&gt;&gt;\ 
 &lt;&lt;set $jobObj.jsalary to $salary&gt;&gt;\
 &lt;&lt;set $jobObj.jname to &quot;Rentner/-in&quot;&gt;&gt;\
 Du hast es geschafft!
