@@ -187,12 +187,15 @@ Du beschließt, dir einen Therapeuten zu suchen. Jetzt gleich! Oder morgen. Auf 
     [[Liegenbleiben-&gt;Liegenbleiben]]
     [[Arbeiten-&gt;Arbeit]]
     &lt;br&gt;
+    &lt;&lt;if $therapiedone == 0&gt;&gt;\
     &lt;&lt;if $therapie == 0&gt;&gt;\
     [[Einen Termin beim Therapeuten machen-&gt;Einführung Therapie]]
-    &lt;&lt;else&gt;&gt;\
+    &lt;&lt;elseif $therapie == 1 and (
+    ($therapieform == &quot;ambulant&quot; and $tag % 3 == 0) or
+    $therapieform == &quot;tagesklinik&quot;)&gt;&gt;
     [[Zur Therapie gehen-&gt;Therapie]]
 	&lt;&lt;endif&gt;&gt;\
-    
+    &lt;&lt;endif&gt;&gt;\
 
   &lt;&lt;case &quot;Abend&quot;&gt;&gt;
     Wie verbringst du deinen Abend?
@@ -288,6 +291,7 @@ Du bist konzentriert und hast bei der Arbeit an deinen Projekten Erfolgserlebnis
 [[Weiter-&gt;Tageszeit]]
 </tw-passagedata><tw-passagedata pid="6" name="NeuerTag" tags="" position="700,200" size="100,100">&lt;&lt;set $zeit = &quot;Morgen&quot;&gt;&gt;\
 &lt;&lt;set $tag += 1&gt;&gt;\
+&lt;&lt;set $therapiedone to 0&gt;&gt;\
 
 &lt;&lt;if $sleep &lt; 50&gt;&gt;\
 Du schläfst unruhig und schlecht. Meistens liegst du wach und grübelst.
@@ -312,8 +316,8 @@ Ein neuer Tag beginnt.
 &lt;&lt;set $depression = 100&gt;&gt;
 &lt;&lt;set $selbstwert = 50&gt;&gt;
 &lt;&lt;set $therapie to 0&gt;&gt;
-
-</tw-passagedata><tw-passagedata pid="8" name="StoryCaption" tags="" position="200,100" size="100,100">&lt;div id=&quot;sidebar-stats&quot;&gt;
+&lt;&lt;set $therapieform to &quot;keine&quot;&gt;&gt;\
+&lt;&lt;set $therapiedone to 0&gt;&gt;\</tw-passagedata><tw-passagedata pid="8" name="StoryCaption" tags="" position="200,100" size="100,100">&lt;div id=&quot;sidebar-stats&quot;&gt;
   &lt;div class=&quot;stat-row&quot;&gt;Name: &lt;&lt;print $player&gt;&gt;&lt;/div&gt;
   &lt;div class=&quot;stat-row&quot;&gt;Tag: &lt;&lt;print $tag&gt;&gt;&lt;/div&gt;
   &lt;div class=&quot;stat-row&quot;&gt;Zeit: &lt;&lt;print $zeit&gt;&gt;&lt;/div&gt;
@@ -348,21 +352,35 @@ Ein neuer Tag beginnt.
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="9" name="Einführung Therapie" tags="" position="100,600" size="100,100">Du entscheidest dich, zum Psychologen zu gehen.
+</tw-passagedata><tw-passagedata pid="9" name="Einführung Therapie" tags="" position="100,600" size="100,100">Du fasst dir ein Herz und beschließt, professionelle Hilfe in Anspruch zu nehmen.
 
-WIP
+Noch am selben Tag bekommst du überraschend einen Termin bei einem Psychiater – ein älterer, ruhiger Mann mit freundlichen Augen. Er deutet auf einen Stuhl gegenüber und sagt mit ruhiger Stimme: „Erzählen Sie mir, was Sie herführt.“
 
-&lt;&lt;set $therapie to 1&gt;&gt;\
-&lt;&lt;set $zeit to &quot;Abend&quot;&gt;&gt;\
-[[weiter|Tageszeit]]</tw-passagedata><tw-passagedata pid="10" name="Liegenbleiben" tags="" position="325,450" size="100,100">Du verbringst den Tag im Bett.
+Du atmest tief durch und antwortest...
+
+[[…dass du selbst nicht genau weißt, warum du hier bist.|therapie1]]
+
+[[…dass du dich müde, antriebslos und traurig fühlst.|therapie2]]
+
+[[…dass es dir eigentlich gut geht – doch plötzlich steigen dir Tränen in die Augen.|therapie2]]
+
+</tw-passagedata><tw-passagedata pid="10" name="Liegenbleiben" tags="" position="325,450" size="100,100">Du verbringst den Tag im Bett.
 &lt;&lt;if $depression &lt;91&gt;&gt;\
 &lt;&lt;run setup.addToStat(&quot;depression&quot;, 6)&gt;&gt;\
 &lt;&lt;run setup.addToStat(&quot;isolation&quot;, 6)&gt;&gt;\
 &lt;&lt;endif&gt;&gt;\
 &lt;&lt;set $zeit = &quot;Abend&quot;&gt;&gt;
-[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="11" name="Therapie" tags="" position="500,600" size="100,100">Hier entsteht demnächst ihr Klinikalltag.
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="11" name="Therapie" tags="" position="500,600" size="100,100">&lt;&lt;if $therapieform == &quot;tagesklinik&quot;&gt;&gt;\
+Du schaust auf den Therapieplan für heute:
 
-[[zurück|Tageszeit]]</tw-passagedata><tw-passagedata pid="12" name="Alkohol" tags="" position="800,450" size="100,100">
+[[Therapieplan]]
+&lt;&lt;else&gt;&gt;\
+Du erscheinst pünktlich zu deiner Therapiestunde mit deiner Psychologin.
+
+[[Worüber möchtest du mit ihr heute sprechen?|Einzeltherapiethemen]]
+&lt;&lt;endif&gt;&gt;\
+
+</tw-passagedata><tw-passagedata pid="12" name="Alkohol" tags="" position="800,450" size="100,100">
 &lt;&lt;if $depression &gt; 80&gt;&gt;\
 Du trinkst, bis die Gedanken leiser werden. Am Ende ist dir nur noch schlecht – aber immerhin denkst du gerade an nichts.
 &lt;&lt;run setup.addToStat(&quot;energie&quot;, -10)&gt;&gt;\
@@ -448,6 +466,44 @@ Du entspannst dich mit einer deiner Lieblingsserien. Es tut gut, in einer andere
 &lt;&lt;run setup.addToStat(&quot;sleep&quot;, -1)&gt;&gt;\
 &lt;&lt;endif&gt;&gt;
 &lt;&lt;set $zeit = &quot;Nacht&quot;&gt;&gt;
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="16" name="therapie1" tags="" position="100,725" size="100,100">Der Psychiater bohrt  nach, aber dir fällt es schwer dich ihm zu öffnen. 
+
+Du hast Angst, dass er dich für verrückt hält oder du in der Psychiatrie landest und nie wieder da raus kommst. Tabletten möchtest du auch keine nehmen, die machen doch nur abhängig.
+
+Alle Vorschläge, die der Psychiater dir macht, lehnst du ab. Er bittet dich, einen Folgetermin auszumachen, aber du gehst schnurstracks an der Sprechstundenhilfe vorbei und nach Hause.
+
+Du fühlst dich einfach noch nicht bereit für eine Therapie.
+
+
+&lt;&lt;set $zeit = &quot;Abend&quot;&gt;&gt;\
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="17" name="therapie2" tags="" position="225,725" size="100,100">Vorsichtig stellt der Psychiater weitere Fragen. Danach lässt er dich einen kurzen Fragebogen ausfüllen. Er studiert deine Antworten und blickt dich dann freundlich über seine Brille hinweg an.
+
+&quot;Vieles deutet daraufhin, dass Sie unter einer schweren depressiven Episode leiden. Das kann man inzwischen sehr gut behandeln - für den Anfang rate ich Ihnen zur Einweisung in eine Tagesklinik.&quot;
+
+Er erklärt dir das Konzept der Klinik genau: Jeden Tag mehrere Stunden Gruppen- oder Einzeltherapien, die dir helfen sollen, schnell wieder auf die Beine zu kommen. Es sind noch Plätze frei, du kannst also sofort am nächsten Tag beginnen, wenn du dich dafür entscheidest.
+
+Alternativ bietet er dir eine ambulante Therapie und medikamentöse Unterstützung an.
+
+Du entscheidest dich für
+
+[[die Tagesklinik|daycare]]
+
+[[ambulante Therapie|ambulance]]
+
+[[nichts von beiden|therapie1]]
+
+</tw-passagedata><tw-passagedata pid="18" name="daycare" tags="" position="200,850" size="100,100">Der Psychiater gibt dir eine kurze Führung durch das Klinikgebäude und erledigt den Papierkram mit dir. Dann entlässt er dich für den Tag und bittet dich, am nächsten Tag pünktlich zu erscheinen.
+&lt;&lt;set $therapieform to &quot;tagesklinik&quot;&gt;&gt;\
+&lt;&lt;set $therapie to 1&gt;&gt;\
+&lt;&lt;set $zeit = &quot;Abend&quot;&gt;&gt;\
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="19" name="ambulance" tags="" position="325,850" size="100,100">Der Psychiater stellt dir ein Rezept für ein Antidepressivum aus und überweist dich für ambulante Gesprächstherapie zu einer Psychologin. Dein erster Termin ist in 2 Tagen.
+&lt;&lt;set $therapieform to &quot;ambulant&quot;&gt;&gt;\
+&lt;&lt;set $therapie to 1&gt;&gt;\
+&lt;&lt;set $zeit = &quot;Abend&quot;&gt;&gt;\
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="20" name="Therapieplan" tags="" position="500,725" size="100,100">WIP
+&lt;&lt;set $therapiedone to 1&gt;&gt;\
+[[Weiter-&gt;Tageszeit]]</tw-passagedata><tw-passagedata pid="21" name="Einzeltherapiethemen" tags="" position="625,725" size="100,100">WIP
+&lt;&lt;set $therapiedone to 1&gt;&gt;\
 [[Weiter-&gt;Tageszeit]]</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
