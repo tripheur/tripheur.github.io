@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mein Flowise Chatbot</title>
+  <title>ETTIBot</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/avatar.png" />
+
   <style>
     body {
       margin: 0;
@@ -14,7 +18,7 @@
       flex-direction: column;
     }
     flowise-fullchatbot {
-      flex: 1;   /* füllt den ganzen Bildschirm */
+      flex: 1;
     }
   </style>
 </head>
@@ -27,13 +31,17 @@
     import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
 
     Chatbot.initFull({
-      chatflowid: "41459ff3-bb86-42d4-8798-3c8e9bc1de3e", // deine Chatflow-ID
-      apiHost: "https://cloud.flowiseai.com",             // dein Flowise-Host
+      chatflowid: "41459ff3-bb86-42d4-8798-3c8e9bc1de3e",
+      apiHost: "https://cloud.flowiseai.com",
       theme: {
         chatWindow: {
-          title: "ETTIbot",
-          welcomeMessage: "Hi! Frag mich etwas zum Modulplan.",
-          sourceDocsTitle: "Quellen:"
+          title: "ETTIBot",
+          welcomeMessage: "Hallo, ich bin der ETTIBot. Ich kann dir Fragen zum Modulplan des Studiengangs Technische Informatik und Kommunikationstechnik beantworten.",
+          sourceDocsTitle: "Quellen:",
+          botMessage: {
+            showAvatar: true,
+            avatarSrc: "images/avatar.png"
+          }
         }
       }
     })
