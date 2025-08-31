@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mein Flowise Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f9f9f9;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    flowise-fullchatbot {
+      flex: 1;   /* füllt den ganzen Bildschirm */
+    }
+  </style>
+</head>
+<body>
+  <!-- Der eingebettete Chatbot -->
+  <flowise-fullchatbot></flowise-fullchatbot>
+
+  <!-- Flowise-Script -->
+  <script type="module">
+    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+
+    Chatbot.initFull({
+      chatflowid: "41459ff3-bb86-42d4-8798-3c8e9bc1de3e", // deine Chatflow-ID
+      apiHost: "https://cloud.flowiseai.com",             // dein Flowise-Host
+      theme: {
+        chatWindow: {
+          title: "ETTIbot",
+          welcomeMessage: "Hi! Frag mich etwas zum Modulplan.",
+          sourceDocsTitle: "Quellen:"
+        }
+      }
+    })
+  </script>
+</body>
+</html>
