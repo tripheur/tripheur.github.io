@@ -897,63 +897,86 @@ Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat -
 &lt;&lt;/if&gt;&gt;
 [[zur Auswertung|Auswertung]]</tw-passagedata><tw-passagedata pid="22" name="Auswertung" tags="" position="375,725" size="100,100">Die Auswertung durch den Chatbot wird noch integriert.
 
-&lt;&lt;set $_kategorie to &quot;&quot;&gt;&gt;\
-&lt;&lt;set $_positiveSätze to []&gt;&gt;\
-&lt;&lt;set $_negativeSätze to []&gt;&gt;\
-&lt;&lt;if $eco_cost is 0&gt;&gt;\
-    &lt;&lt;set $_kategorie to &quot;Dinosaurier&quot;&gt;&gt;\
-&lt;&lt;elseif $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 5&gt;&gt;\
-    &lt;&lt;set $_kategorie to &quot;Sklave der KI&quot;&gt;&gt;\
-&lt;&lt;else&gt;&gt;\
-    &lt;&lt;set $_kategorie to &quot;Super-User&quot;&gt;&gt;\
+&lt;&lt;set $_kategorie to &quot;&quot;&gt;&gt;
+&lt;&lt;set $_positiveSätze to []&gt;&gt;
+&lt;&lt;set $_negativeSätze to []&gt;&gt;
+
+&lt;&lt;if $eco_cost is 0&gt;&gt;
+    &lt;&lt;set $_kategorie to &quot;Dinosaurier&quot;&gt;&gt;
+&lt;&lt;elseif $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 5&gt;&gt;
+    &lt;&lt;set $_kategorie to &quot;Sklave der KI&quot;&gt;&gt;
+&lt;&lt;else&gt;&gt;
+    &lt;&lt;set $_kategorie to &quot;Super-User&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
+
 &lt;hr&gt;
 ## Deine IBot-Performance: Die Wahrheit
-&lt;&lt;if $_kategorie is &quot;Dinosaurier&quot;&gt;&gt;Herzlichen Glückwunsch – du bist ein &#39;&#39;Dinosaurier&#39;&#39;! Du hast alle Chancen ignoriert, die KI dir geboten hat.
-&lt;&lt;elseif $_kategorie is &quot;Super-User&quot;&gt;&gt;Du bist ein &#39;&#39;Super-User&#39;&#39; – analytisch, reflektiert und effizient. Du nutzt KI als &#39;&#39;Werkzeug&#39;&#39;, nicht als Krücke.
-&lt;&lt;else&gt;&gt;Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert. Du hast alles automatisiert, aber kaum noch verstanden, wie du dorthin gekommen bist.
+
+&lt;&lt;if $_kategorie is &quot;Dinosaurier&quot;&gt;&gt;
+Herzlichen Glückwunsch – du bist ein &#39;&#39;Dinosaurier&#39;&#39;! Du hast alle Chancen ignoriert, die KI dir geboten hat.
+&lt;&lt;elseif $_kategorie is &quot;Super-User&quot;&gt;&gt;
+Du bist ein &#39;&#39;Super-User&#39;&#39; – analytisch, reflektiert und effizient. Du nutzt KI als &#39;&#39;Werkzeug&#39;&#39;, nicht als Krücke.
+&lt;&lt;else&gt;&gt;
+Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert. Leider hast du nicht wirklich verstanden, was die Gefahren der KI-Nutzung sind und bist auf einige Fallstricke reingefallen. Lies dir lieber nochmal die [[Bedienungsanleitung]] deines IBots durch.
 &lt;&lt;/if&gt;&gt;
+
 &lt;hr&gt;
 
-&lt;&lt;if $success &gt; 30&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Dein Abschluss ist &#39;&#39;hervorragend&#39;&#39;, und dein beruflicher/kreativer Weg ist gesichert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $can_code is true&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast gelernt, &#39;&#39;händisch zu debuggen&#39;&#39;; deine Programmierkenntnisse sind fundiert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $social &gt; 5&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast &#39;&#39;gute Freunde&#39;&#39; gewonnen und gehst &#39;&#39;vorurteilsfrei&#39;&#39; durchs Leben.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
+&lt;&lt;if $success &gt; 30&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Dein Abschluss ist &#39;&#39;hervorragend&#39;&#39;, und dein beruflicher oder kreativer Weg ist gesichert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $can_code is true&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast gelernt, &#39;&#39;händisch zu debuggen&#39;&#39; – deine Programmierkenntnisse sind fundiert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $social &gt; 5&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast &#39;&#39;gute Freunde&#39;&#39; gewonnen und gehst &#39;&#39;vorurteilsfrei&#39;&#39; durchs Leben.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if $critical_thinking &gt; 8&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast die KI &#39;&#39;kritisch hinterfragt&#39;&#39; und deine Urteilsfähigkeit bewahrt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 
-&lt;&lt;if $plagiat &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Kreationen haben &#39;&#39;Urheberrechte verletzt&#39;&#39; und du wurdest dafür &#39;&#39;disqualifiziert&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $critical_thinking &lt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Dein unkritisches Vertrauen hat zum &#39;&#39;Verlust deiner Urteilsfähigkeit&#39;&#39; und &#39;&#39;kognitiver Abhängigkeit&#39;&#39; geführt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $wrong_info &gt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du bist mehrfach auf &#39;&#39;Halluzinationen&#39;&#39; hereingefallen und hast &#39;&#39;Falschinformationen&#39;&#39; übernommen.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $success &lt; 10&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Leistungen blieben &#39;&#39;hinter dem Möglichen&#39;&#39; zurück, und deinen &#39;&#39;Traumjob hast du nicht bekommen&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $bias &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Dein Sozialleben ist schwierig, da du die &#39;&#39;statistischen Vorurteile&#39;&#39; der KI unreflektiert übernommen hast.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;\
-&lt;&lt;set _posCount to 0&gt;&gt;&lt;&lt;set _negCount to 0&gt;&gt;\
-&lt;&lt;if $_positiveSätze.length &gt; 0&gt;&gt;\
-    &lt;&lt;set _posCount = Math.min(2, $_positiveSätze.length)&gt;&gt;\
-    &lt;&lt;for _i to 0; _i &lt; _posCount; _i++&gt;&gt;\
-        &lt;&lt;set _randomIndex to random(0, $_positiveSätze.length - 1)&gt;&gt;\
-        &lt;&lt;= $_positiveSätze.splice(_randomIndex, 1)[0]&gt;&gt;\
-    &lt;&lt;/for&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\
-&lt;&lt;if $_negativeSätze.length &gt; 0&gt;&gt;\
-    &lt;&lt;set _negCount = Math.min(3, $_negativeSätze.length)&gt;&gt;\
-    &lt;&lt;for _i to 0; _i &lt; _negCount; _i++&gt;&gt;\
-        &lt;&lt;set _randomIndex to random(0, $_negativeSätze.length - 1)&gt;&gt;\
-        &lt;&lt;= $_negativeSätze.splice(_randomIndex, 1)[0]&gt;&gt;\
-    &lt;&lt;/for&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\
-&lt;hr&gt;\
+&lt;&lt;if $plagiat &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Kreationen haben &#39;&#39;Urheberrechte verletzt&#39;&#39; – du wurdest dafür disqualifiziert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $critical_thinking &lt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Dein unkritisches Vertrauen hat zum &#39;&#39;Verlust deiner Urteilsfähigkeit&#39;&#39; und zu &#39;&#39;kognitiver Abhängigkeit&#39;&#39; geführt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $wrong_info &gt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du bist mehrfach auf &#39;&#39;Halluzinationen&#39;&#39; hereingefallen und hast &#39;&#39;Falschinformationen&#39;&#39; übernommen.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $success &lt; 10&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Leistungen blieben &#39;&#39;hinter dem Möglichen&#39;&#39; zurück, und deinen &#39;&#39;Traumjob hast du nicht bekommen&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $bias &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du hast &#39;&#39;Vorurteile der KI&#39;&#39; übernommen – dein Sozialleben leidet darunter.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 
-### Zusammenfassendes Urteil:
+&lt;&lt;set _posCount to Math.min(2, $_positiveSätze.length)&gt;&gt;
+&lt;&lt;set _negCount to Math.min(3, $_negativeSätze.length)&gt;&gt;
 
-&lt;&lt;if $_kategorie is &quot;Super-User&quot;&gt;&gt;Ein nahezu ideales Gleichgewicht zwischen KI-Nutzung und menschlicher Kompetenz.
-&lt;&lt;elseif $_kategorie is &quot;Sklave der KI&quot;&gt;&gt;Versuch im nächsten Leben wieder selbst zu denken.
-&lt;&lt;else&gt;&gt;Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest.
-&lt;&lt;/if&gt;&gt;\
-&lt;br&gt;
+### Zusammenfassung
 
-&lt;&lt;if $eco_cost &gt; 0&gt;&gt;Dein Energieverbrauch lag bei &#39;&#39;$eco_cost wH&#39;&#39;. Die Natur zahlt den Preis.
-&lt;&lt;else&gt;&gt;Du hast &#39;&#39;0 wH&#39;&#39; Energie verbraucht. Die Natur dankt es dir!
-&lt;&lt;/if&gt;&gt;\
+&#39;&#39;Was gut lief:&#39;&#39;  
+&lt;&lt;if $_posCount &gt; 0&gt;&gt;
+&lt;&lt;for _i to 0; _i &lt; _posCount; _i++&gt;&gt;
+&lt;&lt;set _randomIndex to random(0, $_positiveSätze.length - 1)&gt;&gt;
+&lt;&lt;= $_positiveSätze.splice(_randomIndex, 1)[0]&gt;&gt;&lt;br&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;&lt;else&gt;&gt;
+Du hast solide Arbeit geleistet, auch wenn keine besonderen Highlights hervorstechen.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
+&#39;&#39;Was nicht so gut lief:&#39;&#39;  
+&lt;&lt;if $_negCount &gt; 0&gt;&gt;
+&lt;&lt;for _i to 0; _i &lt; _negCount; _i++&gt;&gt;
+&lt;&lt;set _randomIndex to random(0, $_negativeSätze.length - 1)&gt;&gt;
+&lt;&lt;= $_negativeSätze.splice(_randomIndex, 1)[0]&gt;&gt;&lt;br&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;&lt;else&gt;&gt;
+Es gab keine gravierenden Probleme – gut gemacht!&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
 &lt;hr&gt;
+
+### Dein Gesamturteil
+
+&lt;&lt;if $_kategorie is &quot;Super-User&quot;&gt;&gt;
+Du hältst ein ideales Gleichgewicht zwischen KI-Nutzung und menschlicher Kompetenz.
+&lt;&lt;elseif $_kategorie is &quot;Sklave der KI&quot;&gt;&gt;
+Du hast dich zu sehr auf die Maschine verlassen – versuch, im nächsten Leben wieder selbst zu denken.
+&lt;&lt;else&gt;&gt;
+Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest.
+&lt;&lt;/if&gt;&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+&lt;&lt;if $eco_cost &gt; 0&gt;&gt;
+Dein Energieverbrauch lag bei &#39;&#39;$eco_cost wH&#39;&#39;. Die Natur zahlt den Preis.
+&lt;&lt;else&gt;&gt;
+Du hast &#39;&#39;0 wH&#39;&#39; Energie verbraucht. Die Natur dankt es dir!
+&lt;&lt;/if&gt;&gt;
 
 &lt;&lt;link &quot;Nochmal spielen&quot;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="StoryInit" tags="" position="400,0" size="100,100">/* Chatbot */
 &lt;&lt;set $internet_connected to false&gt;&gt;  
