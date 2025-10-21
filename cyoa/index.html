@@ -903,7 +903,7 @@ Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat -
 
 &lt;&lt;if $eco_cost is 0&gt;&gt;
     &lt;&lt;set $_kategorie to &quot;Dinosaurier&quot;&gt;&gt;
-&lt;&lt;elseif $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 5&gt;&gt;
+&lt;&lt;elseif $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 4&gt;&gt;
     &lt;&lt;set $_kategorie to &quot;Sklave der KI&quot;&gt;&gt;
 &lt;&lt;else&gt;&gt;
     &lt;&lt;set $_kategorie to &quot;Super-User&quot;&gt;&gt;
@@ -929,8 +929,8 @@ Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert
 
 &lt;&lt;if $plagiat &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Kreationen haben &#39;&#39;Urheberrechte verletzt&#39;&#39; – du wurdest dafür disqualifiziert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if $critical_thinking &lt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Dein unkritisches Vertrauen hat zum &#39;&#39;Verlust deiner Urteilsfähigkeit&#39;&#39; und zu &#39;&#39;kognitiver Abhängigkeit&#39;&#39; geführt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $wrong_info &gt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du bist mehrfach auf &#39;&#39;Halluzinationen&#39;&#39; hereingefallen und hast &#39;&#39;Falschinformationen&#39;&#39; übernommen.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $success &lt; 10&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Leistungen blieben &#39;&#39;hinter dem Möglichen&#39;&#39; zurück, und deinen &#39;&#39;Traumjob hast du nicht bekommen&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $wrong_info &gt; 4&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du bist mehrfach auf &#39;&#39;Halluzinationen&#39;&#39; hereingefallen und hast &#39;&#39;Falschinformationen&#39;&#39; übernommen.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $success &lt; 25&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Leistungen blieben &#39;&#39;hinter dem Möglichen&#39;&#39; zurück, und deinen &#39;&#39;Traumjob hast du nicht bekommen&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if $bias &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du hast &#39;&#39;Vorurteile der KI&#39;&#39; übernommen – dein Sozialleben leidet darunter.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
 
 &lt;&lt;set _posCount to Math.min(2, $_positiveSätze.length)&gt;&gt;
