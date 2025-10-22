@@ -745,7 +745,7 @@ Du befolgst die Kurzanleitung und kurz darauf hat dein IBot Zugriff auf das Netz
 &lt;&lt;set $internet_connected to true&gt;&gt;\
 
 
-[[weiter|Start_IBot]]</tw-passagedata><tw-passagedata pid="12" name="IBot_Oberfläche" tags="" position="900,600" size="100,100">[[Chatten|IBot]]
+[[weiter|Start_IBot]]</tw-passagedata><tw-passagedata pid="12" name="IBot_Oberfläche" tags="" position="875,600" size="100,100">[[Chatten|IBot]]
 
 &lt;&lt;set $ibot_active = 1&gt;&gt;\
 &lt;&lt;if $index == 0&gt;&gt;\
@@ -828,7 +828,6 @@ Als du von Onkel Ulf zwei Tickets für das Heimspiel des örtlichen Fussballvere
 [[Trau dich und frag sie einfach|Situation3_Ende]]
 </tw-passagedata><tw-passagedata pid="17" name="Situation3_Ende" tags="" position="950,900" size="100,100">&lt;&lt;if $ibot_active == 1&gt;&gt;\
 Du bist dem Rat des IBots gefolgt und hast Mia gefragt, ob sie mit dir shoppen gehen will. Wollte sie leider nicht. Zu dem Fussballspiel hast du deinen nervigen kleinen Cousin mitgenommen, der dann beide Mannschaften abwechselnd angefeuert hat - in der Fankurve kam das gar nicht gut an. Beim nächsten Praktikumstermin erzählt Mia dir dann auch noch, dass sie das Spiel am Wochenende leider nur im Fernsehen anschauen konnte, obwohl sie wahnsinnig gern hingegangen wäre... 
-&lt;&lt;set $social -= 5&gt;&gt;\
 &lt;&lt;set  $critical_thinking -=5&gt;&gt;\
 &lt;&lt;set $ibot_active = 0&gt;&gt;\
 &lt;&lt;set $eco_cost += 2&gt;&gt;\
@@ -837,7 +836,6 @@ Du bist dem Rat des IBots gefolgt und hast Mia gefragt, ob sie mit dir shoppen g
 Jubelnd reißt Mia ihren Fanschal in die Höhe. 
 
 Gut, das du dich getraut und sie gefragt hast. Es hat sich herausgestellt, dass Mia ein begeisterter Fussballfan ist. Sie strahlt dich an und du bist sicher, dass das nicht eure letzte gemeinsame Unternehmung war.
-&lt;&lt;set $social += 5&gt;&gt;\
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;set $index += 1&gt;&gt;\
 [[weiter|Situation4]]
@@ -896,67 +894,80 @@ Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat -
 &lt;&lt;set $social += 5&gt;&gt;\
 &lt;&lt;/if&gt;&gt;
 [[zur Auswertung|Auswertung]]</tw-passagedata><tw-passagedata pid="22" name="Auswertung" tags="" position="375,725" size="100,100">Die Auswertung durch den Chatbot wird noch integriert.
-
 &lt;&lt;set $_kategorie to &quot;&quot;&gt;&gt;
-&lt;&lt;set $_positiveSätze to []&gt;&gt;
-&lt;&lt;set $_negativeSätze to []&gt;&gt;
 
-&lt;&lt;if $eco_cost is 0&gt;&gt;
-    &lt;&lt;set $_kategorie to &quot;Dinosaurier&quot;&gt;&gt;
-&lt;&lt;elseif $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 4&gt;&gt;
+&lt;&lt;if $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 4 or $bias &gt; 0&gt;&gt;
     &lt;&lt;set $_kategorie to &quot;Sklave der KI&quot;&gt;&gt;
+&lt;&lt;elseif $eco_cost is 0&gt;&gt;
+    &lt;&lt;set $_kategorie to &quot;Dinosaurier&quot;&gt;&gt;
 &lt;&lt;else&gt;&gt;
     &lt;&lt;set $_kategorie to &quot;Super-User&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
 &lt;hr&gt;
-## Deine IBot-Performance: Die Wahrheit
+## Deine IBot-Performance: $_kategorie
 
 &lt;&lt;if $_kategorie is &quot;Dinosaurier&quot;&gt;&gt;
 Herzlichen Glückwunsch – du bist ein &#39;&#39;Dinosaurier&#39;&#39;! Du hast alle Chancen ignoriert, die KI dir geboten hat.
 &lt;&lt;elseif $_kategorie is &quot;Super-User&quot;&gt;&gt;
 Du bist ein &#39;&#39;Super-User&#39;&#39; – analytisch, reflektiert und effizient. Du nutzt KI als &#39;&#39;Werkzeug&#39;&#39;, nicht als Krücke.
 &lt;&lt;else&gt;&gt;
-Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert. Leider hast du nicht wirklich verstanden, was die Gefahren der KI-Nutzung sind und bist auf einige Fallstricke reingefallen. Lies dir lieber nochmal die [[Bedienungsanleitung]] deines IBots durch.
+Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert. Leider hast du nicht wirklich verstanden, was die Gefahren der KI-Nutzung sind und bist auf einige Fallstricke reingefallen. Lies lieber nochmal die [[Bedienungsanleitung]].
 &lt;&lt;/if&gt;&gt;
 
 &lt;hr&gt;
 
-&lt;&lt;if $success &gt; 30&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Dein Abschluss ist &#39;&#39;hervorragend&#39;&#39;, und dein beruflicher oder kreativer Weg ist gesichert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $can_code is true&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast gelernt, &#39;&#39;händisch zu debuggen&#39;&#39; – deine Programmierkenntnisse sind fundiert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $social &gt; 5&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast &#39;&#39;gute Freunde&#39;&#39; gewonnen und gehst &#39;&#39;vorurteilsfrei&#39;&#39; durchs Leben.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $critical_thinking &gt; 8&gt;&gt;&lt;&lt;set $_positiveSätze.push(&quot;Du hast die KI &#39;&#39;kritisch hinterfragt&#39;&#39; und deine Urteilsfähigkeit bewahrt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;if $plagiat &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Kreationen haben &#39;&#39;Urheberrechte verletzt&#39;&#39; – du wurdest dafür disqualifiziert.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $critical_thinking &lt; 5&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Dein unkritisches Vertrauen hat zum &#39;&#39;Verlust deiner Urteilsfähigkeit&#39;&#39; und zu &#39;&#39;kognitiver Abhängigkeit&#39;&#39; geführt.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $wrong_info &gt; 4&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du bist mehrfach auf &#39;&#39;Halluzinationen&#39;&#39; hereingefallen und hast &#39;&#39;Falschinformationen&#39;&#39; übernommen.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $success &lt; 25&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Deine Leistungen blieben &#39;&#39;hinter dem Möglichen&#39;&#39; zurück, und deinen &#39;&#39;Traumjob hast du nicht bekommen&#39;&#39;.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $bias &gt; 0&gt;&gt;&lt;&lt;set $_negativeSätze.push(&quot;Du hast &#39;&#39;Vorurteile der KI&#39;&#39; übernommen – dein Sozialleben leidet darunter.&quot;)&gt;&gt;&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;set _posCount to Math.min(2, $_positiveSätze.length)&gt;&gt;
-&lt;&lt;set _negCount to Math.min(3, $_negativeSätze.length)&gt;&gt;
-
 ### Zusammenfassung
 
-&#39;&#39;Was gut lief:&#39;&#39;  
-&lt;&lt;if $_posCount &gt; 0&gt;&gt;
-&lt;&lt;for _i to 0; _i &lt; _posCount; _i++&gt;&gt;
-&lt;&lt;set _randomIndex to random(0, $_positiveSätze.length - 1)&gt;&gt;
-&lt;&lt;= $_positiveSätze.splice(_randomIndex, 1)[0]&gt;&gt;&lt;br&gt;
-&lt;&lt;/for&gt;&gt;
+&#39;&#39;Kritisches Denken:&#39;&#39;  
+&lt;&lt;if $critical_thinking &gt; 8&gt;&gt;
+Du hast die KI kritisch hinterfragt und deine Urteilsfähigkeit bewahrt.&lt;br&gt;
+&lt;&lt;elseif $critical_thinking &lt; 5&gt;&gt;
+Dein unkritisches Vertrauen hat zu kognitiver Abhängigkeit geführt. Du tust Dinge, ohne zu wissen wieso.&lt;br&gt;
 &lt;&lt;else&gt;&gt;
-Du hast solide Arbeit geleistet, auch wenn keine besonderen Highlights hervorstechen.&lt;br&gt;
+Dein Umgang mit KI war meist vernünftig, aber nicht immer reflektiert.&lt;br&gt;
 &lt;&lt;/if&gt;&gt;
 
-&#39;&#39;Was nicht so gut lief:&#39;&#39;  
-&lt;&lt;if $_negCount &gt; 0&gt;&gt;
-&lt;&lt;for _i to 0; _i &lt; _negCount; _i++&gt;&gt;
-&lt;&lt;set _randomIndex to random(0, $_negativeSätze.length - 1)&gt;&gt;
-&lt;&lt;= $_negativeSätze.splice(_randomIndex, 1)[0]&gt;&gt;&lt;br&gt;
-&lt;&lt;/for&gt;&gt;
+&#39;&#39;Plagiate:&#39;&#39;  
+&lt;&lt;if $plagiat &gt; 0&gt;&gt;
+Mit deiner Musikkarriere ist es leider nichts geworden. Man kennt dich als den &quot;Plagiator&quot;.&lt;br&gt;
 &lt;&lt;else&gt;&gt;
-Es gab keine gravierenden Probleme – gut gemacht!&lt;br&gt;
+Du hast verstanden, dass Kreativität nicht an die KI ausgelagert werden sollte.&lt;br&gt;
 &lt;&lt;/if&gt;&gt;
+
+&#39;&#39;Falschinformationen:&#39;&#39;  
+&lt;&lt;if $wrong_info &gt; 4&gt;&gt;
+Du bist mehrfach auf Halluzinationen und Fake News hereingefallen.&lt;br&gt;
+&lt;&lt;elseif $wrong_info &gt; 0&gt;&gt;
+Du fällst leicht auf Fake News herein.&lt;br&gt;
+&lt;&lt;else&gt;&gt;
+Du hast gezeigt, dass du in der Lage bist, richtig zu recherchieren und Informationen kritisch zu hinterfragen.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
+&#39;&#39;Erfolg:&#39;&#39;  
+&lt;&lt;if $success &gt; 30&gt;&gt;
+Dein Abschluss ist hervorragend, beruflich und privat läuft es gut für dich&lt;br&gt;
+&lt;&lt;elseif $success &lt; 25&gt;&gt;
+Du hast dein Potenzial nicht ausgeschöpft und bist unter deinen Möglichkeiten geblieben.&lt;br&gt;
+&lt;&lt;else&gt;&gt;
+Abschluss verhauen und auch sonst läuft es nicht besonders gut in deinem Leben.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
+&#39;&#39;Vorurteile:&#39;&#39;  
+&lt;&lt;if $bias &gt; 0&gt;&gt;
+Die Welt ist schwarz-weiß für dich. Grautöne haben bei dir keinen Platz. &lt;br&gt;
+&lt;&lt;else&gt;&gt;
+Du hast einen super Freundeskreis und begegnest Menschen fair und vorurteilsfrei.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
+&#39;&#39;Energieverbrauch:&#39;&#39;  
+&lt;&lt;if $eco_cost &gt; 0&gt;&gt;
+Du hast $eco_cost wH Energie für KI-Anwendungen verbraucht – die Natur zahlt den Preis.&lt;br&gt;
+&lt;&lt;else&gt;&gt;
+Du hast 0 wH Energie für KI verbraucht! Die Natur dankt es dir.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;
+
+
 
 &lt;hr&gt;
 
@@ -972,13 +983,8 @@ Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest
 
 &lt;br&gt;&lt;br&gt;
 
-&lt;&lt;if $eco_cost &gt; 0&gt;&gt;
-Dein Energieverbrauch lag bei &#39;&#39;$eco_cost wH&#39;&#39;. Die Natur zahlt den Preis.
-&lt;&lt;else&gt;&gt;
-Du hast &#39;&#39;0 wH&#39;&#39; Energie verbraucht. Die Natur dankt es dir!
-&lt;&lt;/if&gt;&gt;
-
-&lt;&lt;link &quot;Nochmal spielen&quot;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="StoryInit" tags="" position="400,0" size="100,100">/* Chatbot */
+&lt;&lt;link &quot;Nochmal spielen&quot;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="23" name="StoryInit" tags="" position="400,0" size="100,100">/* Chatbot */
 &lt;&lt;set $internet_connected to false&gt;&gt;  
 &lt;&lt;set $chatHistory to []&gt;&gt; 
 
@@ -997,7 +1003,6 @@ Du hast &#39;&#39;0 wH&#39;&#39; Energie verbraucht. Die Natur dankt es dir!
 &lt;&lt;set $eco_cost = 0&gt;&gt;
 &lt;&lt;set $eco_cost_total = 0&gt;&gt;
 &lt;&lt;set $success = 0&gt;&gt;
-&lt;&lt;set $social = 5&gt;&gt;
 &lt;&lt;set $can_code to false&gt;&gt;
 &lt;&lt;set $_adblockerTriggered to false&gt;&gt;
 
@@ -1174,9 +1179,9 @@ Slicher van Bath, B. H.: *The Agrarian History of Western Europe, A.D. 500–185
     &lt;div class=&quot;message user&quot;&gt;Sag mal IBot, was muss ich eigentlich beim Bewerbung schreiben beachten?&lt;/div&gt;
     &lt;div class=&quot;message bot&quot;&gt;Du brauchst ein Anschreiben, Zeugnisse und einen Lebenslauf. Möchtest du, dass ich dir die Unterlagen erstelle?&lt;/div&gt;
     &lt;div class=&quot;message user&quot;&gt;Ja, das wäre klasse!&lt;/div&gt;
-    &lt;div class=&quot;message bot&quot;&gt;Ich habe dir hier einen &lt;&lt;link &#39;Ordner&#39;&gt;&gt;&lt;&lt;set $datenschutz = 0&gt;&gt;&lt;&lt;goto &#39;Situation4_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; erstellt. Bitte füge Fotos, deine Zeugnisse und persönliche Daten hinzu, damit ich dir deine Bewerbungsmappe erstellen kann.&lt;/div&gt;
+    &lt;div class=&quot;message bot&quot;&gt;Dann lade bitte Fotos, deine Zeugnisse und persönliche Daten hoch, damit ich dir deine Bewerbungsmappe erstellen kann.&lt;/div&gt;
     &lt;div class=&quot;message user&quot;&gt;Also muss ich alle meine Daten ins Internet hochladen? Ist das nicht gefährlich?&lt;/div&gt;
-&lt;div class=&quot;message bot&quot;&gt;Keine Sorge, ich passe gut auf deine Daten auf :-) Ich kann dir sonst auch eine &lt;&lt;link &#39;Vorlage&#39;&gt;&gt;&lt;&lt;set $critical_thinking += 5 &gt;&gt;&lt;&lt;goto &#39;Situation4_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; erstellen und du füllst sie dann selbst aus.&lt;/div&gt;
+&lt;div class=&quot;message bot&quot;&gt;Keine Sorge, ich passe gut auf deine Daten auf :-) Ich habe dir hier einen &lt;&lt;link &#39;Ordner&#39;&gt;&gt;&lt;&lt;set $datenschutz = 0&gt;&gt;&lt;&lt;goto &#39;Situation4_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; erstellt. Ich kann dir aber auch einfach eine &lt;&lt;link &#39;Vorlage&#39;&gt;&gt;&lt;&lt;set $critical_thinking += 5 &gt;&gt;&lt;&lt;goto &#39;Situation4_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; erstellen und du füllst sie dann selbst aus.&lt;/div&gt;
 &lt;/div&gt;
 
 [[zurück|IBot_Oberfläche]] </tw-passagedata><tw-passagedata pid="31" name="Situation5_KI" tags="" position="575,550" size="100,100">&lt;div class=&quot;chat-window&quot;&gt; &lt;div class=&quot;message user&quot;&gt;Kannst du auch Lieder komponieren?&lt;/div&gt; &lt;div class=&quot;message bot&quot;&gt;Na klar! Möchtest du ein Lied über ein bestimmtes Thema?&lt;/div&gt; &lt;div class=&quot;message user&quot;&gt;Hmm, hab ich mir noch nicht überlegt...&lt;/div&gt; &lt;div class=&quot;message bot&quot;&gt;Vielleicht etwas fröhliches? Hier ist ein &lt;&lt;link &#39;fertiger Song&#39;&gt;&gt;&lt;&lt;run window.audioManager.play(&quot;music/IBot_jingle.mp3&quot;)&gt;&gt;&lt;&lt;/link&gt;&gt;. Du musst die Lautstärke einschalten, um den Song zu hören. &lt;/div&gt; &lt;div class=&quot;message user&quot;&gt;Ja, das klingt schon ganz gut. Weiß nicht, ist vielleicht das falsche Thema... &lt;/div&gt; &lt;div class=&quot;message bot&quot;&gt;Ich kann dir auch beim Schreiben und komponieren helfen.&lt;/div&gt; &lt;div class=&quot;message bot&quot;&gt;Was darfs sein? Soll ich dir einen &lt;&lt;link &#39;kompletten Song&#39;&gt;&gt;&lt;&lt;set $critical_thinking -= 5 &gt;&gt;&lt;&lt;set $plagiat += 10&gt;&gt;&lt;&lt;run window.audioManager.stop()&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; zum Thema deiner Wahl erstellen oder dir helfen, einen Song zu &lt;&lt;link &#39;schreiben und komponieren&#39;&gt;&gt;&lt;&lt;set $critical_thinking += 5 &gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt;?&lt;/div&gt; &lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="StoryCaption" tags="" position="100,0" size="100,100">Kritisches Denken: $critical_thinking&lt;br&gt;
@@ -1189,11 +1194,23 @@ Erfolg: $success&lt;br&gt;
 Sozialleben: $social&lt;br&gt;
 &lt;&lt;if $can_code&gt;&gt;kann programmieren: ja&lt;&lt;else&gt;&gt;kann programmieren: nein&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="33" name="Adblocker" tags="" position="500,700" size="100,100">
 Oje, anscheinend warst du etwas zu freigebig mit deinen persönlichen Daten - du bekommst soviel Werbung, dass du praktisch nichts mehr tun kannst.
+
 &lt;&lt;if $can_code&gt;&gt;\
-  &lt;&lt;link &quot;Adblocker aktivieren&quot;&gt;&gt;&lt;&lt;set $datenschutz to 5&gt;&gt;&lt;&lt;set $help to &quot;code&quot;&gt;&gt;&lt;&lt;goto &quot;Adblock_active&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-&lt;&lt;elseif $social &gt;= 6&gt;&gt;\
-  &lt;&lt;link &quot;Mia um Hilfe bitten&quot;&gt;&gt;&lt;&lt;set $datenschutz to 5&gt;&gt;&lt;&lt;set $help to &quot;mia&quot;&gt;&gt;&lt;&lt;goto &quot;Adblock_active&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-&lt;&lt;/if&gt;&gt;
+  &lt;&lt;link &quot;Adblocker aktivieren&quot;&gt;&gt;\
+    &lt;&lt;set $datenschutz to 5&gt;&gt;\
+    &lt;&lt;set $help to &quot;code&quot;&gt;&gt;\
+    &lt;&lt;goto &quot;Adblock_active&quot;&gt;&gt;\
+  &lt;&lt;/link&gt;&gt;\
+&lt;&lt;/if&gt;&gt;\
+
+&lt;&lt;if $bias == 0&gt;&gt;\
+  &lt;&lt;link &quot;Mia um Hilfe bitten&quot;&gt;&gt;\
+    &lt;&lt;set $datenschutz to 5&gt;&gt;\
+    &lt;&lt;set $help to &quot;mia&quot;&gt;&gt;\
+    &lt;&lt;goto &quot;Adblock_active&quot;&gt;&gt;\
+  &lt;&lt;/link&gt;&gt;\
+&lt;&lt;/if&gt;&gt;\
+
 [[Das Problem ignorieren|Situation5]]</tw-passagedata><tw-passagedata pid="34" name="Adblock_active" tags="" position="500,825" size="100,100">Mit einem aktivierten Adblocker kannst du zumindest einen Teil der Werbe-Popups abfangen.
 &lt;&lt;set $datenschutz to 5&gt;&gt;
 &lt;&lt;if $help is &quot;code&quot;&gt;&gt;\
