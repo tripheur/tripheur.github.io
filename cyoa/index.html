@@ -782,15 +782,15 @@ Dein IBot hat dir geholfen, die Hausarbeit zu schreiben – und es ging wirklich
 Zum Glück hast du den Text, den der IBot generiert hat, nochmal genau durchgelesen. Einige der Quellen existierten gar nicht und auch im Text stand einiger Blödsinn. Die korrekten Fakten zu recherchieren hat dich zwar etwas Zeit gekostet, aber dafür hast du mit einer Top-Note bestanden!
 &lt;&lt;set $success += 10&gt;&gt;\
 &lt;&lt;set $eco_cost += 15&gt;&gt;\
-&lt;&lt;elseif $fehler8_gefunden and $fehler9_gefunden and $fehler10_gefunden and ($fails &gt; 0)&gt;&gt;\
+&lt;&lt;elseif $fehler8_gefunden and $fehler9_gefunden and $fehler10_gefunden and ($score &lt; 10)&gt;&gt;\
 Zum Glück hast du dir die Quellen nochmal genauer angesehen - da hatte der IBot dir ziemlichen Quatsch erzählt. Ganz fehlerfrei war dein Text trotzdem nicht, aber für ein &quot;befriedigend&quot; reicht es. Nächstes Mal kritischer nachprüfen!
 &lt;&lt;set $success += $score&gt;&gt;\
-&lt;&lt;set $wrong_info -= $fails&gt;&gt;\
+&lt;&lt;set $wrong_info += $fails&gt;&gt;\
 &lt;&lt;set $eco_cost += 10&gt;&gt;\
 &lt;&lt;else&gt;&gt;\
 Die Quellen die dein IBot dir genannt hat, existieren leider gar nicht - zumindest nicht alle. Dass du sie trotzdem verwendet und das Dokument so abgegeben hast bedeutet leider, dass du durchgefallen bist. Vielleicht solltest du dir die [[Bedienungsanleitung]] nochmal anschauen?
 &lt;&lt;set $success -= 5 &gt;&gt;\
-&lt;&lt;set $wrong_info -= $fails&gt;&gt;\
+&lt;&lt;set $wrong_info += $fails&gt;&gt;\
 &lt;&lt;set $eco_cost += 5&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
 &lt;&lt;else&gt;&gt;\ Du hast die ganze Nacht recherchiert und geschrieben. Mehrmals bist du auf deiner Tastatur eingeschlafen. Und das merkt man deiner Arbeit leider auch an. Inhaltlich ist soweit alles korrekt, aber die vielen Rechtschreibfehler und die schlampige Formatierung geben leider deutlichen Abzug bei der Note. Müde und eine schlechte Note - Deine Laune ist auf dem Nullpunkt. 
@@ -917,17 +917,17 @@ Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat -
 &lt;h1&gt; Deine IBot-Performance: $_kategorie&lt;/h1&gt;
 &lt;p&gt;
 &lt;&lt;if $_kategorie is &quot;Dinosaurier&quot;&gt;&gt;\
-&lt;div class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
+&lt;div align=&quot;center&quot; class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
     &lt;img src=&quot;images/dino_oma.gif&quot; alt=&quot;dino&quot; style=&quot;max-width:300px;&quot;&gt;
 &lt;/div&gt;
 Herzlichen Glückwunsch – du bist ein &#39;&#39;Dinosaurier&#39;&#39;! Du hast alle Chancen ignoriert, die KI dir geboten hat.
 &lt;&lt;elseif $_kategorie is &quot;Super-User&quot;&gt;&gt;\
-&lt;div class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
+&lt;div align=&quot;center&quot; class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
     &lt;img src=&quot;images/poweruser.jpg&quot; alt=&quot;superuser&quot; style=&quot;max-width:300px;&quot;&gt;
 &lt;/div&gt;
 Du bist ein &#39;&#39;Super-User&#39;&#39; – analytisch, reflektiert und effizient. Du nutzt KI als &#39;&#39;Werkzeug&#39;&#39;, nicht als Krücke.
 &lt;&lt;else&gt;&gt;\
-&lt;div class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
+&lt;div align=&quot;center&quot; class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
     &lt;img src=&quot;images/sklave.jpg&quot; alt=&quot;sklave&quot; style=&quot;max-width:300px;&quot;&gt;
 &lt;/div&gt;
 Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert. Leider hast du nicht wirklich verstanden, was die Gefahren der KI-Nutzung sind und bist auf einige Fallstricke reingefallen. Lies lieber nochmal die [[Bedienungsanleitung]].
@@ -937,9 +937,9 @@ Du bist ein &#39;&#39;Sklave der KI&#39;&#39; – effizient, aber fremdgesteuert
 &lt;h2&gt;Zusammenfassung&lt;/h2&gt;
 
 &#39;&#39;Erfolg:&#39;&#39;  
-&lt;&lt;if $success &gt; 30&gt;&gt;\
+&lt;&lt;if $success &gt; 15&gt;&gt;\
 Dein Abschluss ist hervorragend, beruflich und privat läuft es gut für dich&lt;br&gt;
-&lt;&lt;elseif $success &lt; 25&gt;&gt;\
+&lt;&lt;elseif $success &lt;= 15 and $success &gt; 0 &gt;&gt;\
 Du hast dein Potenzial nicht ausgeschöpft und bist unter deinen Möglichkeiten geblieben.&lt;br&gt;
 &lt;&lt;else&gt;&gt;\
 Abschluss verhauen und auch sonst läuft es nicht besonders gut in deinem Leben.&lt;br&gt;
@@ -983,22 +983,17 @@ Du hast $eco_cost wH Energie für KI-Anwendungen verbraucht – die Natur zahlt 
 &lt;&lt;else&gt;&gt;\
 Du hast 0 wH Energie für KI verbraucht! Die Natur dankt es dir.&lt;br&gt;
 &lt;&lt;/if&gt;&gt;\
-&lt;hr&gt;
 
 &lt;h2&gt; Dein Gesamturteil&lt;/h2&gt;
-
 &lt;&lt;if $_kategorie is &quot;Super-User&quot;&gt;&gt;\
-
 Du hältst ein ideales Gleichgewicht zwischen KI-Nutzung und menschlicher Kompetenz.
 &lt;&lt;elseif $_kategorie is &quot;Sklave der KI&quot;&gt;&gt;\
 Du solltest dich unbedingt mehr mit den Risiken der KI-Nutzung auseinandersetzen.
 Schau dir die [[Bedienungsanleitung]] genau an und probiere es nochmal.
 &lt;&lt;else&gt;&gt;\
-Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest.
-&lt;&lt;/if&gt;&gt;
-
-&lt;br&gt;&lt;br&gt;
-
+Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest. 
+&lt;&lt;/if&gt;&gt;\
+&lt;br&gt;
 Bitte nimm dir kurz die Zeit, an der 
 &lt;a href=&quot;https://docs.google.com/forms/d/e/1FAIpQLSd4C3przPqgOR8tbfRRy5GxLor9Tc-KTV9fptM2KoWf8Yb6dw/viewform?usp=dialog&quot; target=&quot;_blank&quot;&gt;Spielerumfrage &lt;/a&gt; telzunehmen.
 
