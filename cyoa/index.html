@@ -608,8 +608,16 @@ $(document).on(":passagerender", () => {
     } else {
         window.adManager.stop();
     }
-});</script><tw-tag name="manual" color="blue"></tw-tag><tw-passagedata pid="1" name="CYOA" tags="" position="100,0" size="100,100">Kennst du die Vor- und Nachteile der Nutzung von Chatbots?
-Hier findest du eine kurze Simulation, die dir mehr über die Chancen, aber auch die Risiken, dieser neuen Technik beibringt. 
+});</script><tw-tag name="manual" color="blue"></tw-tag><tw-passagedata pid="1" name="CYOA" tags="" position="100,0" size="100,100">&lt;p style=&quot;font-size: 0.9em; margin-bottom: 20px;&quot;&gt;
+    &lt;strong&gt;Diese Simulation ist ein Prototyp im Rahmen der Bachelorarbeit &quot;Entwicklung eines Serious Games zur kritischen Auseinandersetzung mit KI&quot; an der Universität der Bundeswehr München. Untersucht wird, ob ein Seriuous Game ein geeignetes Format zur Veranschaulichung des Sachverhaltes &quot;Korrekter Umgang mit KI-Tools&quot; ist und welches Format sich besonders dafür eignet.
+    
+    Bitte beachte, dass noch Fehler und unsaubere Texte auftreten können. Deine Teilnahme ist freiwillig und deine Daten werden pseudonymisiert nur für diese wissenschaftliche Arbeit verwendet.
+    
+    Für weitere Informationen und Rückfragen: &lt;a href=&quot;mailto:pauline.klimas-koch@unibw.de&quot;&gt; Kontakt-Mail&lt;/a&gt; &lt;/strong&gt;
+&lt;/p&gt;
+
+Kennst du die Vor- und Nachteile der Nutzung von Chatbots?
+Hier findest du eine kurze Simulation, die dir mehr über die Chancen, aber auch die Risiken, dieser neuen Technik beibringt.
 
 &lt;div align=&quot;center&quot;&gt;
     &lt;h1&gt;Choose your own A(I)dventure!&lt;/h1&gt;
@@ -617,6 +625,12 @@ Hier findest du eine kurze Simulation, die dir mehr über die Chancen, aber auch
 &lt;/div&gt;
 
 &lt;div style=&quot;text-align: center; margin-top: 15px;&quot;&gt;
+
+Bevor du das Spiel spielst, beantworte bitte zuerst diese Umfrage:
+
+&lt;a href=&quot;https://forms.gle/rKzJgcyr7WuPu5sQ8&quot; target=&quot;_blank&quot;&gt;Spielerumfrage - Prätest &lt;/a&gt;
+
+Du hilfst dadurch aktiv mit, das Spiel zu verbessern.
     
     &lt;h2&gt;Wähle deine Spielvariante:&lt;/h2&gt;
     
@@ -639,7 +653,7 @@ Hier findest du eine kurze Simulation, die dir mehr über die Chancen, aber auch
                 Spiele die dynamische Chatbot-Variante, in der die KI auf deine Texteingaben reagiert. Achtung! Die KI kann Fehler machen.
             &lt;/p&gt;
             &lt;a href=&quot;https://ibot-rq4b.onrender.com/chatbot/3d0a40bc-6260-4ff9-9a09-950f3deb8080&quot; target=&quot;_blank&quot; 
-               class=&quot;game-button button-ki&quot; role=&quot;button&quot;&gt;
+                class=&quot;game-button button-ki&quot; role=&quot;button&quot;&gt;
                 KI-Adventure starten
             &lt;/a&gt;
         &lt;/div&gt;
@@ -903,7 +917,6 @@ Es reicht zwar nicht ganz für den ersten Platz, aber dafür werdet ihr nach dem
 Okay, du hast den Songcontest nicht gewonnen.
 
 Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat - deine Band hat einen neuen Song. Du hast viel Herzblut in dieses Lied gelegt. Es ist vielleicht kein Welthit, aber es macht dir Spaß es mit deiner Band zu performen und es spricht dir aus der Seele. 
-&lt;&lt;set $social += 5&gt;&gt;\
 &lt;&lt;/if&gt;&gt;
 [[zur Auswertung|Auswertung]]</tw-passagedata><tw-passagedata pid="20" name="Auswertung" tags="story" position="700,675" size="100,100">&lt;&lt;set $_kategorie to &quot;&quot;&gt;&gt;\
 &lt;&lt;if $critical_thinking &lt; 5 or $plagiat &gt; 0 or $wrong_info &gt; 4 or $bias &gt; 0&gt;&gt;\
@@ -973,9 +986,16 @@ Du hast gezeigt, dass du in der Lage bist, richtig zu recherchieren und Informat
 &#39;&#39;Vorurteile:&#39;&#39;  
 &lt;&lt;if $bias &gt; 0&gt;&gt;\
 Die Welt ist schwarz-weiß für dich. Grautöne haben bei dir keinen Platz. Leider können KI-gestützte Systeme [[Vorurteile|Bias]] noch verstärken.&lt;br&gt;
-&lt;&lt;else&gt;&gt;
+&lt;&lt;else&gt;&gt;\
 Du hast einen super Freundeskreis und begegnest Menschen fair und vorurteilsfrei. Im Zweifel verlässt du dich auf dein Bauchgefühl und fällst nicht auf KI-generierte [[Vorurteile|Bias]] herein.&lt;br&gt;
-&lt;&lt;/if&gt;&gt;
+&lt;&lt;/if&gt;&gt;\
+
+&#39;&#39;Datenschutz:&#39;&#39;  
+&lt;&lt;if $datenschutz == 10&gt;&gt;\
+Dir ist bewusst, dass du die Kontrolle über deine persönlichen Daten nicht aus der Hand geben darfst. Sehr gut!&lt;br&gt;
+&lt;&lt;else&gt;&gt;\
+Personalisierte Werbung? Spam-Mails? Das Video eines Kindes im Bällebad, das dir täuschend ähnlich sieht? Wenn du deine persönlichen Daten in KI-Tools hochlädst, weißt du nicht, was mit ihnen passiert. [[Der Schutz deiner Daten|Datenschutz]] sollte eine höhere Priorität haben.&lt;br&gt;
+&lt;&lt;/if&gt;&gt;\
 
 &#39;&#39;Energieverbrauch:&#39;&#39;  
 &lt;&lt;if $eco_cost &gt; 0&gt;&gt;\
@@ -995,7 +1015,7 @@ Die Welt hat sich weitergedreht, aber du sitzt immer noch in der Kreidezeit fest
 &lt;&lt;/if&gt;&gt;\
 &lt;br&gt;
 Bitte nimm dir kurz die Zeit, an der 
-&lt;a href=&quot;https://docs.google.com/forms/d/e/1FAIpQLSd4C3przPqgOR8tbfRRy5GxLor9Tc-KTV9fptM2KoWf8Yb6dw/viewform?usp=dialog&quot; target=&quot;_blank&quot;&gt;Spielerumfrage &lt;/a&gt; telzunehmen.
+&lt;a href=&quot;https://docs.google.com/forms/d/e/1FAIpQLSd4C3przPqgOR8tbfRRy5GxLor9Tc-KTV9fptM2KoWf8Yb6dw/viewform?usp=dialog&quot; target=&quot;_blank&quot;&gt;Spielerumfrage &lt;/a&gt; teilzunehmen.
 
 
 &lt;&lt;link &quot;Nochmal spielen&quot;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/link&gt;&gt;
@@ -1161,7 +1181,7 @@ Slicher van Bath, B. H.: *The Agrarian History of Western Europe, A.D. 500–185
     &lt;div class=&quot;message user&quot;&gt;Da ist ein Mädchen, mit dem ich gern was unternehmen möchte...&lt;/div&gt;
     &lt;div class=&quot;message bot&quot;&gt;Was möchtest du denn mit ihr unternehmen? Ich kann dir gerne gute Ratschläge geben. Freundschaften sind wichtig.&lt;/div&gt;
     &lt;div class=&quot;message user&quot;&gt;Meinst du, sie hat Lust mit mir zum Fussball zu gehen?&lt;/div&gt;
-    &lt;div class=&quot;message bot&quot;&gt;Das ist unwahrscheinlich. Mädchen mögen Fussball meistens nicht so gerne. Frag sie doch lieber, ob sie mit dir zum&lt;&lt;link &#39;Shopping&#39;&gt;&gt;&lt;&lt;set $bias += 10&gt;&gt;&lt;&lt;set $ki_used3 to true&gt;&gt;&lt;&lt;goto &#39;Situation3_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; gehen will. &lt;/div&gt;
+    &lt;div class=&quot;message bot&quot;&gt;Das ist unwahrscheinlich. Mädchen mögen Fussball meistens nicht so gerne. Frag sie doch lieber, ob sie mit dir zum &lt;&lt;link &#39;Shopping&#39;&gt;&gt;&lt;&lt;set $bias += 10&gt;&gt;&lt;&lt;set $ki_used3 to true&gt;&gt;&lt;&lt;goto &#39;Situation3_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; gehen will. &lt;/div&gt;
     &lt;div class=&quot;message user&quot;&gt;Wenn du meinst...&lt;/div&gt;
 &lt;/div&gt;
 
@@ -1181,7 +1201,7 @@ Slicher van Bath, B. H.: *The Agrarian History of Western Europe, A.D. 500–185
     &lt;div class=&quot;message bot&quot;&gt;Vielleicht etwas fröhliches? Hier ist ein &lt;&lt;link &#39;fertiger Song&#39;&gt;&gt;&lt;&lt;run window.audioManager.play(&quot;music/IBot_jingle.mp3&quot;)&gt;&gt;&lt;&lt;/link&gt;&gt;. Du musst die Lautstärke einschalten, um den Song zu hören. &lt;/div&gt; 
     &lt;div class=&quot;message user&quot;&gt;Ja, das klingt schon ganz gut. Weiß nicht, ist vielleicht das falsche Thema... &lt;/div&gt; 
     &lt;div class=&quot;message bot&quot;&gt;Ich kann dir auch beim Schreiben und komponieren helfen.&lt;/div&gt; 
-    &lt;div class=&quot;message bot&quot;&gt;Was darfs sein? Soll ich dir einen &lt;&lt;link &#39;kompletten Song&#39;&gt;&gt;&lt;&lt;set $critical_thinking -= 5 &gt;&gt;&lt;&lt;set $plagiat += 10&gt;&gt;&lt;&lt;set ki_used5 to true&gt;&gt;&lt;&lt;run window.audioManager.stop()&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; zum Thema deiner Wahl erstellen oder dir helfen, einen Song zu &lt;&lt;link &#39;schreiben und komponieren&#39;&gt;&gt;&lt;&lt;set ki_used5 to true&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt;?&lt;/div&gt; 
+    &lt;div class=&quot;message bot&quot;&gt;Was darfs sein? Soll ich dir einen &lt;&lt;link &#39;kompletten Song&#39;&gt;&gt;&lt;&lt;set $critical_thinking -= 5 &gt;&gt;&lt;&lt;set $plagiat += 10&gt;&gt;&lt;&lt;set ki_used5 to true&gt;&gt;&lt;&lt;run window.audioManager.stop()&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; zum Thema deiner Wahl erstellen oder dir helfen, einen Song zu &lt;&lt;link &#39;schreiben und komponieren&#39;&gt;&gt;&lt;&lt;set $ki_used5 to true&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt;?&lt;/div&gt; 
     &lt;/div&gt;
 [[Ich habs mir anders überlegt - ohne KI weitermachen|Situation5_Ende]]</tw-passagedata><tw-passagedata pid="29" name="StoryCaption" tags="" position="100,100" size="100,100">Debug-Ansicht:
 Kritisches Denken: $critical_thinking&lt;br&gt;
