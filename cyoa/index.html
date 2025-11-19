@@ -252,168 +252,8 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
     0% { transform: translateX(0); }
     100% { transform: translateX(10px); }
 }
-/* Neue Ladeanimation */
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #007bff;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-#story {
-    background-color: #000000 !important;
-}
-
-
-#ui-bar {
-    background-color: #000000 !important;
-}
-
-
-#story-core {
-    box-shadow: none !important;
-}
-
-</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* =========================================================
-   CHATBOT + FLOWISE-AUSWERTUNG + AUDIO + WERBELOGIK
-   ========================================================= */
-
-// ------------------- Chatbot allgemein -------------------
-async function query(data) {
-  try {
-    const response = await fetch(
-      "https://cloud.flowiseai.com/api/v1/prediction/cc782555-7b47-46c1-ba3a-0a419547e21d",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      }
-    );
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Fehler bei der Flowise-Abfrage:", error);
-    return { text: "Sorry, der Bot hat einen Fehler! 😅" };
-  }
-}
-
-// KORRIGIERT: Vereinfachte sendMessage-Funktion, die auf Engine.show() setzt
-window.sendMessage = function () {
-    const inputField = document.getElementById("inputmessage");
-    const message = inputField.value.trim();
-    if (!message) return;
-
-    // 1. Nachricht des Spielers zum Chatverlauf hinzufügen
-    State.setVar(
-        "$chatHistory",
-        (State.getVar("$chatHistory") || []).concat([{ sender: "user", text: message }])
-    );
-
-    // 2. Eingabefeld leeren
-    inputField.value = "";
-    
-    // 3. Wenn kein Internet, sofort mit Bot-Antwort und Neustart der Passage antworten.
-    if (!State.getVar("$internet_connected")) {
-        const aiResponse = "Bitte verbinde mich mit dem Internet.";
-        State.setVar(
-            "$chatHistory",
-            (State.getVar("$chatHistory") || []).concat([{ sender: "bot", text: aiResponse }])
-        );
-        Engine.show(); 
-    } else {
-        // 4. KI-Anfrage senden
-        query({ question: message }).then((response) => {
-            const botReply = response.text || "Ich weiß nicht, was ich sagen soll!";
-            
-            // Bot-Antwort zum Chatverlauf hinzufügen
-            State.setVar(
-                "$chatHistory",
-                (State.getVar("$chatHistory") || []).concat([{ sender: "bot", text: botReply }])
-            );
-            Engine.show(); 
-        });
-        
-        // Rendern, um die Spielernachricht sofort anzuzeigen
-        Engine.show();
-    }
-}; // 🛑 HINZUFÜGT
-
-// ------------------- Flowise Auswertung -------------------
-window.setup = window.setup || {};
-
-setup.evaluatePlayer = async function () {
-  // Verhindert doppelte Requests (Hinzugefügt: _evaluationFailed)
-  if (State.getVar("_evaluationDone") || State.getVar("_evaluationFailed")) return;
-
-  State.setVar("_evaluationDone", true);
-  State.setVar("$evaluationResponse", "Auswertung wird geladen...");
-
-  const playerData = {
-    critical_thinking: State.getVar("critical_thinking") || 0,
-    datenschutz: State.getVar("datenschutz") || 0,
-    wrong_info: State.getVar("wrong_info") || 0,
-    plagiat: State.getVar("plagiat") || 0,
-    bias: State.getVar("bias") || 0,
-    eco_cost: State.getVar("eco_cost") || 0,
-    eco_cost_total: State.getVar("eco_cost_total") || 0,
-    success: State.getVar("success") || 0,
-    social: State.getVar("social") || 0,
-    can_code: State.getVar("can_code") || false
-  };
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(
-      "https://cloud.flowiseai.com/api/v1/prediction/cc782555-7b47-46c1-ba3a-0a419547e21d",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          evaluation: true,
-          instruction:
-            "Generiere eine Bewertung für den Spieler basierend auf den Variablen und den Bewertungsrichtlinien im Documentstore. Beschreibe den Spielertyp (z. B. 'kritischer Denker', 'Dinosaurier') und die Konsequenzen der Entscheidungen in einer immersiven, neutralen und höflichen Sprache. Verwende maximal ein Emoji.",
-          variables: playerData
-        }),
-        signal: controller.signal
-      }
-    );
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) throw new Error("HTTP-Fehler: " + response.status);
-
-    const result = await response.json();
-    const text =
-      result.text ||
-      result.output ||
-      "Der Bot hat keine verständliche Antwort geliefert.";
-
-    State.setVar("$evaluationResponse", text);
-    Engine.show();
-  } catch (error) {
-    console.error("Auswertungsfehler:", error);
-    State.setVar("_evaluationFailed", true);
-    let message = "⚠️ Fehler bei der Auswertung: ";
-    if (error.name === "AbortError") {
-      message += "Der Server hat nicht rechtzeitig geantwortet. Bitte versuche es später erneut.";
-    } else {
-      message += "Verbindung zum Server fehlgeschlagen.";
-    }
-    State.setVar("$evaluationResponse", message);
-    Engine.show();
-  }
-};
-
-// ------------------- Audio-Manager (KORRIGIERT) -------------------
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">// ------------------- Audio-Manager -------------------
 window.audioManager = {
   current: null,
   play(src, loop = false) {
@@ -438,7 +278,7 @@ window.audioManager = {
   }
 };
 
-// ------------------- Werbe-Popups (KORRIGIERT) -------------------
+// ------------------- Werbe-Popups-------------------
 window.adManager = {
   interval: null,
   ads: [
@@ -514,7 +354,7 @@ window.adManager = {
     this.paused = true;
   },
 
-  // KORRIGIERT: Steuert die 5 Popups in schneller Folge (alle nach 1 Sekunde)
+  // Steuert die 5 Popups in schneller Folge (alle nach 1 Sekunde)
   runAdRain() {
       if (this.paused) return;
       
@@ -530,7 +370,7 @@ window.adManager = {
       }, 1000); // 1 Sekunde warten, dann alle 5 starten
   },
 
-  // NEU: Erstellt und zeigt ein einzelnes Popup an
+  // Erstellt und zeigt ein einzelnes Popup an
   createAndDisplaySingleAd() {
     // Wenn das Spiel pausiert ist oder der Datenschutz gelöst wurde, abbrechen
     if (this.paused || Number(State.getVar("$datenschutz")) === 10) return; 
@@ -571,14 +411,14 @@ window.adManager = {
   }
 }; // 🛑 HINZUFÜGT
 
-// ------------------- SugarCube Passage Handling (KORRIGIERT) -------------------
+// ------------------- SugarCube Passage Handling -------------------
 
 // Render event handling
 $(document).on(":passagerender", () => {
     // --- CHATBOX LOGIK ---
     const chatBox = document.getElementById("chatbox");
     if (chatBox) {
-        chatBox.innerHTML = ""; // IMMER die Chatbox leeren
+        chatBox.innerHTML = ""; // 
         let chatHistory = State.getVar("$chatHistory") || [];
         
         // Fügt die Systemnachricht nur einmal in den Verlauf ein
@@ -608,7 +448,7 @@ $(document).on(":passagerender", () => {
     } else {
         window.adManager.stop();
     }
-});</script><tw-tag name="manual" color="blue"></tw-tag><tw-passagedata pid="1" name="CYOA" tags="" position="100,0" size="100,100">&lt;p style=&quot;font-size: 0.9em; margin-bottom: 20px;&quot;&gt;
+});</script><tw-tag name="manual" color="blue"></tw-tag><tw-passagedata pid="1" name="CYOA" tags="" position="100,100" size="100,100">&lt;p style=&quot;font-size: 0.9em; margin-bottom: 20px;&quot;&gt;
     &lt;strong&gt;Diese Simulation ist ein Prototyp im Rahmen der Bachelorarbeit &quot;Entwicklung eines Serious Games zur kritischen Auseinandersetzung mit KI&quot; an der Universität der Bundeswehr München. Untersucht wird, ob ein Serious Game ein geeignetes Format zur Veranschaulichung des Sachverhaltes &quot;Korrekter Umgang mit KI-Tools&quot; ist und welches Format sich besonders dafür eignet.
     
     Bitte beachte, dass noch Fehler und unsaubere Texte auftreten können. Deine Teilnahme ist freiwillig und anonym. Die erhobenen Daten werden nur für diese wissenschaftliche Arbeit verwendet.
@@ -657,7 +497,7 @@ Du hilfst dadurch aktiv mit, das Spiel zu verbessern.
         &lt;/div&gt;
     &lt;/div&gt;
     
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Start-A" tags="story" position="400,0" size="100,100">
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Start-A" tags="story" position="500,150" size="100,100">
 Es ist dein Geburtstag. 
 Du öffnest das Geschenk deiner Eltern:
 &lt;div class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
@@ -952,7 +792,7 @@ Vielleicht solltest du dir die [[Bedienungsanleitung]] des IBot nochmal anschaue
 &lt;div align=&quot;center&quot; class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
     &lt;img src=&quot;images/band.jpg&quot; alt=&quot;Band&quot; style=&quot;max-width:300px;&quot;&gt;
 &lt;/div&gt;
-
+ &lt;&lt;audio &quot;Algorithmus&quot; play&gt;&gt;\
 Es war ein hartes Stück Arbeit, aber gemeinsam mit deiner Band und mit Unterstützung des IBots bei Versmaß und dem Aufschreiben der Noten, habt ihr ein wirklich tolles Lied geschrieben. Und zum Glück hast du darauf verzichtet, den Song einfach vom IBot schreiben zu lassen - zwei andere Bands wurden genau wegen so etwas disqualifiziert. 
 Es reicht zwar nicht ganz für den ersten Platz, aber dafür werdet ihr nach dem Auftritt von einer Plattenfirma angeschrieben. Vielleicht wird das ja was mit der Musikkarriere.
  &lt;&lt;set $eco_cost += 25&gt;&gt;\
@@ -964,7 +804,7 @@ Es reicht zwar nicht ganz für den ersten Platz, aber dafür werdet ihr nach dem
 &lt;div align=&quot;center&quot; class=&quot;bild-container&quot; style=&quot;line-height: 0;&quot;&gt;
     &lt;img src=&quot;images/band.jpg&quot; alt=&quot;Band&quot; style=&quot;max-width:300px;&quot;&gt;
 &lt;/div&gt;
-
+ &lt;&lt;audio &quot;Aufstehen&quot; play&gt;&gt;\
 Okay, du hast den Songcontest nicht gewonnen.
 Aber hey, das macht nichts, denn auch wenn es nicht für den Sieg gereicht hat - deine Band hat einen neuen Song. Du hast viel Herzblut in dieses Lied gelegt. Es ist vielleicht kein Welthit, aber es macht dir Spaß es mit deiner Band zu performen und es spricht dir aus der Seele. 
 &lt;&lt;/if&gt;&gt;
@@ -1109,6 +949,8 @@ Vielen Dank!
 
 /* Sound-Bibliothek */
 &lt;&lt;cacheaudio &quot;Plagiat&quot; &quot;music/Alles_mit_KI.mp3&quot; &gt;&gt;
+&lt;&lt;cacheaudio &quot;Algorithmus&quot; &quot;music/Algorithmus.mp3&quot; &gt;&gt;
+&lt;&lt;cacheaudio &quot;Aufstehen&quot; &quot;music/Aufstehen.mp3&quot; &gt;&gt;
 </tw-passagedata><tw-passagedata pid="22" name="Situation1_KI" tags="story" position="800,175" size="100,100">&lt;div class=&quot;chat-window&quot;&gt;
     &lt;div class=&quot;message user&quot;&gt;Hey, kannst du mir meine Hausarbeit schreiben?&lt;/div&gt;
     &lt;div class=&quot;message bot&quot;&gt;Gerne :-) Sag mir, um welches Thema es geht.&lt;/div&gt;
@@ -1256,7 +1098,7 @@ Slicher van Bath, B. H.: *The Agrarian History of Western Europe, A.D. 500–185
     &lt;div class=&quot;message bot&quot;&gt;Ich kann dir auch beim Schreiben und komponieren helfen.&lt;/div&gt; 
     &lt;div class=&quot;message bot&quot;&gt;Was darfs sein? Soll ich dir einen &lt;&lt;link &#39;kompletten Song&#39;&gt;&gt;&lt;&lt;set $critical_thinking -= 5 &gt;&gt;&lt;&lt;set $plagiat += 10&gt;&gt;&lt;&lt;set $ki_used5 to true&gt;&gt;&lt;&lt;run window.audioManager.stop()&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt; zum Thema deiner Wahl erstellen oder dir helfen, einen Song zu &lt;&lt;link &#39;schreiben und komponieren&#39;&gt;&gt;&lt;&lt;set $ki_used5 to true&gt;&gt;&lt;&lt;goto &#39;Situation5_Ende&#39;&gt;&gt;&lt;&lt;/link&gt;&gt;?&lt;/div&gt; 
     &lt;/div&gt;
-[[Ich habs mir anders überlegt - ohne KI weitermachen|Situation5_Ende]]</tw-passagedata><tw-passagedata pid="29" name="StoryCaption" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="30" name="Adblocker" tags="story" position="525,500" size="100,100">
+[[Ich habs mir anders überlegt - ohne KI weitermachen|Situation5_Ende]]</tw-passagedata><tw-passagedata pid="29" name="Adblocker" tags="story" position="525,500" size="100,100">
 Oje, anscheinend warst du etwas zu freigebig mit deinen persönlichen Daten - du bekommst soviel Werbung, dass du praktisch nichts mehr tun kannst.
 
 &lt;&lt;if $can_code&gt;&gt;\
@@ -1275,7 +1117,7 @@ Oje, anscheinend warst du etwas zu freigebig mit deinen persönlichen Daten - du
   &lt;&lt;/link&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\
 
-[[Das Problem ignorieren|Situation5]]</tw-passagedata><tw-passagedata pid="31" name="Adblock_active" tags="story" position="525,625" size="100,100">Mit einem aktivierten Adblocker kannst du zumindest einen Teil der Werbe-Popups abfangen.
+[[Das Problem ignorieren|Situation5]]</tw-passagedata><tw-passagedata pid="30" name="Adblock_active" tags="story" position="525,625" size="100,100">Mit einem aktivierten Adblocker kannst du zumindest einen Teil der Werbe-Popups abfangen.
 &lt;&lt;set $datenschutz to 5&gt;&gt;
 &lt;&lt;if $help is &quot;code&quot;&gt;&gt;\
 Hier haben sich deine Programmierfähigkeiten bezahlt gemacht.
@@ -1283,9 +1125,9 @@ Hier haben sich deine Programmierfähigkeiten bezahlt gemacht.
 Gut, das Mia dir helfen konnte, den Adblocker zu installieren.
 &lt;&lt;/if&gt;&gt;
 
-[[weiter|Situation5]]</tw-passagedata><tw-passagedata pid="32" name="PassageHeader" tags="" position="100,400" size="100,100">&lt;&lt;if tags().includes(&quot;story&quot;)&gt;&gt;
+[[weiter|Situation5]]</tw-passagedata><tw-passagedata pid="31" name="PassageHeader" tags="" position="100,400" size="100,100">&lt;&lt;if tags().includes(&quot;story&quot;)&gt;&gt;
     &lt;&lt;set $lastStoryPassage to passage()&gt;&gt;
-&lt;&lt;endif&gt;&gt;</tw-passagedata><tw-passagedata pid="33" name="Start-B" tags="" position="250,0" size="100,100">&lt;h2&gt;Bevor du das KI-Adventure startest – Wichtige Hinweise:&lt;/h2&gt;
+&lt;&lt;endif&gt;&gt;</tw-passagedata><tw-passagedata pid="32" name="Start-B" tags="" position="500,50" size="100,100">&lt;h2&gt;Bevor du das KI-Adventure startest – Wichtige Hinweise:&lt;/h2&gt;
 
 Es freut mich, dass du die KI-Variante des Spiels ausprobieren möchtest! Beachte bitte die folgenden Punkte, bevor du loslegst:
 
