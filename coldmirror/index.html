@@ -100,7 +100,43 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 	</div>
 	<tw-storydata name="Das daten wir nicht!" startnode="1" creator="Twine" creator-version="2.8.1" format="SugarCube" format-version="2.36.1" ifid="F2145E98-496E-4659-B321-5BBDD2967336" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* --- SCHRIFTARTEN LADEN (WICHTIG: GANZ OBEN) --- */
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+/* =========================================
+   MOBILE ANPASSUNG (HANDY-FIX)
+   ========================================= */
 
+@media screen and (max-width: 768px) {
+    
+    /* 1. Den Text wieder sichtbar machen */
+    #story {
+        margin-left: 3.5em !important; /* Nur Platz für den Menü-Knopf lassen */
+        margin-right: 1em !important;  /* Ein bisschen Rand rechts */
+    }
+
+    /* 2. Schriftgrößen anpassen */
+    body {
+        font-size: 16px !important; /* Etwas kleinerer Text auf dem Handy */
+    }
+
+    h1, h2 {
+        font-size: 1.8em !important; /* Überschriften passen sich an */
+        word-wrap: break-word; /* Lange Wörter umbrechen */
+    }
+
+    /* 3. Links/Buttons mobil-freundlicher machen */
+    a {
+        min-width: 100px; /* Buttons nicht ganz so breit */
+        width: 100%;      /* Aber volle verfügbare Breite nutzen */
+        box-sizing: border-box; /* Damit Rahmen nicht die Breite sprengen */
+        display: block;   /* Untereinander statt nebeneinander */
+        margin: 10px 0;
+    }
+    
+    /* 4. Bilder anpassen */
+    img {
+        max-width: 100%; /* Damit Bilder nicht breiter als das Handy sind */
+        height: auto;
+    }
+}
 /* --- GRUNDDESIGN FÜR ALLES --- */
 body {
     /* Der Bluescreen-Hintergrund mit Streifen */
@@ -129,6 +165,43 @@ body {
     padding: 20px;
     margin-top: 20px;
     box-shadow: 10px 10px 0px #000000;
+}
+/* =========================================
+   FIX FÜR DEN MENÜ-PFEIL (TOGGLE)
+   ========================================= */
+
+#ui-bar-toggle {
+    /* Sichtbarkeit erzwingen */
+    display: block !important;
+    opacity: 1 !important;
+    
+    /* Windows-95-Button Look */
+    background-color: #c0c0c0 !important; /* Grau */
+    color: black !important;              /* Schwarzer Pfeil */
+    border: 3px outset white !important;  /* 3D-Effekt */
+    
+    /* Positionierung und Größe (Wichtig für dicke Daumen!) */
+    position: fixed !important;
+    top: 5px !important;
+    left: 5px !important;
+    width: 50px !important;
+    height: 50px !important;
+    line-height: 45px !important; /* Zentriert den Pfeil vertikal */
+    
+    /* Damit er ÜBER dem blauen Hintergrund liegt */
+    z-index: 200000 !important; 
+}
+
+/* Den Pfeil selbst etwas größer machen */
+#ui-bar-toggle:before {
+    font-size: 1.8em !important;
+}
+
+/* Wenn die Leiste offen ist, schieben wir den Button mit */
+#ui-bar:not(.stowed) #ui-bar-toggle {
+    /* Er bleibt am UI-Bar kleben */
+    border-style: inset !important; /* Sieht gedrückt aus */
+    background-color: #a0a0a0 !important;
 }
 
 /* --- ÜBERSCHRIFTEN (TITEL) --- */
@@ -200,7 +273,8 @@ a:hover {
 .schweb-gehirn {
     animation: schweben 3s infinite ease-in-out;
     filter: drop-shadow(0 0 10px #ff00ff); /* Pinkes Leuchten */
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start-Menu" tags="start-menu" position="300,50" size="100,100">&lt;center&gt;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* Seitenleiste automatisch einklappen, wenn der Bildschirm schmaler als 800px ist */
+Config.ui.stowBarInitially = 800;</script><tw-passagedata pid="1" name="Start-Menu" tags="start-menu" position="300,50" size="100,100">&lt;center&gt;
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
 &lt;h1 class=&quot;titel&quot;&gt;Uhh, das daten wir nicht!&lt;/h1&gt;
 &lt;div style=&quot;text-align:center; font-size: 1.5em;&quot;&gt;
