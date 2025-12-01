@@ -98,15 +98,19 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="Das daten wir nicht!" startnode="1" creator="Twine" creator-version="2.8.1" format="SugarCube" format-version="2.36.1" ifid="F2145E98-496E-4659-B321-5BBDD2967336" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* --- GRUNDDESIGN FÜR ALLES --- */
+	<tw-storydata name="Das daten wir nicht!" startnode="1" creator="Twine" creator-version="2.8.1" format="SugarCube" format-version="2.36.1" ifid="F2145E98-496E-4659-B321-5BBDD2967336" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* --- SCHRIFTARTEN LADEN (WICHTIG: GANZ OBEN) --- */
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+/* --- GRUNDDESIGN FÜR ALLES --- */
 body {
     /* Der Bluescreen-Hintergrund mit Streifen */
     background-color: #0000FF; 
     background-image: linear-gradient(45deg, #0000FF 25%, #0000AA 25%, #0000AA 50%, #0000FF 50%, #0000FF 75%, #0000AA 75%, #0000AA 100%);
     background-size: 40px 40px;
     
-    /* Die heilige Schriftart */
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    /* Die heilige Schriftart (angepasst für Handys) */
+    /* 1. Windows, 2. Apple/iOS, 3. Android/Google Font, 4. Fallback */
+    font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
     
     /* Farben des Schmerzes */
     color: yellow;
@@ -170,7 +174,8 @@ a:hover {
 #ui-bar {
     background-color: rgba(0, 0, 255, 0.8); /* Blau, aber etwas dunkler */
     border-right: 5px dashed yellow;
-    font-family: "Comic Sans MS", cursive;
+    /* Auch hier die Schriftarten-Liste anpassen */
+    font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
 }
 
 #ui-bar a {
