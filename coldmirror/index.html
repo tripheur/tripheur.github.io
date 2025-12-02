@@ -100,107 +100,67 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 	</div>
 	<tw-storydata name="Das daten wir nicht!" startnode="1" creator="Twine" creator-version="2.8.1" format="SugarCube" format-version="2.36.1" ifid="F2145E98-496E-4659-B321-5BBDD2967336" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* --- SCHRIFTARTEN LADEN (WICHTIG: GANZ OBEN) --- */
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
 /* =========================================
-   MOBILE ANPASSUNG (HANDY-FIX)
+   MOBILE ANPASSUNG (HANDY-FIX GLOBAL)
    ========================================= */
-
 @media screen and (max-width: 768px) {
-    
-    /* 1. Den Text wieder sichtbar machen */
     #story {
-        margin-left: 3.5em !important; /* Nur Platz für den Menü-Knopf lassen */
-        margin-right: 1em !important;  /* Ein bisschen Rand rechts */
+        margin-left: 3.5em !important;
+        margin-right: 1em !important; 
     }
-
-    /* 2. Schriftgrößen anpassen */
-    body {
-        font-size: 16px !important; /* Etwas kleinerer Text auf dem Handy */
-    }
-
-    h1, h2 {
-        font-size: 1.8em !important; /* Überschriften passen sich an */
-        word-wrap: break-word; /* Lange Wörter umbrechen */
-    }
-
-    /* 3. Links/Buttons mobil-freundlicher machen */
+    body { font-size: 16px !important; }
+    h1, h2 { font-size: 1.8em !important; word-wrap: break-word; }
     a {
-        min-width: 100px; /* Buttons nicht ganz so breit */
-        width: 100%;      /* Aber volle verfügbare Breite nutzen */
-        box-sizing: border-box; /* Damit Rahmen nicht die Breite sprengen */
-        display: block;   /* Untereinander statt nebeneinander */
+        min-width: 100px;
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
         margin: 10px 0;
     }
-    
-    /* 4. Bilder anpassen */
-    img {
-        max-width: 100%; /* Damit Bilder nicht breiter als das Handy sind */
-        height: auto;
-    }
+    img { max-width: 100%; height: auto; }
 }
+
 /* --- GRUNDDESIGN FÜR ALLES --- */
 body {
-    /* Der Bluescreen-Hintergrund mit Streifen */
     background-color: #0000FF; 
     background-image: linear-gradient(45deg, #0000FF 25%, #0000AA 25%, #0000AA 50%, #0000FF 50%, #0000FF 75%, #0000AA 75%, #0000AA 100%);
     background-size: 40px 40px;
-    
-    /* Die heilige Schriftart (angepasst für Handys) */
-    /* 1. Windows, 2. Apple/iOS, 3. Android/Google Font, 4. Fallback */
     font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
-    
-    /* Farben des Schmerzes */
     color: yellow;
-    text-shadow: 2px 2px #FF0000; /* Roter Schatten */
-    
-    /* Damit man auch alles sieht */
+    text-shadow: 2px 2px #FF0000;
     font-size: 20px;
 }
 
 /* --- DER TEXTBEREICH --- */
-/* Wir machen den Hintergrund der Passage halb-transparent, 
-   damit die blauen Streifen durchscheinen */
 .passage {
     background-color: rgba(0, 0, 50, 0.4); 
-    border: 3px dashed white; /* Passend zum Titel */
+    border: 3px dashed white;
     padding: 20px;
     margin-top: 20px;
     box-shadow: 10px 10px 0px #000000;
 }
+
 /* =========================================
    FIX FÜR DEN MENÜ-PFEIL (TOGGLE)
    ========================================= */
-
 #ui-bar-toggle {
-    /* Sichtbarkeit erzwingen */
     display: block !important;
     opacity: 1 !important;
-    
-    /* Windows-95-Button Look */
-    background-color: #c0c0c0 !important; /* Grau */
-    color: black !important;              /* Schwarzer Pfeil */
-    border: 3px outset white !important;  /* 3D-Effekt */
-    
-    /* Positionierung und Größe (Wichtig für dicke Daumen!) */
+    background-color: #c0c0c0 !important;
+    color: black !important;
+    border: 3px outset white !important;
     position: fixed !important;
     top: 5px !important;
     left: 5px !important;
     width: 50px !important;
     height: 50px !important;
-    line-height: 45px !important; /* Zentriert den Pfeil vertikal */
-    
-    /* Damit er ÜBER dem blauen Hintergrund liegt */
+    line-height: 45px !important;
     z-index: 200000 !important; 
 }
-
-/* Den Pfeil selbst etwas größer machen */
-#ui-bar-toggle:before {
-    font-size: 1.8em !important;
-}
-
-/* Wenn die Leiste offen ist, schieben wir den Button mit */
+#ui-bar-toggle:before { font-size: 1.8em !important; }
 #ui-bar:not(.stowed) #ui-bar-toggle {
-    /* Er bleibt am UI-Bar kleben */
-    border-style: inset !important; /* Sieht gedrückt aus */
+    border-style: inset !important;
     background-color: #a0a0a0 !important;
 }
 
@@ -208,18 +168,17 @@ body {
 h1, h2 {
     font-size: 3em;
     text-align: center;
-    transform: rotate(-2deg); /* Alles ist leicht schief */
+    transform: rotate(-2deg);
     border: 4px dashed white;
     padding: 10px;
     background-color: rgba(0,0,0,0.5);
     margin-bottom: 30px;
-    color: #00FF00; /* Knallgrün für Überschriften als Kontrast */
+    color: #00FF00;
 }
 
-/* --- LINKS / BUTTONS --- */
-/* Das hier verwandelt ALLE Links in deine grauen Klötze */
+/* --- LINKS / BUTTONS (GLOBALE STYLES) --- */
 a {
-    display: inline-block; /* Damit sie im Text fließen, aber Block-Eigenschaften haben */
+    display: inline-block;
     min-width: 150px;
     margin: 10px 5px;
     background-color: #eee;
@@ -231,48 +190,185 @@ a {
     padding: 5px 10px;
     text-decoration: none;
     font-weight: bold;
-    text-shadow: none; /* Kein Schatten im Button für Lesbarkeit */
-    cursor: url('https://cdn.pixabay.com/photo/2014/04/02/10/26/mouse-pointer-303788_960_720.png'), pointer; /* Optional: Hässlicher Mauszeiger */
+    text-shadow: none;
+    cursor: url('https://cdn.pixabay.com/photo/2014/04/02/10/26/mouse-pointer-303788_960_720.png'), pointer;
 }
-
 a:hover {
     background-color: #ccc;
     color: red;
     border-color: white;
     text-decoration: none;
-    transform: scale(1.05); /* Button wird kurz größer */
+    transform: scale(1.05);
 }
 
 /* --- DIE SIDEBAR (LINKS) --- */
 #ui-bar {
-    background-color: rgba(0, 0, 255, 0.8); /* Blau, aber etwas dunkler */
+    background-color: rgba(0, 0, 255, 0.8);
     border-right: 5px dashed yellow;
-    /* Auch hier die Schriftarten-Liste anpassen */
     font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
 }
+#ui-bar a { width: auto; font-size: 0.8em; }
+#ui-bar-history, #ui-bar-toggle { all: unset; }
 
-#ui-bar a {
-    /* Sidebar Links etwas kleiner */
-    width: auto;
-    font-size: 0.8em;
-}
-
-/* Entfernt den Standard SugarCube "Save" Button Look und nutzt unseren */
-#ui-bar-history, #ui-bar-toggle {
-    all: unset; 
-}
-
-/* Eine Animation definieren */
+/* ANIMATIONEN */
 @keyframes schweben {
     0% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(-20px) rotate(5deg); }
     100% { transform: translateY(0px) rotate(0deg); }
 }
-
-/* Die Klasse für das Bild */
 .schweb-gehirn {
     animation: schweben 3s infinite ease-in-out;
-    filter: drop-shadow(0 0 10px #ff00ff); /* Pinkes Leuchten */
+    filter: drop-shadow(0 0 10px #ff00ff);
+}
+
+
+/* =================================================================
+   HIER BEGINNT DAS MINIGAME CSS (UDO/MOODY)
+   ================================================================= */
+
+/* Der Kasten um das Minigame */
+#game-container {
+    max-width: 100%; /* Passt sich der Passage an */
+    margin: 0 auto;
+    background-color: #333; /* Dunkler Kontrast zum Blue Screen */
+    border: 4px solid #fff; /* Weißer Rahmen passt zu deinem Stil */
+    padding: 15px;
+    box-sizing: border-box; /* Verhindert Layout-Sprengung */
+}
+
+/* --- MINIGAME HEADER --- */
+#header {
+    background-color: #111;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px dashed #999;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: white;
+    text-shadow: none;
+}
+
+/* Lebensbalken */
+.hp-container {
+    width: 100%;
+    background-color: #500;
+    height: 25px;
+    margin-top: 5px;
+    position: relative;
+    border: 2px solid #fff;
+}
+.hp-bar { background-color: #0f0; height: 100%; transition: width 0.3s; }
+.hp-text {
+    position: absolute; width: 100%; text-align: center;
+    top: 0; left: 0; line-height: 25px;
+    color: white; font-weight: bold; text-shadow: 1px 1px 2px black;
+    z-index: 10;
+}
+
+/* --- HAUPTBEREICH (Split) --- */
+#main-area {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+/* Linke Seite */
+#bowl-area {
+    flex: 1;
+    text-align: center;
+    border-right: 2px dashed #777;
+    padding-right: 15px;
+}
+
+/* Rechte Seite */
+#moody-area {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- BUTTONS IM MINIGAME (Überschreibt globale Styles lokal) --- */
+#ingredients-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Kompakter Abstand */
+    margin-top: 10px;
+}
+
+#ingredients-list br { display: none; } /* Killt Twine-Leerzeilen */
+
+#ingredients-list button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 0 !important; /* Wichtig wegen gap */
+    
+    /* Minigame Button Look (Dunkelgrau) */
+    background-color: #444;
+    border: 2px outset #ccc;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: inherit; /* Nimmt Comic Sans an */
+    line-height: normal;
+    text-shadow: none;
+}
+
+#ingredients-list button:hover { 
+    background-color: #666; 
+    border-color: #fff;
+    color: yellow;
+}
+
+/* Text Styles im Minigame */
+#instruction {
+    font-size: 1.1em;
+    margin-top: 10px;
+    background-color: #222;
+    padding: 10px;
+    border: 2px solid #555;
+    color: white;
+    text-shadow: none;
+}
+
+#feedback {
+    color: #ff5555;
+    font-weight: bold;
+    min-height: 1.2em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px black;
+}
+
+/* Bilder Styles */
+.game-image {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    border-radius: 0; /* Eckig passt besser zu Windows 95 Style */
+    border: 3px solid #fff;
+    margin-bottom: 5px;
+    box-shadow: 5px 5px 0px #000;
+}
+
+/* --- MINIGAME HANDY-FIX --- */
+/* Wenn der Bildschirm schmal ist, stapeln wir Udo und Schüssel */
+@media screen and (max-width: 600px) {
+    #main-area {
+        flex-direction: column; /* Untereinander */
+    }
+    #bowl-area {
+        border-right: none;
+        border-bottom: 2px dashed #777;
+        padding-bottom: 15px;
+        padding-right: 0;
+        width: 100%;
+    }
+    #moody-area {
+        width: 100%;
+        margin-top: 15px;
+    }
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* Seitenleiste automatisch einklappen, wenn der Bildschirm schmaler als 800px ist */
 Config.ui.stowBarInitially = 800;</script><tw-passagedata pid="1" name="Start-Menu" tags="start-menu" position="300,50" size="100,100">&lt;center&gt;
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
@@ -283,9 +379,6 @@ Die inoffizielle Coldmirror Dating Sim
 &lt;div class=&quot;menu-button&quot;&gt;
   [[Spiel leider starten|Start]]
 &lt;/div&gt;
-&lt;div class=&quot;menu-button&quot;&gt;\
-  [[Spielstand laden (Warum?)|Load]]
-&lt;/div&gt;\
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
       &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
@@ -331,7 +424,15 @@ Die inoffizielle Coldmirror Dating Sim
 ]&gt;&gt;
 
 /* Wir nennen den Song &quot;bgm&quot; (Background Music) */
-&lt;&lt;cacheaudio &quot;bgm&quot; &quot;audio/background.mp3&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="100,200" size="100,100">&lt;strong&gt;Tag:&lt;/strong&gt; $tag
+&lt;&lt;cacheaudio &quot;bgm&quot; &quot;audio/background.mp3&quot;&gt;&gt;
+
+/* Eierkuchen-Spiel */
+&lt;&lt;set $maxHp to 3&gt;&gt;
+&lt;&lt;set $hp to 3&gt;&gt;
+&lt;&lt;set $round to 1&gt;&gt;
+&lt;&lt;set $feedbackText to &quot;&quot;&gt;&gt;
+&lt;&lt;set $moodyText to &quot;&quot;&gt;&gt;
+&lt;&lt;set $moodyText to &quot;Also was ist die wichtigste Zutat für Eierkuchen?&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="100,200" size="100,100">&lt;strong&gt;Tag:&lt;/strong&gt; $tag
 &lt;strong&gt;Uhrzeit:&lt;/strong&gt; $zeit:00 Uhr
 &lt;strong&gt;Ort:&lt;/strong&gt; $ort
 &lt;hr&gt;
@@ -435,7 +536,7 @@ Snape sitzt am Lehrertisch und wirft dir the LOOK&lt;sup&gt;TM&lt;/sup&gt; zu.
 \
 /* Gehen Link */
 &lt;&lt;link &quot;Frühstücken und zum Unterricht gehen&quot;&gt;&gt;\
-&lt;&lt;zeitplus 0 &quot;Hof&quot;&gt;&gt;\
+&lt;&lt;zeitplus 1 &quot;Hof&quot;&gt;&gt;\
 &lt;&lt;/link&gt;&gt;\
 \
 /* --- MITTAGS (12 Uhr) --- */
@@ -464,7 +565,7 @@ Hermine macht die Hausaufgaben, die ihr am Nachmittag erst aufbekommt. Snape lie
 \
 /* Gehen Link */
 &lt;&lt;link &quot;Soup Soup Soup essen und wieder zum Unterricht gehen&quot;&gt;&gt;\
-&lt;&lt;zeitplus 0 &quot;Hof&quot;&gt;&gt;\
+&lt;&lt;zeitplus 1 &quot;Hof&quot;&gt;&gt;\
 &lt;&lt;/link&gt;&gt;\
 \
 /* --- ABENDS (Sonst) --- */
@@ -498,11 +599,12 @@ Nur Dumbledore schaut irgendwie traurig...
 \
 /* Gehen Link */
 &lt;&lt;link &quot;Abendessen und dann in den Gemeinschaftsraum gehen&quot;&gt;&gt;\
-&lt;&lt;zeitplus 0 &quot;Gemeinschaftsraum&quot;&gt;&gt;\
+&lt;&lt;zeitplus 1 &quot;Gemeinschaftsraum&quot;&gt;&gt;\
 &lt;&lt;/link&gt;&gt;\
 \
 &lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="6" name="Klassenzimmer" tags="" position="600,325" size="100,100">&lt;&lt;set $ort to &quot;Klassenzimmer&quot;&gt;&gt;\
 &lt;&lt;set $class to random(1, 4)&gt;&gt;\
+
 \
 &lt;&lt;switch $class&gt;&gt;\
   &lt;&lt;case 1&gt;&gt;\
@@ -532,8 +634,8 @@ Nur Dumbledore schaut irgendwie traurig...
     &lt;br&gt;&lt;em&gt;(Close enough.)&lt;/em&gt;
 
   &lt;&lt;case 4&gt;&gt;\
-    /* Wir wählen ein zufälliges Rezept für heute aus */\
-    &lt;&lt;set $heuteKochen to $rezepte.random()&gt;&gt;\
+    /* &lt;&lt;set $heuteKochen to $rezepte.random()&gt;&gt;*/\
+    &lt;&lt;set $heuteKochen to $rezepte[0]&gt;&gt;\
     &lt;h1&gt;HAUSWIRTSCHAFTSKUNDE&lt;/h1&gt;\
 
     &lt;span style=&quot;color:red; font-weight:bold;&quot;&gt;Udo:&lt;/span&gt; &quot;Ich bin der Udo, euer Hauswirtschaftslehrer.&quot;
@@ -835,8 +937,12 @@ Ihr seht euch verliebt in die Augen.
 
 [[Mach, das Snape voll verliebt in mich ist|SnapeFlirt][$snapeZuneigung to 100]]
 
-[[Mach, das Hermine voll verliebt in mich ist|HermineFlirt][$hermineZuneigung to 100]]</tw-passagedata><tw-passagedata pid="25" name="Rezept_Eierkuchen" tags="" position="550,675" size="100,100">Rezept für Eierkuchen
-wip
+[[Mach, das Hermine voll verliebt in mich ist|HermineFlirt][$hermineZuneigung to 100]]</tw-passagedata><tw-passagedata pid="25" name="Rezept_Eierkuchen" tags="" position="550,675" size="100,100">&lt;h1&gt;Eierkuchen-Minigame&lt;/h1&gt;
+
+Nenne die korrekten Zutaten in der richtigen Reihenfolge! Vorsicht - wenn du zuviele Fehler machst, stirbst du. 
+
+[[weiter|Game]]
+
 
 [[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="26" name="Rezept_Soup" tags="" position="650,675" size="100,100">Rezept für Soup Soup Soup
 wip
@@ -916,6 +1022,192 @@ Es ist ja auch noch nicht das Ende des Schuljahrs...
 &lt;img src=&quot;images/voldikills.gif&quot;&gt;
 
 Tja - Schade Schokolade. Wärst mal lieber aus dem Weg gegangen...
+
+&lt;div class=&quot;menu-button&quot;&gt;\
+    &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
+      &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
+  &lt;&lt;/link&gt;&gt;
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="37" name="Game" tags="" position="600,900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;div id=&quot;game-container&quot;&gt;
+    
+    &lt;div id=&quot;header&quot;&gt;
+        LEBENSPUNKTE
+        &lt;div id=&quot;hp-display&quot; class=&quot;hp-container&quot;&gt;
+            &lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;
+            &lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;main-area&quot;&gt;
+        
+        &lt;div id=&quot;bowl-area&quot;&gt;
+            &lt;img src=&quot;images/schuessel.jpg&quot; class=&quot;game-image&quot; alt=&quot;Schüssel&quot;&gt;
+           
+            &lt;div id=&quot;ingredients-list&quot;&gt;
+                &lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;moody-area&quot;&gt;
+            &lt;div style=&quot;text-align: center;&quot;&gt;
+                &lt;img src=&quot;images/moody.gif&quot; class=&quot;game-image&quot; alt=&quot;Udo&quot;&gt;
+            &lt;/div&gt;
+            
+            &lt;div id=&quot;feedback&quot;&gt;&lt;&lt;print $feedbackText&gt;&gt;&lt;/div&gt;
+            
+            &lt;div id=&quot;instruction&quot;&gt;
+                UDO SAGT:&lt;br&gt;
+                &lt;span style=&quot;color: yellow;&quot;&gt;&quot;&lt;&lt;print $moodyText&gt;&gt;&quot;&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="38" name="IngredientsLogic" tags="" position="475,900" size="100,100">/* PRÜFEN OB GAME OVER ODER GEWONNEN */
+&lt;&lt;if $hp lte 0&gt;&gt;
+    &lt;&lt;replace &quot;#game-container&quot;&gt;&gt;
+        &lt;h1&gt;GAME OVER&lt;/h1&gt;
+        &lt;p style=&quot;text-align:center;&quot;&gt;Udo hat dich gezwungen, deine Kreation zu essen. Du bist leider tot.&lt;/p&gt;
+        &lt;center&gt;[[Ende|BadEnd_Eierkuchen]]&lt;/center&gt;
+    &lt;&lt;/replace&gt;&gt;
+
+&lt;&lt;elseif $round gt 3&gt;&gt;
+    &lt;&lt;replace &quot;#game-container&quot;&gt;&gt;
+        &lt;h1 style=&quot;color:green; text-align:center;&quot;&gt;LECKER!&lt;/h1&gt;
+        
+        &lt;p style=&quot;text-align:center;&quot;&gt;Ron: &quot;Fühlt sich an wie Nippel...&quot;&lt;/p&gt;
+        
+        &lt;div style=&quot;text-align: center;&quot;&gt;
+            &lt;img src=&quot;images/hermionefail.gif&quot; style=&quot;max-width: 100%; border: 2px solid white;&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;p style=&quot;text-align:center;&quot;&gt;Hermine: &quot;Ich hasse Rosinen! Das sind nur vergammelte Weintrauben!&quot;&lt;/p&gt;
+        
+        &lt;p style=&quot;text-align:center; color: red;&quot;&gt;(Hermine findet deine Antwort ekelhaft. -10 Punkte.)&lt;/p&gt;
+        
+        &lt;center&gt;
+            &lt;&lt;link &quot;Pause&quot;&gt;&gt;
+                &lt;&lt;set $hermine_zuneigung to $hermine_zuneigung - 10&gt;&gt;
+
+                /* 2. ALLES ZURÜCKSETZEN FÜR NEUSTART */
+                &lt;&lt;set $hp to 3&gt;&gt;
+                &lt;&lt;set $round to 1&gt;&gt;
+                &lt;&lt;set $feedbackText to &quot;&quot;&gt;&gt;
+                /* Den Start-Text von Udo wiederherstellen */
+                &lt;&lt;set $moodyText to &quot;Wer von euch kann mir sagen, wie viele Eier in einen Eierkuchen gehören? ... Niemand? Ich will 250g weißes Pulver!&quot;&gt;&gt;
+
+                /* 3. Raum verlassen */
+                &lt;&lt;zeitplus 1 &quot;Hof&quot;&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+        &lt;/center&gt;
+    &lt;&lt;/replace&gt;&gt;
+
+&lt;&lt;else&gt;&gt;
+
+    /* RUNDE 1: MEHL (Alles ist falsch, alles geht weiter) */
+    &lt;&lt;if $round is 1&gt;&gt;
+        
+        /* Button 1: Schinken */
+        &lt;&lt;button &quot;Schinken&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $round to 2&gt;&gt;
+            &lt;&lt;set $feedbackText to &quot;KLONK! Eier wäre die richtige Lösung. &#39;Aber da steht gar nicht Eier!&#39; WEIßT DU WIE EGAL MIR DAS IST?&quot; &gt;&gt;
+            &lt;&lt;set $moodyText to &quot;Und jetzt? Nennt mir eine weitere Zutat für Eierkuchen!&quot;&gt;&gt;
+            
+            /* Visualisierung updaten */
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#instruction&quot;&gt;&gt;UDO SAGT:&lt;br&gt;&lt;span style=&quot;color: yellow;&quot;&gt;&quot;&lt;&lt;print $moodyText&gt;&gt;&quot;&lt;/span&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        /* Button 2: Pommes */
+        &lt;&lt;button &quot;Pommes (frittiert)&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $round to 2&gt;&gt; /* GEHT WEITER IN RUNDE 2 */
+            &lt;&lt;set $feedbackText to &quot;&#39;Bist du dumm?!&#39; Pommes kommen immer erst zum Schluss! Aber egal, weiter!&quot; &gt;&gt;
+            &lt;&lt;set $moodyText to &quot;Und jetzt? Nennt mir eine weitere Zutat für Eierkuchen!&quot;&gt;&gt;
+            
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#instruction&quot;&gt;&gt;UDO SAGT:&lt;br&gt;&lt;span style=&quot;color: yellow;&quot;&gt;&quot;&lt;&lt;print $moodyText&gt;&gt;&quot;&lt;/span&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        /* Button 3: Mehl */
+        &lt;&lt;button &quot;Mehl (250g)&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $round to 2&gt;&gt; /* GEHT WEITER IN RUNDE 2 */
+            &lt;&lt;set $feedbackText to &quot;KLONK! Eier wäre die richtige Lösung. &#39;Aber da steht gar nicht Eier!&#39; WEIßT DU WIE EGAL MIR DAS IST?&quot; &gt;&gt;
+            &lt;&lt;set $moodyText to &quot;Und jetzt? Nennt mir eine weitere Zutat für Eierkuchen!&quot;&gt;&gt;
+            
+            /* Update alles */
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#instruction&quot;&gt;&gt;UDO SAGT:&lt;br&gt;&lt;span style=&quot;color: yellow;&quot;&gt;&quot;&lt;&lt;print $moodyText&gt;&gt;&quot;&lt;/span&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+    
+    /* RUNDE 2: MILCH */
+    &lt;&lt;elseif $round is 2&gt;&gt;
+        
+        &lt;&lt;button &quot;Noch mehr Eier?&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $feedbackText to &quot;KLONK! &#39;ICH HAB GESAGT, SCHNAUZE!&#39;&quot; &gt;&gt;
+            
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        &lt;&lt;button &quot;Kürbissaft&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $feedbackText to &quot;KLONK! &#39;Ekelhaft!&#39;&quot; &gt;&gt;
+            
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        &lt;&lt;button &quot;Butter und Schmalz, Milch und Mehl...&quot;&gt;&gt;
+            &lt;&lt;set $round to 3&gt;&gt;
+            &lt;&lt;set $feedbackText to &quot;Das hast du aber schön auswendig gelernt. Dafür hast du bestimmt die Namen all deiner Geschwister vergessen, oder?&quot; &gt;&gt;
+            &lt;&lt;set $moodyText to &quot;Damit hätten wir das Grundrezept. Was würdet ihr denn noch zusätzlich nehmen?&quot;&gt;&gt;
+            
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            /* Hinweis: In deinem Code stand hier noch MOODY, hab es mal so gelassen, falls gewollt */
+            &lt;&lt;replace &quot;#instruction&quot;&gt;&gt;UDO SAGT:&lt;br&gt;&lt;span style=&quot;color: yellow;&quot;&gt;&quot;&lt;&lt;print $moodyText&gt;&gt;&quot;&lt;/span&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+    /* RUNDE 3: ROSINEN */
+    &lt;&lt;elseif $round is 3&gt;&gt;
+        
+        &lt;&lt;button &quot;Schokostreusel&quot;&gt;&gt;
+            &lt;&lt;set $hp to $hp - 1&gt;&gt;
+            &lt;&lt;set $feedbackText to &quot;&#39;Langweilig!&#39;&quot; &gt;&gt;
+            
+            &lt;&lt;replace &quot;#hp-display&quot;&gt;&gt;&lt;div class=&quot;hp-text&quot;&gt;HP: $hp / $maxHp&lt;/div&gt;&lt;div class=&quot;hp-bar&quot; @style=&quot;&#39;width:&#39; + ($hp / $maxHp * 100) + &#39;%&#39;&quot;&gt;&lt;/div&gt;&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#feedback&quot;&gt;&gt;$feedbackText&lt;&lt;/replace&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        &lt;&lt;button &quot;Rattengift&quot;&gt;&gt;
+            &lt;&lt;set $hp to 0&gt;&gt; /* Tödlich */
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+
+        &lt;&lt;button &quot;Rosinen&quot;&gt;&gt;
+            &lt;&lt;set $round to 4&gt;&gt;
+            &lt;&lt;replace &quot;#ingredients-list&quot;&gt;&gt;&lt;&lt;include &quot;IngredientsLogic&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="39" name="BadEnd_Eierkuchen" tags="" position="475,1025" size="100,100">&lt;h1&gt;The End&lt;/h1&gt;\
+
+
+
+Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
 
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
