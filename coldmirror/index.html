@@ -522,7 +522,7 @@ Snape sitzt am Lehrertisch und wirft dir the LOOK&lt;sup&gt;TM&lt;/sup&gt; zu.
 &lt;&lt;elseif $inventar.includes(&quot;Das Gehirn&quot;)&gt;&gt;\
 [[Hermine ansprechen|HermineTalk]]\
 &lt;&lt;else&gt;&gt;\
-[[Hermine ansprechen|HermineFail]]\
+[[Hermine ansprechen|HermineFail][$hermineZuneigung -= 10]]\
 &lt;&lt;/if&gt;&gt;\
 \
 /* Snape Interaktion */
@@ -531,7 +531,7 @@ Snape sitzt am Lehrertisch und wirft dir the LOOK&lt;sup&gt;TM&lt;/sup&gt; zu.
 &lt;&lt;elseif $inventar.includes(&quot;Trauriges Gedicht&quot;)&gt;&gt;\
 [[Snape ansprechen|SnapeTalk]]\
 &lt;&lt;else&gt;&gt;\
-[[Snape ansprechen|SnapeFail]]\
+[[Snape ansprechen|SnapeFail][$snapeZuneigung -= 10]]\
 &lt;&lt;/if&gt;&gt;\
 \
 /* Gehen Link */
@@ -656,12 +656,12 @@ Nur Dumbledore schaut irgendwie traurig...
 &lt;&lt;/switch&gt;&gt;\
 \
 &lt;hr&gt;\
-&lt;&lt;set $iq += 10&gt;&gt;\
-&lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;DEIN IQ IST GESTIEGEN (+10)&lt;/span&gt;
+&lt;&lt;set $hermineZuneigung += 2&gt;&gt;\
+&lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;Hermine lobt deinen Fleiß (+2)&lt;/span&gt;
 &lt;br&gt;&lt;br&gt;\
 \
 &lt;&lt;if $zeit == 12&gt;&gt;\
-  /* Wir nutzen zeitplus 0, damit Zeit nicht voranschreitet, aber das Random Event trotzdem triggern kann */
+
   &lt;&lt;link &quot;Es klingelt! Mittagessen&quot;&gt;&gt;\
     &lt;&lt;zeitplus 0 &quot;Grosse Halle&quot;&gt;&gt;\
   &lt;&lt;/link&gt;&gt;
@@ -676,7 +676,8 @@ Nur Dumbledore schaut irgendwie traurig...
   &lt;&lt;/link&gt;&gt;\
   &lt;br&gt;\
   /* Option B: Schwänzen */\
-  &lt;&lt;link &quot;Schule schwänzen (1 Std.)&quot;&gt;&gt;\
+  &lt;&lt;link &quot;Schule schwänzen (1 Std.) - Hermine wäre nicht begeistert&quot;&gt;&gt;\
+  &lt;&lt;set $hermineZuneigung -= 5&gt;&gt;\
     &lt;&lt;zeitplus 1 &quot;Hof&quot;&gt;&gt;\
   &lt;&lt;/link&gt;&gt;\
 &lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="7" name="Schlafsaal" tags="" position="600,50" size="100,100">&lt;&lt;set $ort to &quot;Schlafsaal&quot;&gt;&gt;
@@ -834,16 +835,32 @@ Er tut so, als wäre es ihm egal, steckt den Brief aber schnell ein.
 
 [[Schlafen (Neuer Tag)|Schlafsaal][$zeit to 8, $tag += 1]]</tw-passagedata><tw-passagedata pid="22" name="HermineFlirt" tags="" position="450,525" size="100,100">&lt;&lt;if $hermineZuneigung == 100&gt;&gt;\
 
-Du nimmst Hermines Hand und ihr schaut euch verliebt an. Dann geht ihr zusammen in die Bibliothek, um noch mehr Bücher auszuleihen.
+Du nimmst Hermines Hand und ihr schaut euch verliebt an. Dann geht ihr zusammen in die Bibliothek, um noch mehr Bücher auszuleihen Eure Zuneigung war so groß wie eine Schüssel Linsen.
 
 &lt;h1&gt;THE END&lt;/h1&gt;
-&lt;&lt;else&gt;&gt;\
+
+&lt;div class=&quot;menu-button&quot;&gt;\
+    &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
+      &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
+  &lt;&lt;/link&gt;&gt;
+  
+&lt;&lt;elseif $hermineZuneigung &lt;= -100&gt;&gt;\
+
+&quot;Mir reicht&#39;s&quot; schreit Hermine dich an. &quot;Wenn du denkst, das du nicht dumm bist, dann denk lieber nochmal nach - was du nicht kannst, weil du eben nicht denkst!&quot; Sie zögert kurz, überdenkt ihren Satz nochmal. 
+
+&quot;Ach egal,&quot; faucht sie dann und erschlägt dich mit dem Buch &quot;Hogwarts: A History&quot;.
+
+&lt;h1&gt;THE END&lt;/h1&gt;
+
+Du bist tot.
 
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
       &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
   &lt;&lt;/link&gt;&gt;
 &lt;/div&gt;\
+
+&lt;&lt;else&gt;&gt;\
 
 &lt;&lt;if $move is &quot;start&quot;&gt;&gt;\
 
@@ -896,6 +913,20 @@ Ihr seht euch verliebt in die Augen.
       &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
   &lt;&lt;/link&gt;&gt;
 &lt;/div&gt;\
+&lt;&lt;elseif $snapeZuneigung &lt;= -100&gt;&gt;\
+
+Snape lächelt dich freundlich an und bietet dir einen Kelch mit Kürbissaft an.
+
+Ohne nachzudenken, trinkst du ihn. Das letzte was du hörst, ist sein höhnisches Lachen...
+
+&lt;h1&gt;THE END&lt;/h1&gt;
+
+Du bist tot.
+
+&lt;div class=&quot;menu-button&quot;&gt;\
+    &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
+      &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
+  &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;if $move is &quot;start&quot;&gt;&gt;\
@@ -939,12 +970,12 @@ Ihr seht euch verliebt in die Augen.
 
 [[Mach, das Hermine voll verliebt in mich ist|HermineFlirt][$hermineZuneigung to 100]]</tw-passagedata><tw-passagedata pid="25" name="Rezept_Eierkuchen" tags="" position="550,675" size="100,100">&lt;h1&gt;Eierkuchen-Minigame&lt;/h1&gt;
 
-Nenne die korrekten Zutaten in der richtigen Reihenfolge! Vorsicht - wenn du zuviele Fehler machst, stirbst du. 
+Nenne die korrekten Zutaten in der richtigen Reihenfolge! Vorsicht - wenn du zu viele Fehler machst, stirbst du. 
 
-[[weiter|Game]]
+[[Eh ich kann das!|Game]]
 
 
-[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="26" name="Rezept_Soup" tags="" position="650,675" size="100,100">Rezept für Soup Soup Soup
+[[Nichts wie weg hier!|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="26" name="Rezept_Soup" tags="" position="650,675" size="100,100">Rezept für Soup Soup Soup
 wip
 
 [[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="27" name="Rezept_Felsenkekse" tags="" position="750,675" size="100,100">Rezept für Felsenkekse
@@ -1094,7 +1125,7 @@ Tja - Schade Schokolade. Wärst mal lieber aus dem Weg gegangen...
                 &lt;&lt;set $round to 1&gt;&gt;
                 &lt;&lt;set $feedbackText to &quot;&quot;&gt;&gt;
                 /* Den Start-Text von Udo wiederherstellen */
-                &lt;&lt;set $moodyText to &quot;Wer von euch kann mir sagen, wie viele Eier in einen Eierkuchen gehören? ... Niemand? Ich will 250g weißes Pulver!&quot;&gt;&gt;
+                &lt;&lt;set $moodyText to &quot;Wiederholungsstunde: Was ist die wichtigste Zutat für Eierkuchen?&quot;&gt;&gt;
 
                 /* 3. Raum verlassen */
                 &lt;&lt;zeitplus 1 &quot;Hof&quot;&gt;&gt;
