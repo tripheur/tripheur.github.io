@@ -620,34 +620,28 @@ a:hover {
 
 /* Das Museumsschild */
 .museum-plaque {
-    background-color: #fdf5e6; /* Altweiß */
-    color: black !important; /* WICHTIG: Überschreibt dein globales Weiß */
-    text-shadow: none !important; /* WICHTIG: Entfernt den Schatten für Lesbarkeit */
-    
-    padding: 15px;
-    border: 4px ridge #d4af37;
-    width: 90%;
-    max-width: 350px;
-    margin: 0 auto 20px auto;
-    box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
-    
-    font-family: "Comic Sans MS", "Comic Neue", cursive;
-    font-size: 0.9em;
-    line-height: 1.3;
-    text-align: left;
-}
-
-.museum-plaque strong {
-    font-size: 1.1em;
-    display: block;
-    margin-bottom: 2px;
-}
-
-.museum-plaque hr {
-    border: 0;
-    border-top: 1px solid #000;
-    opacity: 0.3;
-    margin: 8px 0;
+    /* Deine Farben bleiben gleich */
+    background-color: #fdf5e6; 
+    color: black !important;
+    text-shadow: none !important;
+    
+    /* GRÖSSE & POSITION - HIER IST DER FIX */
+    box-sizing: border-box; /* Verhindert, dass Padding die Box breiter macht */
+    width: 90%;             /* Nimmt fast den ganzen Platz auf dem Handy ein */
+    max-width: 350px;       /* ...aber wird am PC nicht riesig */
+    margin: 10px auto;      /* Zentriert die Box */
+    
+    /* RAHMEN & DESIGN */
+    padding: 15px;
+    border: 4px ridge #d4af37;
+    border-radius: 5px;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+    
+    /* SCHRIFT */
+    font-family: "Comic Sans MS", "Comic Neue", cursive;
+    font-size: 0.9em;
+    line-height: 1.3;
+    text-align: left;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* Seitenleiste automatisch einklappen, wenn der Bildschirm schmaler als 800px ist */
 Config.ui.stowBarInitially = 800;</script><tw-passagedata pid="1" name="Start-Menu" tags="start-menu" position="300,50" size="100,100">&lt;center&gt;
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
@@ -1674,6 +1668,14 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
     &lt;div class=&quot;terminal-body&quot;&gt;
         &lt;span class=&quot;blinking-cursor&quot;&gt;_&lt;/span&gt; SYSTEM LOG FILE GELADEN...
         
+        &lt;span class=&quot;version-header&quot;&gt;v 1.5.2 - OPTIK &amp; PANIK&lt;/span&gt;
+        &lt;div class=&quot;version-content&quot;&gt;\
+            &quot;Das &#39;Es passt jetzt aufs Handy&#39; Update&quot;
+            &lt;ul&gt;
+                &lt;li&gt;[FIX] &lt;b&gt;Galerie-Glitch:&lt;/b&gt; Die Gemälde im Flur halten sich jetzt an die physikalischen Grenzen des Handy-Bildschirms. Kein Überlaufen mehr.&lt;/li&gt;
+                &lt;li&gt;[BALANCE] &lt;b&gt;Voldi-Spawn:&lt;/b&gt; Der Dunkle Lord fühlte sich vernachlässigt. Seine Erscheinungsrate wurde erhöht. Lauf schneller.&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;\
         &lt;span class=&quot;version-header&quot;&gt;v 1.5.1 - KUNST &amp; KATASTROPHEN&lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
             &quot;Das &#39;Kulturelle Bildung&#39; Update&quot;
@@ -1790,54 +1792,53 @@ Was machst du jetzt?
 
 [[Klingelstreich und weglaufen|Hagridwin]]
 
-[[Klingelstreich und stehen bleiben|Hagridfail]]</tw-passagedata><tw-passagedata pid="43" name="random_Art" tags="" position="100,1150" size="100,100">&lt;div id=&quot;art-gallery&quot; style=&quot;text-align:center; margin-top: 20px;&quot;&gt; \
-    &lt;h2&gt;Hogwarts Flur der &quot;Schönen&quot; Künste&lt;/h2&gt;\
+[[Klingelstreich und stehen bleiben|Hagridfail]]</tw-passagedata><tw-passagedata pid="43" name="random_Art" tags="" position="100,1150" size="100,100">&lt;div id=&quot;art-gallery&quot; style=&quot;text-align:center; margin-top: 20px;&quot;&gt;
+    &lt;h2&gt;Hogwarts Flur der &quot;Schönen&quot; Künste&lt;/h2&gt;
     Du bleibst vor einem Gemälde stehen, das jemand (aus gutem Grund) in einer dunklen Ecke aufgehängt hat.
 
-    &lt;&lt;set _artRoll to random(1, 3)&gt;&gt;\
+    &lt;&lt;set _artRoll to random(1, 3)&gt;&gt;
 
     /* --- BILD 1: HARRY &amp; EULE --- */
-    &lt;&lt;if _artRoll is 1&gt;&gt;\
-        &lt;div class=&quot;art-frame&quot; style=&quot;border: 10px groove gold; display:inline-block; padding: 5px; background: #222;&quot;&gt;\
-            &lt;img src=&quot;images/harryhermine.png&quot; style=&quot;max-width: 400px; filter: sepia(30%);&quot;&gt;\
-        &lt;/div&gt;\
+    &lt;&lt;if _artRoll is 1&gt;&gt;
+        &lt;div class=&quot;art-frame frame-gold&quot;&gt;
+            &lt;img src=&quot;images/harryhermine.png&quot; style=&quot;filter: sepia(30%);&quot;&gt;
+        &lt;/div&gt;
         
-        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #d4af37, #a8860b); color: black; padding: 10px; border: 2px solid #555; width: 300px; margin: 10px auto; border-radius: 5px; font-family: serif; text-shadow: none;&quot;&gt;\
-            &lt;strong&gt;&quot;Der Junge, der einen Vogel hat&quot;&lt;/strong&gt;&lt;br&gt;\
+        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #d4af37, #a8860b);&quot;&gt;
+            &lt;strong&gt;&quot;Der Junge, der einen Vogel hat&quot;&lt;/strong&gt;&lt;br&gt;
             &lt;span style=&quot;font-size: 0.8em; font-style: italic;&quot;&gt;Acryl auf Sperrholz, unbekannter Erstklässler&lt;/span&gt;
-            &lt;hr style=&quot;border-color: black; opacity: 0.5;&quot;&gt;\
+            &lt;hr&gt;
             Ein ehemaliger Schüler (Selbstportrait). Und seine Eule Hermine ist natürlich auch dabei.
-        &lt;/div&gt;\
+        &lt;/div&gt;
 
     /* --- BILD 2: VASE --- */
-    &lt;&lt;elseif _artRoll is 2&gt;&gt;\
-        &lt;div class=&quot;art-frame&quot; style=&quot;border: 10px ridge silver; display:inline-block; padding: 5px; background: #222;&quot;&gt;\
-            &lt;img src=&quot;images/cyriel.png&quot; style=&quot;max-width: 400px; filter: contrast(120%);&quot;&gt;\
-        &lt;/div&gt;\
+    &lt;&lt;elseif _artRoll is 2&gt;&gt;
+        &lt;div class=&quot;art-frame frame-silver&quot;&gt;
+            &lt;img src=&quot;images/cyriel.png&quot; style=&quot;filter: contrast(120%);&quot;&gt;
+        &lt;/div&gt;
         
-        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #c0c0c0, #808080); color: black; padding: 10px; border: 2px solid #555; width: 300px; margin: 10px auto; border-radius: 5px; font-family: serif; text-shadow: none;&quot;&gt;\
-            &lt;strong&gt;&quot;Magische Blumen&quot;&lt;/strong&gt;&lt;br&gt;\
+        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #c0c0c0, #808080);&quot;&gt;
+            &lt;strong&gt;&quot;Magische Blumen&quot;&lt;/strong&gt;&lt;br&gt;
             &lt;span style=&quot;font-size: 0.8em; font-style: italic;&quot;&gt;Wasserfarben &amp; Tränen, von Jens Kurt Rohling&lt;/span&gt;
-            &lt;hr style=&quot;border-color: black; opacity: 0.5;&quot;&gt;\
-            Der Künstler [...] wollte hier wahrscheinlich ausdrücken, dass es sich um eine besondere Blumenvase an einer Magischen Schule handelt. Überliefert ist, dass er seine Assistentin Cyriel mehrfach aufforderte, das Stillleben magischer zu gestalten.
-        &lt;/div&gt;\
+            &lt;hr&gt;
+            Der Künstler [...] wollte hier wahrscheinlich ausdrücken, dass es sich um eine besondere Blumenvase an einer Magischen Schule handelt.
+        &lt;/div&gt;
 
     /* --- BILD 3: HEXE --- */
-    &lt;&lt;else&gt;&gt;\
-        &lt;div class=&quot;art-frame&quot; style=&quot;border: 10px solid #4a3c31; display:inline-block; padding: 5px; background: #222;&quot;&gt;\
-            &lt;img src=&quot;images/hexe1.png&quot; style=&quot;max-width: 400px; filter: grayscale(50%);&quot;&gt;\
-        &lt;/div&gt;\
+    &lt;&lt;else&gt;&gt;
+        &lt;div class=&quot;art-frame frame-wood&quot;&gt;
+            &lt;img src=&quot;images/hexe1.png&quot; style=&quot;filter: grayscale(50%);&quot;&gt;
+        &lt;/div&gt;
         
-        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #cd7f32, #8b4500); color: black; padding: 10px; border: 2px solid #555; width: 300px; margin: 10px auto; border-radius: 5px; font-family: serif; text-shadow: none;&quot;&gt;\
-            &lt;strong&gt;&quot;Jolanda, die Intolerante&quot;&lt;/strong&gt;&lt;br&gt;\
+        &lt;div class=&quot;museum-plaque&quot; style=&quot;background: linear-gradient(to bottom, #cd7f32, #8b4500);&quot;&gt;
+            &lt;strong&gt;&quot;Jolanda, die Intolerante&quot;&lt;/strong&gt;&lt;br&gt;
             &lt;span style=&quot;font-size: 0.8em; font-style: italic;&quot;&gt;Öl auf Leinwand (sehr ölig)&lt;/span&gt;
-            &lt;hr style=&quot;border-color: black; opacity: 0.5;&quot;&gt;\
-            Die gezeichnete Hexe &quot;Jolanda, die Intolerante&quot; bei ihrer Lieblingsbeschäftigung - dem Intolerant sein. Der Künstler [...] wollte durch die extravaganten rosafarbigen Hexenhut-Darstellungen wohl eine Botschaft übermitteln, die leider nicht überliefert wurde.
-        &lt;/div&gt;\
-    &lt;&lt;/if&gt;&gt;\
+            &lt;hr&gt;
+            Die gezeichnete Hexe &quot;Jolanda, die Intolerante&quot; bei ihrer Lieblingsbeschäftigung - dem Intolerant sein.
+        &lt;/div&gt;
+    &lt;&lt;/if&gt;&gt;
 
 [[Weitergehen|Hof]]
-
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="44" name="Hagridwin" tags="" position="1200,325" size="100,100">Im Wegrennen drehst du dich um und siehst Hagrids Gesicht:
 
 &lt;img src=&quot;images/hagridsad.gif&quot;&gt;
