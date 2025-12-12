@@ -593,19 +593,24 @@ a:hover {
 
 /* Der Rahmen Container */
 .art-frame {
-    display: inline-block;
-    padding: 5px;
-    background-color: #222; /* Dunkler Hintergrund direkt hinterm Bild */
-    margin-bottom: 15px;
-    box-shadow: 10px 10px 0px #000; /* Dein globaler Schatten-Look */
+    display: inline-block;
+    padding: 5px;
+    background-color: #222;
+    margin-bottom: 15px;
+    box-shadow: 10px 10px 0px #000;
+
+    /* --- WICHTIGE ÄNDERUNGEN --- */
+    box-sizing: border-box;  /* Sorgt dafür, dass Rahmen/Padding INKLUSIVE der Breite sind */
+    max-width: 100%;         /* Darf niemals breiter als der Bildschirm sein */
+    width: auto;             /* Passt sich sonst dem Inhalt an */
 }
 
 /* Damit die Bilder auf Handys nicht explodieren */
 .art-frame img {
-    max-width: 400px;
-    width: 100%; 
-    height: auto;
-    display: block;
+    /* Wir überschreiben hier die Inline-Styles */
+    max-width: 100% !important; 
+    height: auto;
+    display: block; /* Entfernt kleine Lücken unter Bildern */
 }
 
 /* Die verschiedenen Rahmen-Typen */
@@ -773,7 +778,7 @@ Die inoffizielle Coldmirror Dating Sim V1.5.1
   
   /* Nur würfeln, wenn wir nicht sowieso schlafen müssen (vor 22 Uhr) */
   &lt;&lt;if $zeit &lt; 22&gt;&gt; 
-     &lt;&lt;if random(1, 100) &lt;= 20&gt;&gt;
+     &lt;&lt;if random(1, 100) &lt;= 15&gt;&gt;
         &lt;&lt;set _eventTriggered to true&gt;&gt;
         
         /* Welches Event? */
@@ -783,7 +788,7 @@ Die inoffizielle Coldmirror Dating Sim V1.5.1
            &lt;&lt;goto &quot;random_FreshD1&quot;&gt;&gt;
         &lt;&lt;elseif _rand == 2&gt;&gt;
            &lt;&lt;goto &quot;random_FreshD2&quot;&gt;&gt;
-         &lt;&lt;elseif _rand &lt;= 7&gt;&gt;
+         &lt;&lt;elseif _rand &lt;= 6&gt;&gt;
            &lt;&lt;goto &quot;random_Art&quot;&gt;&gt;
         &lt;&lt;else&gt;&gt;
            &lt;&lt;goto &quot;random_Voldemort&quot;&gt;&gt;
@@ -1278,7 +1283,7 @@ Du bist tot.
 
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
-      &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
+      
   &lt;&lt;/link&gt;&gt;
 &lt;/div&gt;\
 
@@ -1346,7 +1351,7 @@ Du bist tot.
 
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
-      &lt;&lt;audio &quot;bgm&quot; volume 0.2 loop play&gt;&gt;
+      &lt;/div&gt;\
   &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;else&gt;&gt;\
