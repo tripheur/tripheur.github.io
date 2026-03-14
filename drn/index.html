@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ein Tag als IP-Paket</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    --bg: #050a0e;
+    --bg2: #0a1520;
+    --green: #00ff88;
+    --green-dim: #00aa55;
+    --cyan: #00e5ff;
+    --red: #ff3355;
+    --yellow: #ffdd00;
+    --orange: #ff8800;
+    --text: #c8e6d0;
+    --border: #1a4030;
+    --glow: 0 0 8px #00ff8866, 0 0 20px #00ff8822;
+    --glow-cyan: 0 0 8px #00e5ff66, 0 0 20px #00e5ff22;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanlines */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  #app {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(16px, 4vw, 28px);
+    font-weight: 900;
+    color: var(--green);
+    text-shadow: var(--glow);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  header p {
+    color: var(--green-dim);
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing: 2px;
+  }
+
+  /* Progress bar */
+  #progress-container {
+    margin-bottom: 20px;
+  }
+  #progress-label {
+    font-size: 11px;
+    color: var(--green-dim);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #progress-bar-outer {
+    height: 4px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  #progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-dim), var(--cyan));
+    transition: width 0.6s ease;
+    box-shadow: var(--glow);
+  }
+
+  /* Scene card */
+  #scene {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--green-dim);
+    padding: 28px;
+    position: relative;
+    flex: 1;
+  }
+  #scene::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0.5;
+  }
+
+  /* Scene header */
+  #scene-tag {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  #scene-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(14px, 3vw, 20px);
+    font-weight: 700;
+    color: var(--green);
+    text-shadow: var(--glow);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Story text */
+  #story-text {
+    line-height: 1.85;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 22px;
+  }
+  #story-text .prompt {
+    color: var(--green);
+    font-weight: bold;
+    margin-top: 16px;
+    display: block;
+  }
+  #story-text .code {
+    color: var(--cyan);
+    background: rgba(0,229,255,0.06);
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 13px;
+  }
+
+  /* Fact box */
+  .fact-box {
+    border: 1px solid var(--green-dim);
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: rgba(0,255,136,0.04);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .fact-box .fact-label {
+    color: var(--yellow);
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Choices */
+  #choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .choice-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    padding: 13px 18px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+    line-height: 1.5;
+  }
+  .choice-btn::before {
+    content: '▶ ';
+    color: var(--green-dim);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .choice-btn:hover {
+    border-color: var(--green-dim);
+    color: var(--green);
+    background: rgba(0,255,136,0.04);
+    text-shadow: 0 0 6px #00ff8840;
+    padding-left: 28px;
+  }
+  .choice-btn:hover::before { opacity: 1; }
+
+  /* Feedback overlay */
+  #feedback {
+    display: none;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid;
+    animation: fadeIn 0.3s ease;
+  }
+  #feedback.correct {
+    border-color: var(--green);
+    background: rgba(0,255,136,0.06);
+    color: var(--green);
+  }
+  #feedback.wrong {
+    border-color: var(--red);
+    background: rgba(255,51,85,0.06);
+    color: var(--red);
+  }
+  #feedback .fb-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  #feedback .fb-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  #feedback .fb-text .highlight { color: var(--cyan); }
+
+  #next-btn, #retry-btn {
+    margin-top: 14px;
+    padding: 10px 24px;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  #next-btn {
+    background: var(--green);
+    color: var(--bg);
+    box-shadow: var(--glow);
+  }
+  #next-btn:hover { background: var(--cyan); box-shadow: var(--glow-cyan); }
+  #retry-btn {
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+  #retry-btn:hover { background: rgba(255,51,85,0.1); }
+
+  /* Status bar */
+  #status-bar {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--green-dim);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .status-item { display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: var(--glow); animation: pulse 2s infinite; }
+
+  /* Packet visual */
+  #packet-visual {
+    height: 50px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .packet-path {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--green-dim) 0, var(--green-dim) 8px, transparent 8px, transparent 16px);
+    opacity: 0.3;
+  }
+  .packet-dot {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px; height: 12px;
+    background: var(--green);
+    box-shadow: var(--glow), 0 0 20px var(--green);
+    border-radius: 2px;
+    transition: left 0.8s ease;
+  }
+  .node-label {
+    position: absolute;
+    bottom: 6px;
+    font-size: 9px;
+    color: var(--green-dim);
+    letter-spacing: 1px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* End screen */
+  #end-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  #end-screen .trophy {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  #end-screen h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(18px, 4vw, 28px);
+    color: var(--green);
+    text-shadow: var(--glow);
+    margin-bottom: 12px;
+  }
+  #end-screen .summary {
+    font-size: 14px;
+    color: var(--text);
+    max-width: 600px;
+    margin: 0 auto 24px;
+    line-height: 1.8;
+  }
+  #restart-btn {
+    padding: 12px 32px;
+    background: var(--green);
+    color: var(--bg);
+    border: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: var(--glow);
+    transition: all 0.2s;
+  }
+  #restart-btn:hover { background: var(--cyan); }
+
+  .score-badge {
+    display: inline-block;
+    background: var(--bg2);
+    border: 1px solid var(--green);
+    padding: 8px 20px;
+    font-family: 'Orbitron', monospace;
+    font-size: 24px;
+    color: var(--yellow);
+    margin: 16px auto;
+    box-shadow: 0 0 20px rgba(255,221,0,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🌐 Ein Tag als IP-Paket</h1>
+    <p>INTERAKTIVE NETZWERK-SIMULATION · KLAUSURVORBEREITUNG</p>
+  </header>
+
+  <div id="status-bar">
+    <div class="status-item"><div class="status-dot"></div><span id="stat-ip">IP: —</span></div>
+    <div class="status-item"><div class="status-dot" style="background:var(--cyan);box-shadow:var(--glow-cyan)"></div><span id="stat-layer">Layer: —</span></div>
+    <div class="status-item"><div class="status-dot" style="background:var(--yellow);box-shadow:0 0 8px #ffdd0066"></div><span id="stat-score">Punkte: 0</span></div>
+  </div>
+
+  <div id="packet-visual">
+    <div class="packet-path"></div>
+    <div class="packet-dot" id="packet-dot" style="left:2%"></div>
+  </div>
+
+  <div id="progress-container">
+    <div id="progress-label">
+      <span>FORTSCHRITT</span>
+      <span id="progress-text">Station 0 / 9</span>
+    </div>
+    <div id="progress-bar-outer"><div id="progress-bar-inner" style="width:0%"></div></div>
+  </div>
+
+  <div id="scene">
+    <div id="scene-tag"></div>
+    <div id="scene-title"></div>
+    <div id="story-text"></div>
+    <div id="choices"></div>
+    <div id="feedback">
+      <div class="fb-title" id="fb-title"></div>
+      <div class="fb-text" id="fb-text"></div>
+      <button id="next-btn" onclick="nextScene()">WEITER ▶</button>
+      <button id="retry-btn" onclick="retryScene()" style="display:none">NOCHMAL VERSUCHEN</button>
+    </div>
+  </div>
+
+  <div id="end-screen">
+    <div class="trophy">📦</div>
+    <h2>PAKET ERFOLGREICH ZUGESTELLT!</h2>
+    <div class="score-badge" id="final-score">0 / 90 Punkte</div>
+    <p class="summary">Du hast den kompletten Weg eines IP-Pakets durch das Netzwerk erlebt – von der IP-Zuteilung per DHCP über DNS-Auflösung, ARP, die OSI-Schichten, Routing, NAT bis zum TCP-Handshake und HTTP. Alles Themen, die in deiner Klausur vorkommen!</p>
+    <button id="restart-btn" onclick="startGame()">NOCHMAL SPIELEN</button>
+  </div>
+</div>
+
+<script>
+const SCENES = [
+  {
+    id: "dhcp",
+    tag: "STATION 01 · DHCP",
+    title: "Du brauchst eine Identität",
+    topic: "Layer: Anwendungsschicht / DHCP",
+    ip: "0.0.0.0",
+    layer: "Application Layer",
+    text: `Du existierst gerade erst. Du bist ein frischer Datenstrom auf einem PC, der gerade ans Netzwerk angeschlossen wurde – aber du hast noch keine IP-Adresse. Ohne IP-Adresse bist du niemand. Du kannst nirgendwo hin.
+
+<span class="prompt">Wie bekommst du deine IP-Adresse?</span>
+
+<div class="fact-box">
+  <span class="fact-label">📡 Kontext</span>
+  Im Netzwerk läuft irgendwo ein Server, der IP-Adressen vergibt. Dein Host kennt seine Adresse noch nicht – er kennt noch nicht mal die Adresse des Servers.
+</div>
+
+Was tust du als erstes?`,
+    choices: [
+      { text: "Ich wähle selbst eine freie IP-Adresse aus der Klasse A (z.B. 10.0.0.1) und nutze sie einfach.", correct: false, penalty: 10 },
+      { text: "Ich sende einen DHCP DISCOVER als Broadcast (255.255.255.255) ins Netzwerk.", correct: true },
+      { text: "Ich frage per DNS-Anfrage nach meiner eigenen IP.", correct: false, penalty: 10 },
+      { text: "Ich sende einen ARP-Request nach der IP des Gateways.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `✔ RICHTIG! Der DHCP-Prozess läuft in 4 Schritten ab:<br><br>
+<span class="highlight">1. DISCOVER</span> – Du sendest einen Broadcast (Ziel: 255.255.255.255, Quelle: 0.0.0.0) – du kennst ja noch niemanden.<br>
+<span class="highlight">2. OFFER</span> – Der DHCP-Server antwortet mit einem Angebot: "Hier ist 192.168.1.42 – willst du die?"<br>
+<span class="highlight">3. REQUEST</span> – Du bestätigst das Angebot per Broadcast: "Ja, ich nehme 192.168.1.42!"<br>
+<span class="highlight">4. ACK</span> – Der Server bestätigt: "OK, die Adresse gehört dir für 24 Stunden (Lease Time)."<br><br>
+Du hast nun: IP, Subnetzmaske, Standard-Gateway und DNS-Server.`,
+    wrongFeedback: `✘ Paket verloren! Selbst gewählte IPs führen zu Konflikten (zwei Geräte, gleiche IP). DNS löst Hostnamen in IPs auf – nicht umgekehrt. ARP ohne eigene IP macht keinen Sinn. Der korrekte Weg ist DHCP mit einem Broadcast-DISCOVER.`,
+    points: 10,
+  },
+  {
+    id: "subnetting",
+    tag: "STATION 02 · IP-ADRESSEN & SUBNETTING",
+    title: "Deine neue Identität prüfen",
+    topic: "Layer: Netzwerkschicht",
+    ip: "192.168.1.42",
+    layer: "Network Layer",
+    text: `Gut. Du hast deine IP-Adresse: <span class="code">192.168.1.42/24</span>
+
+Dein Ziel ist <span class="code">www.example.com</span> mit der IP <span class="code">93.184.216.34</span>.
+
+Bevor du losläufst: Du musst entscheiden, ob dein Ziel im selben Netz liegt oder ob du über den Router musst.
+
+<div class="fact-box">
+  <span class="fact-label">🧮 Rechenaufgabe</span>
+  Deine IP: 192.168.1.42<br>
+  Subnetzmaske: /24 → 255.255.255.0<br>
+  Ziel-IP: 93.184.216.34<br><br>
+  Netzadresse = IP <b>AND</b> Subnetzmaske<br>
+  Dein Netz: 192.168.1.0 – 192.168.1.255<br>
+  Broadcast: 192.168.1.255 | Hosts: 254
+</div>
+
+Liegt die Ziel-IP 93.184.216.34 in deinem /24-Netz?`,
+    choices: [
+      { text: "Ja – 93.184.216.34 liegt in meinem Netz 192.168.1.0/24. Ich kann direkt kommunizieren.", correct: false, penalty: 10 },
+      { text: "Nein – 93.x.x.x liegt in einem anderen Netz. Ich muss über den Standard-Gateway (Router).", correct: true },
+      { text: "Ich kann das nicht bestimmen – dafür brauche ich erst einen DNS-Lookup.", correct: false, penalty: 5 },
+      { text: "Egal – ich sende immer über den Router, auch bei lokalen Zielen.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `✔ RICHTIG! 93.184.216.34 liegt NICHT im Netz 192.168.1.0/24.<br><br>
+<span class="highlight">Prüfung:</span> 93.184.216.34 AND 255.255.255.0 = 93.184.216.0 ≠ 192.168.1.0<br><br>
+Da das Ziel außerhalb liegt, schickst du das Paket an den <span class="highlight">Standard-Gateway</span> (z.B. 192.168.1.1). Der Router kennt den Weg weiter.<br><br>
+<span class="highlight">Merkhilfe /24:</span> Die ersten 24 Bits sind Netzanteil → 192.168.1.xxx – nur der letzte Oktett variiert.`,
+    wrongFeedback: `✘ Die Subnetzmaske /24 bedeutet 255.255.255.0. Dein Netz ist 192.168.1.0–192.168.1.255. Die Ziel-IP 93.x.x.x liegt definitiv außerhalb – sie muss über den Router.`,
+    points: 10,
+  },
+  {
+    id: "dns",
+    tag: "STATION 03 · DNS",
+    title: "Den Weg zu www.example.com finden",
+    topic: "Layer: Anwendungsschicht",
+    ip: "192.168.1.42",
+    layer: "Application Layer",
+    text: `Du weißt: Ziel ist <span class="code">www.example.com</span> – aber woher kennst du die IP 93.184.216.34?
+
+Eigentlich kennst du sie noch nicht. Du hast nur den Hostnamen. Für IP-Pakete brauchst du eine IP-Adresse.
+
+<div class="fact-box">
+  <span class="fact-label">🗂️ DNS-Hierarchie</span>
+  Root-Server → .com TLD-Server → example.com Authoritative Server<br><br>
+  DNS nutzt standardmäßig <b>UDP Port 53</b> für Anfragen (TCP bei großen Antworten).
+</div>
+
+Wie läuft die DNS-Auflösung ab? Wähle den korrekten Ablauf:`,
+    choices: [
+      { text: "Mein Host fragt direkt den Root-DNS-Server nach www.example.com.", correct: false, penalty: 10 },
+      { text: "Mein Host fragt den konfigurierten DNS-Resolver (z.B. 192.168.1.1). Dieser übernimmt die rekursive Auflösung für mich.", correct: true },
+      { text: "Mein Host sendet einen Broadcast ins Netz und hofft, dass jemand die IP kennt.", correct: false, penalty: 10 },
+      { text: "Mein Host schaut in der ARP-Tabelle nach dem Hostnamen.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `✔ RICHTIG! Ablauf der rekursiven DNS-Auflösung:<br><br>
+1. Dein Host → <span class="highlight">lokaler Resolver</span> (vom DHCP konfiguriert): "Wer ist www.example.com?"<br>
+2. Resolver → <span class="highlight">Root-Server</span>: "Wer verwaltet .com?"<br>
+3. Resolver → <span class="highlight">.com TLD-Server</span>: "Wer verwaltet example.com?"<br>
+4. Resolver → <span class="highlight">Authoritative Nameserver</span>: "Was ist die IP von www.example.com?"<br>
+5. Antwort: <span class="highlight">93.184.216.34</span> (A-Record)<br><br>
+Das Ergebnis wird <b>gecacht</b> (TTL!). Du sparst dir die nächste Anfrage.`,
+    wrongFeedback: `✘ Hosts fragen nie direkt Root-Server. ARP löst IPs in MAC-Adressen auf – keine Hostnamen. Broadcasts für DNS? Nein. Der Host fragt seinen <b>konfigurierten Resolver</b>, der dann iterativ/rekursiv die gesamte Hierarchie befragt.`,
+    points: 10,
+  },
+  {
+    id: "arp",
+    tag: "STATION 04 · ARP",
+    title: "Die MAC-Adresse des Gateways",
+    topic: "Layer: Sicherungsschicht",
+    ip: "192.168.1.42",
+    layer: "Data Link Layer",
+    text: `Du kennst jetzt das Ziel: <span class="code">93.184.216.34</span>. Da es außerhalb deines Netzes liegt, schickst du das Paket zum <span class="code">Gateway: 192.168.1.1</span>.
+
+Aber Ethernet-Frames brauchen eine <b>MAC-Adresse</b> – keine IP. Du kennst die IP des Gateways, aber nicht seine MAC.
+
+<div class="fact-box">
+  <span class="fact-label">⚙️ ARP</span>
+  Address Resolution Protocol – löst IP-Adressen in MAC-Adressen auf.<br>
+  Ergebnis wird im <b>ARP-Cache</b> gespeichert (z.B. 60–120 Sekunden).
+</div>
+
+Was sendest du, um die MAC-Adresse von 192.168.1.1 zu erhalten?`,
+    choices: [
+      { text: "ARP Request als Unicast direkt an 192.168.1.1: 'Wer hat IP 192.168.1.1?'", correct: false, penalty: 10 },
+      { text: "ARP Request als Broadcast (FF:FF:FF:FF:FF:FF): 'Wer hat IP 192.168.1.1? Sag es 192.168.1.42!'", correct: true },
+      { text: "Ich frage den DNS-Server nach der MAC-Adresse des Gateways.", correct: false, penalty: 10 },
+      { text: "Ich sende RARP – das ist dafür zuständig.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `✔ RICHTIG! ARP-Ablauf:<br><br>
+1. Du sendest ARP Request als <span class="highlight">Ethernet-Broadcast</span> (Ziel-MAC: FF:FF:FF:FF:FF:FF)<br>
+   Inhalt: "Wer hat 192.168.1.1? Bitte antworte an 192.168.1.42 (AA:BB:CC:DD:EE:01)"<br><br>
+2. Der Gateway antwortet als <span class="highlight">Unicast</span> direkt an dich:<br>
+   "192.168.1.1 ist bei mir: 00:11:22:33:44:55"<br><br>
+3. Du trägst das Ergebnis in deinen <span class="highlight">ARP-Cache</span> ein.<br><br>
+<span class="highlight">RARP</span> (Reverse ARP) macht das Gegenteil: MAC → IP (veraltet, heute DHCP).`,
+    wrongFeedback: `✘ Unicast geht nicht – du kennst die MAC ja noch nicht! DNS kennt keine MACs. RARP macht MAC→IP (veraltet). Korrekt: ARP Request als <b>Broadcast</b>, damit jedes Gerät im Segment es empfängt und derjenige mit der gesuchten IP antworten kann.`,
+    points: 10,
+  },
+  {
+    id: "osi",
+    tag: "STATION 05 · OSI-MODELL",
+    title: "Dich selbst einpacken",
+    topic: "Alle OSI-Layer",
+    ip: "192.168.1.42",
+    layer: "All Layers",
+    text: `Jetzt geht es ans Einpacken. Du bist HTTP-Nutzdaten aus der Anwendungsschicht. Auf dem Weg nach draußen musst du durch alle Schichten.
+
+<div class="fact-box">
+  <span class="fact-label">📚 OSI-MODELL (7 Schichten)</span>
+  7 – Anwendung (HTTP, DNS, DHCP)<br>
+  6 – Darstellung (Verschlüsselung, Kodierung)<br>
+  5 – Sitzung (Session-Management)<br>
+  4 – Transport (TCP/UDP, Ports, Segmente)<br>
+  3 – Netzwerk (IP, Routing, Pakete)<br>
+  2 – Sicherung (MAC, Ethernet, Frames)<br>
+  1 – Bitübertragung (Bits, Kabel, WLAN)
+</div>
+
+An welchem Layer wird dein <b>IP-Header</b> (mit Quell- und Ziel-IP) hinzugefügt?`,
+    choices: [
+      { text: "Layer 2 – Sicherungsschicht: Hier kommt die IP-Adresse drauf.", correct: false, penalty: 10 },
+      { text: "Layer 3 – Netzwerkschicht: Hier wird der IP-Header mit Quell-IP und Ziel-IP hinzugefügt.", correct: true },
+      { text: "Layer 4 – Transportschicht: TCP-Header enthält auch IP-Adressen.", correct: false, penalty: 10 },
+      { text: "Layer 7 – Anwendungsschicht: HTTP-Header enthält die Ziel-IP.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `✔ RICHTIG! Einkapselung von oben nach unten:<br><br>
+L7 → <span class="highlight">HTTP-Daten</span> (GET /index.html)<br>
+L4 → + <span class="highlight">TCP-Header</span> (Quell-Port: 51234, Ziel-Port: 80) = Segment<br>
+L3 → + <span class="highlight">IP-Header</span> (Src: 192.168.1.42, Dst: 93.184.216.34) = Paket<br>
+L2 → + <span class="highlight">Ethernet-Header</span> (Src-MAC, Dst-MAC: Gateway) = Frame<br>
+L1 → Übertragung als Bits/Signale<br><br>
+Beim Empfänger passiert das Gegenteil: <span class="highlight">Dekapsulierung</span> von unten nach oben.`,
+    wrongFeedback: `✘ Layer 2 trägt MAC-Adressen (Ethernet). Layer 4 (TCP) trägt Port-Nummern, keine IPs. Layer 7 (HTTP) enthält Anwendungsdaten, keine IP-Header. Der IP-Header gehört zu <b>Layer 3 – Netzwerkschicht</b>.`,
+    points: 10,
+  },
+  {
+    id: "routing",
+    tag: "STATION 06 · ROUTING",
+    title: "Am Router: Wohin jetzt?",
+    topic: "Layer: Netzwerkschicht / Routing",
+    ip: "192.168.1.42",
+    layer: "Network Layer",
+    text: `Du bist als Ethernet-Frame beim Standard-Gateway angekommen. Der Router empfängt dich, entfernt den alten Ethernet-Frame (Layer 2) und schaut sich deinen IP-Header an.
+
+Ziel-IP: <span class="code">93.184.216.34</span>
+
+<div class="fact-box">
+  <span class="fact-label">🗺️ ROUTING-TABELLE (vereinfacht)</span>
+  Netz: 192.168.1.0/24 → Interface eth0 (lokal)<br>
+  Netz: 10.0.0.0/8     → Interface eth1<br>
+  Netz: 0.0.0.0/0      → Default Route → ISP (eth2)<br><br>
+  Longest Prefix Match: Der spezifischste Eintrag gewinnt.
+</div>
+
+Wie entscheidet der Router, welchen Eintrag er nutzt?`,
+    choices: [
+      { text: "Er nimmt immer den ersten passenden Eintrag in der Tabelle.", correct: false, penalty: 10 },
+      { text: "Er nimmt den Eintrag mit dem längsten Präfix (Longest Prefix Match) – also den spezifischsten.", correct: true },
+      { text: "Er fragt per Broadcast alle Nachbarn, wer das Ziel kennt.", correct: false, penalty: 10 },
+      { text: "Er fragt DNS nach dem nächsten Hop für 93.184.216.34.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `✔ RICHTIG! <span class="highlight">Longest Prefix Match</span> ist das Kernprinzip des IP-Routings:<br><br>
+93.184.216.34 passt zu:<br>
+• 0.0.0.0/0 (Default Route, /0 = 0 übereinstimmende Bits)<br><br>
+Kein spezifischerer Eintrag → <span class="highlight">Default Route</span> gewinnt → weiter zum ISP!<br><br>
+<span class="highlight">Wichtig:</span> Router dekrementieren den <b>TTL (Time To Live)</b> um 1. Erreicht TTL = 0, wird das Paket verworfen und ein ICMP "Time Exceeded" zurückgeschickt. So verhindert man Routing-Loops.`,
+    wrongFeedback: `✘ "Erster Eintrag" ist falsch – das wäre FCFS, nicht Routing. Broadcasts für Routing? Nein – das wäre sehr ineffizient. DNS kennt keine Router-Pfade. Die Antwort: <b>Longest Prefix Match</b> – der spezifischste passende Tabelleneintrag gewinnt.`,
+    points: 10,
+  },
+  {
+    id: "nat",
+    tag: "STATION 07 · NAT",
+    title: "Das Internet betreten",
+    topic: "Layer: Netzwerkschicht / NAT",
+    ip: "192.168.1.42",
+    layer: "Network Layer",
+    text: `Du bist jetzt beim ISP-Router. Du verlässt das private Netz und betrittst das öffentliche Internet.
+
+Deine aktuelle Quell-IP: <span class="code">192.168.1.42</span> – das ist eine <b>private IP-Adresse</b>.
+
+<div class="fact-box">
+  <span class="fact-label">🌍 PRIVATE IP-ADRESSBEREICHE (RFC 1918)</span>
+  10.0.0.0 – 10.255.255.255 (/8)<br>
+  172.16.0.0 – 172.31.255.255 (/12)<br>
+  192.168.0.0 – 192.168.255.255 (/16)<br><br>
+  Diese Adressen sind im Internet <b>nicht routbar</b>!
+</div>
+
+Was muss passieren, damit du das öffentliche Internet erreichen kannst?`,
+    choices: [
+      { text: "Nichts – Router im Internet kennen alle privaten Adressen und leiten sie weiter.", correct: false, penalty: 10 },
+      { text: "NAT (Network Address Translation) ersetzt meine private Quell-IP durch die öffentliche IP des Routers.", correct: true },
+      { text: "Ich bekomme automatisch eine neue öffentliche IP per DHCP vom ISP.", correct: false, penalty: 5 },
+      { text: "Das Paket wird mit einem VPN-Tunnel verpackt, der die private IP verbirgt.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `✔ RICHTIG! NAT (genauer: PAT/NAPT) funktioniert so:<br><br>
+<span class="highlight">Ausgehend:</span><br>
+Src: 192.168.1.42:51234 → Dst: 93.184.216.34:80<br>
+wird zu:<br>
+Src: <b>85.123.45.67</b>:41234 → Dst: 93.184.216.34:80<br><br>
+Der Router speichert diese Zuordnung in der <span class="highlight">NAT-Tabelle</span>.<br><br>
+<span class="highlight">Eingehend:</span> Antwortpakete von 93.184.216.34:80 an 85.123.45.67:41234 werden anhand der Tabelle zurückübersetzt → 192.168.1.42:51234.`,
+    wrongFeedback: `✘ Private IPs sind im Internet nicht routbar – Router verwerfen sie einfach. DHCP vom ISP ist möglich für den Router selbst, aber nicht für jeden Host. VPN wäre ein anderer Ansatz. Die korrekte Lösung: <b>NAT</b> übersetzt die Quell-IP am Netzrand.`,
+    points: 10,
+  },
+  {
+    id: "tcp",
+    tag: "STATION 08 · TCP & PROTOKOLLE",
+    title: "Verbindung zum Server aufbauen",
+    topic: "Layer: Transportschicht",
+    ip: "85.123.45.67 (NAT)",
+    layer: "Transport Layer",
+    text: `Du bist angekommen – fast. Bevor du HTTP-Daten senden kannst, muss eine TCP-Verbindung aufgebaut werden. TCP ist <b>verbindungsorientiert</b> und zuverlässig.
+
+<div class="fact-box">
+  <span class="fact-label">⚡ TCP vs. UDP</span>
+  TCP: Verbindungsorientiert, zuverlässig, Flusskontrolle, langsamer<br>
+  UDP: Verbindungslos, unzuverlässig, schneller, für Streaming/Gaming/DNS<br>
+</div>
+
+In welcher Reihenfolge läuft der TCP 3-Way-Handshake ab?`,
+    choices: [
+      { text: "SYN → ACK → SYN-ACK (Client sendet SYN, Server antwortet ACK, Client bestätigt SYN-ACK)", correct: false, penalty: 10 },
+      { text: "SYN → SYN-ACK → ACK (Client sendet SYN, Server antwortet SYN-ACK, Client bestätigt ACK)", correct: true },
+      { text: "ACK → SYN → SYN-ACK (Server initiiert, Client bestätigt, Server schließt ab)", correct: false, penalty: 10 },
+      { text: "SYN → SYN → ACK-ACK (beide senden SYN, dann gegenseitige Bestätigung)", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `✔ RICHTIG! Der TCP 3-Way-Handshake:<br><br>
+1. <span class="highlight">Client → Server: SYN</span><br>
+   "Ich möchte eine Verbindung. Meine ISN (Initial Sequence Number): x"<br><br>
+2. <span class="highlight">Server → Client: SYN-ACK</span><br>
+   "OK! Meine ISN: y. Ich bestätige dein x+1"<br><br>
+3. <span class="highlight">Client → Server: ACK</span><br>
+   "Ich bestätige dein y+1. Verbindung steht!"<br><br>
+Zum Abbau: <span class="highlight">4-Way-FIN</span> (FIN, ACK, FIN, ACK).<br>
+TCP-Port für HTTP: <b>80</b> | HTTPS: <b>443</b> | DNS: <b>53</b> | SSH: <b>22</b>`,
+    wrongFeedback: `✘ Der korrekte Ablauf: <b>SYN → SYN-ACK → ACK</b>. Immer der Client initiiert mit SYN. Der Server antwortet mit SYN-ACK (bestätigt UND stellt eigene Verbindung vor). Der Client bestätigt mit ACK. Drei Schritte – drei Pakete.`,
+    points: 10,
+  },
+  {
+    id: "http",
+    tag: "STATION 09 · HTTP & ANKUNFT",
+    title: "Das Ziel ist erreicht!",
+    topic: "Layer: Anwendungsschicht",
+    ip: "85.123.45.67 (NAT)",
+    layer: "Application Layer",
+    text: `Die TCP-Verbindung steht. Jetzt sendet dein Browser den eigentlichen HTTP-Request. Du bist fast am Ziel!
+
+<div class="fact-box">
+  <span class="fact-label">🌐 HTTP-REQUEST</span>
+  GET /index.html HTTP/1.1<br>
+  Host: www.example.com<br>
+  User-Agent: Mozilla/5.0<br>
+  Accept: text/html
+</div>
+
+Letzte Frage: Was ist der Unterschied zwischen <b>HTTP</b> und <b>HTTPS</b>?`,
+    choices: [
+      { text: "HTTPS ist schneller, weil es einen anderen TCP-Port (443) nutzt.", correct: false, penalty: 5 },
+      { text: "HTTPS verschlüsselt die Verbindung via TLS – Daten sind während der Übertragung nicht lesbar.", correct: true },
+      { text: "HTTPS nutzt UDP statt TCP – daher 'secure' durch Verbindungslosigkeit.", correct: false, penalty: 10 },
+      { text: "Es gibt keinen Unterschied – HTTPS ist nur ein Alias für HTTP auf Port 443.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `✔ RICHTIG! HTTPS = HTTP über <span class="highlight">TLS (Transport Layer Security)</span>:<br><br>
+• Vor dem HTTP-Request findet ein <span class="highlight">TLS-Handshake</span> statt<br>
+• Server sendet Zertifikat (von CA signiert)<br>
+• Schlüsselaustausch (z.B. Diffie-Hellman)<br>
+• Alle HTTP-Daten werden verschlüsselt übertragen<br>
+• Port: <span class="highlight">443</span> (statt 80)<br><br>
+🎉 <b>PAKET ERFOLGREICH ZUGESTELLT!</b><br>
+Du hast den kompletten Weg von DHCP → DNS → ARP → OSI → Routing → NAT → TCP → HTTP zurückgelegt!`,
+    wrongFeedback: `✘ HTTPS ist nicht zwangsläufig schneller. Es nutzt immer noch TCP (nicht UDP). HTTPS ist definitiv nicht nur ein Alias – es nutzt TLS-Verschlüsselung. Richtig: <b>HTTPS = HTTP + TLS-Verschlüsselung</b> auf Port 443.`,
+    points: 10,
+    last: true,
+  },
+];
+
+const NODES = ["HOST", "DHCP", "DNS", "ARP", "OSI", "ROUTER", "NAT", "SERVER", "HTTP", "✓"];
+
+let currentScene = 0;
+let score = 0;
+let wrongThisScene = false;
+
+function updateStatusBar(scene) {
+  document.getElementById('stat-ip').textContent = 'IP: ' + scene.ip;
+  document.getElementById('stat-layer').textContent = scene.layer;
+  document.getElementById('stat-score').textContent = 'Punkte: ' + score;
+}
+
+function updateProgress(idx) {
+  const pct = (idx / SCENES.length) * 100;
+  document.getElementById('progress-bar-inner').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = 'Station ' + idx + ' / ' + SCENES.length;
+  // Move packet dot
+  const dotPct = Math.max(2, (idx / SCENES.length) * 94) + '%';
+  document.getElementById('packet-dot').style.left = dotPct;
+}
+
+function renderNodes() {
+  const vis = document.getElementById('packet-visual');
+  // Remove old labels
+  vis.querySelectorAll('.node-label').forEach(e => e.remove());
+  NODES.forEach((label, i) => {
+    const pct = (i / (NODES.length - 1)) * 100;
+    const el = document.createElement('div');
+    el.className = 'node-label';
+    el.textContent = label;
+    el.style.left = pct + '%';
+    vis.appendChild(el);
+  });
+}
+
+function showScene(idx) {
+  if (idx >= SCENES.length) { showEnd(); return; }
+  const scene = SCENES[idx];
+  wrongThisScene = false;
+
+  document.getElementById('scene-tag').textContent = scene.tag;
+  document.getElementById('scene-title').textContent = scene.title;
+  document.getElementById('story-text').innerHTML = scene.text;
+  updateStatusBar(scene);
+  updateProgress(idx);
+
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  scene.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c.text;
+    btn.onclick = () => handleChoice(c, btn);
+    choicesEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'none';
+  fb.className = 'correct';
+
+  // Scene animation
+  document.getElementById('scene').style.opacity = 0;
+  setTimeout(() => { document.getElementById('scene').style.transition = 'opacity 0.4s'; document.getElementById('scene').style.opacity = 1; }, 10);
+}
+
+function handleChoice(choice, btn) {
+  const scene = SCENES[currentScene];
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+
+  // Disable all buttons
+  document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  btn.style.opacity = '1';
+
+  if (choice.correct) {
+    score += scene.points;
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    fb.className = 'correct';
+    document.getElementById('fb-title').textContent = '✔ RICHTIG +'+ scene.points + ' PUNKTE';
+    document.getElementById('fb-text').innerHTML = scene.correctFeedback;
+    document.getElementById('next-btn').style.display = 'inline-block';
+    document.getElementById('retry-btn').style.display = 'none';
+  } else {
+    score = Math.max(0, score - (choice.penalty || 10));
+    wrongThisScene = true;
+    btn.style.borderColor = 'var(--red)';
+    btn.style.color = 'var(--red)';
+    fb.className = 'wrong';
+    document.getElementById('fb-title').textContent = '✘ PAKET VERLOREN! -' + (choice.penalty || 10) + ' PUNKTE';
+    document.getElementById('fb-text').innerHTML = scene.wrongFeedback;
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('retry-btn').style.display = 'inline-block';
+  }
+  document.getElementById('stat-score').textContent = 'Punkte: ' + score;
+}
+
+function nextScene() {
+  currentScene++;
+  showScene(currentScene);
+}
+
+function retryScene() {
+  showScene(currentScene);
+}
+
+function showEnd() {
+  document.getElementById('scene').style.display = 'none';
+  document.getElementById('progress-container').style.display = 'none';
+  const end = document.getElementById('end-screen');
+  end.style.display = 'block';
+  document.getElementById('final-score').textContent = score + ' / 90 Punkte';
+  updateProgress(SCENES.length);
+  document.getElementById('packet-dot').style.left = '96%';
+
+  const pct = Math.round((score / 90) * 100);
+  let grade = '';
+  if (pct >= 90) grade = '🏆 Ausgezeichnet! Netzwerk-Experte!';
+  else if (pct >= 70) grade = '👍 Gut gemacht! Klausur sollte klappen.';
+  else if (pct >= 50) grade = '📚 Okay – noch ein bisschen wiederholen.';
+  else grade = '💪 Nochmal spielen und die Konzepte festigen!';
+  end.querySelector('.summary').insertAdjacentHTML('afterend', '<p style="color:var(--yellow);font-family:Orbitron,monospace;font-size:14px;margin-top:12px">' + grade + '</p>');
+}
+
+function startGame() {
+  currentScene = 0;
+  score = 0;
+  document.getElementById('scene').style.display = '';
+  document.getElementById('progress-container').style.display = '';
+  document.getElementById('end-screen').style.display = 'none';
+  // Remove grade message if exists
+  const end = document.getElementById('end-screen');
+  const extra = end.querySelector('p:last-of-type');
+  if (extra && extra !== end.querySelector('.summary')) extra.remove();
+  showScene(0);
+}
+
+renderNodes();
+startGame();
+</script>
+</body>
+</html>
