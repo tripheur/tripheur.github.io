@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📦 IP-Paketchens große Reise!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --sky:    #e8f4fd;
+  --blue:   #4a9eff;
+  --blue2:  #2d7dd2;
+  --yellow: #ffd166;
+  --orange: #ff9f1c;
+  --pink:   #ff6b9d;
+  --green:  #06d6a0;
+  --green2: #04b484;
+  --purple: #a855f7;
+  --red:    #ef4444;
+  --white:  #ffffff;
+  --text:   #2d3748;
+  --light:  #f7f9fc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(160deg, #e0f0ff 0%, #fce8f3 50%, #e8fff5 100%);
+  min-height: 100vh;
+  color: var(--text);
+}
+
+/* Floating clouds background */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(ellipse 120px 60px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 90px 45px at 80% 15%, rgba(255,255,255,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 150px 70px at 50% 80%, rgba(255,255,255,0.4) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+#app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+  position: relative; z-index: 1;
+}
+
+/* ─── HEADER ─── */
+header {
+  text-align: center;
+  padding: 20px 0 10px;
+}
+header h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(24px, 6vw, 42px);
+  background: linear-gradient(135deg, var(--blue), var(--pink), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.1));
+  line-height: 1.1;
+}
+header .subtitle {
+  font-size: 14px;
+  color: #7a8fa6;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ─── PROGRESS WORMS ─── */
+#progress-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 14px 0;
+  flex-wrap: wrap;
+}
+.prog-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  border: 3px solid #cde;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  transition: all 0.4s;
+}
+.prog-dot.done   { background: var(--green);  border-color: var(--green2); box-shadow: 0 2px 8px rgba(6,214,160,0.4); }
+.prog-dot.active { background: var(--yellow); border-color: var(--orange); box-shadow: 0 2px 8px rgba(255,145,28,0.4); animation: bounce 0.6s ease infinite alternate; }
+
+@keyframes bounce { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+/* ─── SCENE CARD ─── */
+#scene-card {
+  background: var(--white);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(74,158,255,0.15), 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: cardIn 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Illustration area */
+#illustration {
+  background: linear-gradient(180deg, #cce8ff 0%, #e8f8ff 100%);
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+#illustration::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 30px;
+  background: var(--white);
+  border-radius: 50% 50% 0 0 / 30px 30px 0 0;
+}
+
+/* Text area */
+#text-area {
+  padding: 22px 28px;
+}
+#scene-location {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+#scene-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(20px, 4vw, 26px);
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+#story-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #4a5568;
+}
+#story-text .highlight {
+  background: linear-gradient(135deg, #fff3cc, #ffe08a);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-weight: 700;
+  color: #7a4f00;
+}
+#story-text .factbox {
+  background: linear-gradient(135deg, #f0fff8, #e0faf2);
+  border-left: 4px solid var(--green);
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+#story-text .factbox .fact-title {
+  font-weight: 800;
+  color: var(--green2);
+  margin-bottom: 4px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ─── CHOICES ─── */
+#choices-area {
+  padding: 16px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.choice-btn {
+  background: var(--light);
+  border: 3px solid #e2eaf5;
+  border-radius: 18px;
+  padding: 14px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.choice-btn .choice-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.choice-btn:hover {
+  border-color: var(--blue);
+  background: #eef6ff;
+  transform: translateX(4px) scale(1.01);
+  box-shadow: 0 4px 12px rgba(74,158,255,0.2);
+}
+.choice-btn.correct-ans {
+  border-color: var(--green); background: #effff8;
+}
+.choice-btn.wrong-ans {
+  border-color: var(--red); background: #fff0f0;
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* ─── FEEDBACK ─── */
+#feedback-area {
+  display: none;
+  margin: 0 28px 24px;
+  border-radius: 20px;
+  padding: 18px 20px;
+  animation: fadeUp 0.3s ease;
+}
+#feedback-area.correct { background: linear-gradient(135deg, #e6fffb, #d0faf0); border: 3px solid var(--green); }
+#feedback-area.wrong   { background: linear-gradient(135deg, #fff5f5, #ffd8d8); border: 3px solid #fc9898; }
+#feedback-area .fb-head {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+#feedback-area.correct .fb-head { color: var(--green2); }
+#feedback-area.wrong   .fb-head { color: var(--red); }
+#feedback-area .fb-body { font-size: 14px; line-height: 1.7; color: #4a5568; }
+#feedback-area .fb-body b { color: var(--blue2); }
+
+#next-btn {
+  display: none;
+  margin: 10px 0 0;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(74,158,255,0.35);
+  transition: all 0.2s;
+}
+#next-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(74,158,255,0.45); }
+#retry-btn {
+  display: none;
+  margin: 10px 0 0;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255,107,157,0.3);
+  transition: all 0.2s;
+}
+#retry-btn:hover { transform: scale(1.05); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─── END SCREEN ─── */
+#end-screen {
+  display: none;
+  text-align: center;
+  padding: 32px 24px;
+}
+#end-screen h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(24px, 5vw, 36px);
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin: 16px 0 8px;
+}
+#end-screen .end-text { font-size: 15px; line-height: 1.8; color: #4a5568; max-width: 520px; margin: 0 auto 20px; }
+#score-bubble {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 32px;
+  padding: 12px 32px;
+  border-radius: 50px;
+  box-shadow: 0 6px 20px rgba(255,145,28,0.35);
+  margin: 12px 0 20px;
+}
+#restart-btn {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  color: white; border: none; border-radius: 50px;
+  font-family: 'Fredoka One', cursive; font-size: 18px;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(6,214,160,0.35);
+  transition: all 0.2s;
+}
+#restart-btn:hover { transform: scale(1.06); }
+
+/* ─── START SCREEN ─── */
+#start-screen {
+  text-align: center;
+  padding: 20px 24px 32px;
+}
+#start-screen .intro-text { font-size: 15px; line-height: 1.8; color: #4a5568; max-width: 520px; margin: 0 auto 20px; }
+#start-btn {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: white; border: none; border-radius: 50px;
+  font-family: 'Fredoka One', cursive; font-size: 20px;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(74,158,255,0.4);
+  transition: all 0.2s;
+}
+#start-btn:hover { transform: scale(1.06); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>📦 IP-Paketchens große Reise!</h1>
+    <p class="subtitle">Ein Abenteuer durch das Internet</p>
+  </header>
+
+  <div id="progress-row"></div>
+
+  <div id="scene-card">
+
+    <!-- START SCREEN -->
+    <div id="start-screen">
+      <div id="illustration" style="min-height:220px">
+        <!-- Cute character SVG: IP-Paket as a little envelope with eyes -->
+        <svg width="340" height="190" viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg">
+          <!-- Sky gradient -->
+          <!-- Road/ground -->
+          <ellipse cx="170" cy="185" rx="140" ry="18" fill="#b8e0ff" opacity="0.5"/>
+          <!-- Stars / dots in background -->
+          <circle cx="30" cy="30" r="4" fill="#ffd166" opacity="0.7"/>
+          <circle cx="310" cy="20" r="3" fill="#ff6b9d" opacity="0.6"/>
+          <circle cx="280" cy="60" r="2.5" fill="#a855f7" opacity="0.5"/>
+          <circle cx="60" cy="60" r="2" fill="#06d6a0" opacity="0.6"/>
+          <!-- Router character - left -->
+          <rect x="28" y="105" width="60" height="44" rx="10" fill="#4a9eff" opacity="0.9"/>
+          <rect x="22" y="118" width="72" height="8" rx="4" fill="#2d7dd2"/>
+          <!-- Antennas -->
+          <line x1="38" y1="105" x2="35" y2="88" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="35" cy="85" r="5" fill="#ff6b9d"/>
+          <line x1="58" y1="105" x2="58" y2="86" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="58" cy="83" r="5" fill="#ffd166"/>
+          <!-- Router eyes -->
+          <circle cx="42" cy="126" r="5" fill="white"/>
+          <circle cx="58" cy="126" r="5" fill="white"/>
+          <circle cx="43" cy="127" r="2.5" fill="#1a2a4a"/>
+          <circle cx="59" cy="127" r="2.5" fill="#1a2a4a"/>
+          <!-- Router smile -->
+          <path d="M44 136 Q50 141 56 136" stroke="#1a2a4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Road dots -->
+          <rect x="90" y="163" width="20" height="5" rx="2.5" fill="white" opacity="0.6"/>
+          <rect x="130" y="163" width="20" height="5" rx="2.5" fill="white" opacity="0.6"/>
+          <rect x="190" y="163" width="20" height="5" rx="2.5" fill="white" opacity="0.6"/>
+          <rect x="230" y="163" width="20" height="5" rx="2.5" fill="white" opacity="0.6"/>
+          <!-- Main IP-Paket character -->
+          <!-- Body: envelope shape -->
+          <rect x="130" y="88" width="80" height="62" rx="10" fill="#ffd166"/>
+          <rect x="130" y="88" width="80" height="62" rx="10" fill="none" stroke="#ff9f1c" stroke-width="3"/>
+          <!-- Envelope flap -->
+          <path d="M130 98 L170 120 L210 98" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Stamp -->
+          <rect x="190" y="94" width="14" height="14" rx="3" fill="#ff6b9d"/>
+          <text x="197" y="104" text-anchor="middle" font-size="9" fill="white" font-family="Nunito, sans-serif" font-weight="800">IP</text>
+          <!-- Eyes -->
+          <circle cx="155" cy="128" r="8" fill="white"/>
+          <circle cx="185" cy="128" r="8" fill="white"/>
+          <circle cx="157" cy="129" r="4" fill="#1a2a4a"/>
+          <circle cx="187" cy="129" r="4" fill="#1a2a4a"/>
+          <!-- Shine dots in eyes -->
+          <circle cx="159" cy="127" r="1.5" fill="white"/>
+          <circle cx="189" cy="127" r="1.5" fill="white"/>
+          <!-- Smile -->
+          <path d="M157 142 Q170 152 183 142" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Legs / feet -->
+          <ellipse cx="153" cy="154" rx="9" ry="5" fill="#ffb830"/>
+          <ellipse cx="187" cy="154" rx="9" ry="5" fill="#ffb830"/>
+          <!-- Arms waving -->
+          <path d="M130 112 Q110 100 105 90" stroke="#ffd166" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <circle cx="103" cy="88" r="6" fill="#ffd166"/>
+          <path d="M210 112 Q232 98 238 88" stroke="#ffd166" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <circle cx="240" cy="86" r="6" fill="#ffd166"/>
+          <!-- Server character - right -->
+          <rect x="258" y="100" width="52" height="64" rx="8" fill="#a855f7" opacity="0.9"/>
+          <rect x="263" y="112" width="42" height="6" rx="3" fill="#9333ea"/>
+          <rect x="263" y="124" width="42" height="6" rx="3" fill="#9333ea"/>
+          <rect x="263" y="136" width="42" height="6" rx="3" fill="#9333ea"/>
+          <!-- Server eyes -->
+          <circle cx="276" cy="106" r="4" fill="#ffd166"/>
+          <circle cx="294" cy="106" r="4" fill="#ffd166"/>
+          <!-- Little lights on server -->
+          <circle cx="296" cy="114" r="2" fill="#06d6a0"/>
+          <circle cx="296" cy="126" r="2" fill="#ff6b9d"/>
+          <circle cx="296" cy="138" r="2" fill="#ffd166"/>
+          <!-- Sparkles -->
+          <text x="100" y="75" font-size="16" opacity="0.8">✨</text>
+          <text x="220" y="65" font-size="14" opacity="0.7">⭐</text>
+          <text x="155" y="70" font-size="12" opacity="0.6">💫</text>
+        </svg>
+      </div>
+      <div style="padding: 24px 28px 0">
+        <p class="intro-text">
+          Hallo! Ich bin <strong>IP-Päckchen</strong> 📦 und ich muss heute eine super wichtige Nachricht ans andere Ende des Internets liefern!<br><br>
+          Aber der Weg ist lang – ich muss durch viele komische Orte durch. Wirst du mir helfen, die richtigen Entscheidungen zu treffen? 🗺️
+        </p>
+      </div>
+    </div>
+
+    <!-- GAME AREA -->
+    <div id="game-area" style="display:none">
+      <div id="illustration"></div>
+      <div id="text-area">
+        <div id="scene-location"></div>
+        <div id="scene-title"></div>
+        <div id="story-text"></div>
+      </div>
+      <div id="choices-area"></div>
+      <div id="feedback-area">
+        <div class="fb-head" id="fb-head"></div>
+        <div class="fb-body" id="fb-body"></div>
+        <button id="next-btn" onclick="nextScene()">Weiter geht's! 🚀</button>
+        <button id="retry-btn" onclick="retryScene()">Nochmal versuchen 🔄</button>
+      </div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen">
+      <div id="illustration-end" style="min-height:160px; background: linear-gradient(180deg,#d4f7e8,#effffa); border-radius: 0; display:flex; align-items:center; justify-content:center">
+        <svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+          <!-- Confetti -->
+          <circle cx="40" cy="30" r="6" fill="#ffd166" opacity="0.8"/>
+          <rect x="80" y="15" width="10" height="10" rx="2" fill="#ff6b9d" opacity="0.7" transform="rotate(20,85,20)"/>
+          <circle cx="150" cy="20" r="5" fill="#4a9eff" opacity="0.7"/>
+          <rect x="200" y="25" width="10" height="10" rx="2" fill="#a855f7" opacity="0.7" transform="rotate(-15,205,30)"/>
+          <circle cx="260" cy="30" r="7" fill="#06d6a0" opacity="0.8"/>
+          <circle cx="120" cy="40" r="4" fill="#ff9f1c" opacity="0.7"/>
+          <rect x="240" y="60" width="8" height="8" rx="2" fill="#ff6b9d" opacity="0.6" transform="rotate(30,244,64)"/>
+          <!-- Happy IP-Paket -->
+          <rect x="110" y="55" width="80" height="62" rx="10" fill="#ffd166"/>
+          <rect x="110" y="55" width="80" height="62" rx="10" fill="none" stroke="#ff9f1c" stroke-width="3"/>
+          <path d="M110 65 L150 88 L190 65" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="168" y="61" width="16" height="16" rx="3" fill="#06d6a0"/>
+          <text x="176" y="72" text-anchor="middle" font-size="9" fill="white" font-family="Nunito" font-weight="800">✓</text>
+          <circle cx="135" cy="96" r="8" fill="white"/>
+          <circle cx="165" cy="96" r="8" fill="white"/>
+          <circle cx="137" cy="97" r="4" fill="#1a2a4a"/>
+          <circle cx="167" cy="97" r="4" fill="#1a2a4a"/>
+          <circle cx="139" cy="95" r="1.5" fill="white"/>
+          <circle cx="169" cy="95" r="1.5" fill="white"/>
+          <!-- Big smile -->
+          <path d="M133 110 Q150 124 167 110" stroke="#ff9f1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Rosy cheeks -->
+          <circle cx="127" cy="106" r="6" fill="#ff9f9f" opacity="0.5"/>
+          <circle cx="173" cy="106" r="6" fill="#ff9f9f" opacity="0.5"/>
+          <!-- Stars around -->
+          <text x="60" y="85" font-size="22">🌟</text>
+          <text x="220" y="80" font-size="22">🎉</text>
+          <text x="40" y="110" font-size="18">⭐</text>
+          <text x="240" y="115" font-size="18">✨</text>
+        </svg>
+      </div>
+      <h2>Päckchen ist angekommen! 🎉</h2>
+      <div id="score-bubble">0 / 90 Punkte</div>
+      <p class="end-text" id="end-text">Du hast IP-Päckchen sicher durch das Internet gebracht!</p>
+      <button id="restart-btn" onclick="startGame()">Nochmal spielen! 🎮</button>
+    </div>
+
+  </div><!-- #scene-card -->
+
+  <!-- Start Button below card -->
+  <div id="start-btn-area" style="text-align:center; margin-top: 20px">
+    <button id="start-btn" onclick="startGame()">Los geht's! 🌟</button>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+/* ═══════════════════════════════════════════
+   ILLUSTRATIONS – inline SVG per scene
+═══════════════════════════════════════════ */
+const ILLUSTRATIONS = {
+  dhcp: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sky -->
+    <!-- DHCP Server as a friendly vending machine -->
+    <rect x="240" y="40" width="80" height="110" rx="12" fill="#a855f7"/>
+    <rect x="248" y="52" width="64" height="48" rx="6" fill="#c084fc"/>
+    <text x="280" y="80" text-anchor="middle" font-size="11" fill="white" font-family="Nunito" font-weight="800">DHCP</text>
+    <text x="280" y="94" text-anchor="middle" font-size="9" fill="#e9d5ff" font-family="Nunito">Server</text>
+    <!-- Slot -->
+    <rect x="260" y="108" width="40" height="20" rx="4" fill="#7c3aed"/>
+    <text x="280" y="121" text-anchor="middle" font-size="10" fill="#ffd166" font-family="Nunito" font-weight="800">IP: ?</text>
+    <!-- Wheels -->
+    <circle cx="258" cy="154" r="7" fill="#7c3aed"/>
+    <circle cx="302" cy="154" r="7" fill="#7c3aed"/>
+    <!-- Confused IP-Päckchen -->
+    <rect x="50" y="78" width="70" height="55" rx="10" fill="#ffd166"/>
+    <rect x="50" y="78" width="70" height="55" rx="10" fill="none" stroke="#ff9f1c" stroke-width="3"/>
+    <path d="M50 88 L85 108 L120 88" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- question mark badge -->
+    <circle cx="115" cy="84" r="10" fill="#ff6b9d"/>
+    <text x="115" y="88" text-anchor="middle" font-size="12" fill="white" font-family="Nunito" font-weight="800">?</text>
+    <!-- Eyes confused -->
+    <circle cx="72" cy="118" r="7" fill="white"/>
+    <circle cx="98" cy="118" r="7" fill="white"/>
+    <circle cx="73" cy="120" r="3" fill="#1a2a4a"/>
+    <circle cx="99" cy="120" r="3" fill="#1a2a4a"/>
+    <!-- Squiggly mouth -->
+    <path d="M70 130 Q77 127 85 130 Q92 133 99 130" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Arrow with broadcast signal -->
+    <path d="M125 115 Q180 100 235 115" stroke="#4a9eff" stroke-width="3" stroke-dasharray="8,5" fill="none" marker-end="url(#arrow-blue)" stroke-linecap="round"/>
+    <defs>
+      <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#4a9eff"/>
+      </marker>
+    </defs>
+    <text x="178" y="97" text-anchor="middle" font-size="11" fill="#4a9eff" font-family="Nunito" font-weight="800">DISCOVER!</text>
+    <!-- Ground -->
+    <ellipse cx="85" cy="138" rx="45" ry="8" fill="#b8e0ff" opacity="0.4"/>
+    <ellipse cx="280" cy="158" rx="50" ry="8" fill="#d8bbff" opacity="0.4"/>
+  </svg>`,
+
+  subnetting: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- Neighborhood map -->
+    <!-- Two neighborhoods -->
+    <rect x="20" y="50" width="130" height="100" rx="16" fill="#e8f4ff" stroke="#4a9eff" stroke-width="3" stroke-dasharray="8,4"/>
+    <text x="85" y="70" text-anchor="middle" font-size="11" fill="#2d7dd2" font-family="Nunito" font-weight="800">Mein Viertel 🏠</text>
+    <text x="85" y="84" text-anchor="middle" font-size="10" fill="#4a9eff" font-family="Nunito">192.168.1.xxx</text>
+    <!-- Houses in my neighborhood -->
+    <rect x="35" y="110" width="30" height="25" rx="4" fill="#ffd166"/>
+    <polygon points="35,110 50,95 65,110" fill="#ff9f1c"/>
+    <rect x="47" y="120" width="6" height="15" rx="1" fill="#8b6914"/>
+    <text x="50" y="150" text-anchor="middle" font-size="9" fill="#4a5568" font-family="Nunito">.42 (ich!)</text>
+    <rect x="100" y="115" width="28" height="20" rx="4" fill="#a8eddb"/>
+    <polygon points="100,115 114,102 128,115" fill="#06d6a0"/>
+    <text x="114" y="150" text-anchor="middle" font-size="9" fill="#4a5568" font-family="Nunito">.1 (GW)</text>
+    <!-- Other neighborhood -->
+    <rect x="210" y="50" width="130" height="100" rx="16" fill="#fff0f8" stroke="#ff6b9d" stroke-width="3" stroke-dasharray="8,4"/>
+    <text x="275" y="70" text-anchor="middle" font-size="11" fill="#be185d" font-family="Nunito" font-weight="800">Fremdes Viertel 🌍</text>
+    <text x="275" y="84" text-anchor="middle" font-size="10" fill="#ff6b9d" font-family="Nunito">93.184.216.xxx</text>
+    <rect x="235" y="110" width="30" height="25" rx="4" fill="#fca5a5"/>
+    <polygon points="235,110 250,95 265,110" fill="#ef4444"/>
+    <rect x="247" y="120" width="6" height="15" rx="1" fill="#8b0000"/>
+    <text x="250" y="150" text-anchor="middle" font-size="9" fill="#4a5568" font-family="Nunito">.34 (Ziel!)</text>
+    <!-- Gate / Router between -->
+    <rect x="163" y="88" width="34" height="54" rx="8" fill="#4a9eff"/>
+    <text x="180" y="106" text-anchor="middle" font-size="9" fill="white" font-family="Nunito" font-weight="800">TOR</text>
+    <text x="180" y="118" text-anchor="middle" font-size="8" fill="#bde0ff" font-family="Nunito">Router</text>
+    <circle cx="175" cy="128" r="4" fill="white"/>
+    <circle cx="185" cy="128" r="4" fill="white"/>
+    <circle cx="176" cy="129" r="2" fill="#1a2a4a"/>
+    <circle cx="186" cy="129" r="2" fill="#1a2a4a"/>
+  </svg>`,
+
+  dns: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- DNS as a big phone book -->
+    <!-- Book -->
+    <rect x="220" y="30" width="110" height="130" rx="10" fill="#4a9eff"/>
+    <rect x="228" y="38" width="94" height="114" rx="6" fill="#cce8ff"/>
+    <text x="275" y="60" text-anchor="middle" font-size="12" fill="#2d7dd2" font-family="Nunito" font-weight="800">📒 DNS</text>
+    <text x="275" y="76" text-anchor="middle" font-size="9" fill="#2d7dd2" font-family="Nunito">Telefonbuch</text>
+    <!-- Entries -->
+    <line x1="238" y1="88" x2="312" y2="88" stroke="#4a9eff" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="242" y="100" font-size="9" fill="#4a5568" font-family="Nunito">google.com → 142.x.x.x</text>
+    <line x1="238" y1="106" x2="312" y2="106" stroke="#4a9eff" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="242" y="118" font-size="9" fill="#4a5568" font-family="Nunito">example.com→ 93.x.x.x</text>
+    <line x1="238" y1="124" x2="312" y2="124" stroke="#4a9eff" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="242" y="136" font-size="9" fill="#4a5568" font-family="Nunito" opacity="0.5">... 🔍</text>
+    <!-- IP-Päckchen asking -->
+    <rect x="30" y="78" width="64" height="50" rx="8" fill="#ffd166"/>
+    <path d="M30 86 L62 103 L94 86" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="108" r="6" fill="white"/>
+    <circle cx="76" cy="108" r="6" fill="white"/>
+    <circle cx="49" cy="109" r="3" fill="#1a2a4a"/>
+    <circle cx="77" cy="109" r="3" fill="#1a2a4a"/>
+    <!-- Speech bubble -->
+    <rect x="22" y="28" width="110" height="40" rx="10" fill="white" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="62,68 52,78 72,68" fill="white" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="62,68 52,76 72,68" fill="white"/>
+    <text x="77" y="48" text-anchor="middle" font-size="10" fill="#4a5568" font-family="Nunito" font-weight="700">Wo ist</text>
+    <text x="77" y="62" text-anchor="middle" font-size="10" fill="#2d7dd2" font-family="Nunito" font-weight="800">example.com?</text>
+    <!-- Arrow -->
+    <path d="M100 105 Q160 80 215 100" stroke="#06d6a0" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arrow-green)"/>
+    <defs>
+      <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+      </marker>
+    </defs>
+    <text x="158" y="78" text-anchor="middle" font-size="11" fill="#06d6a0" font-family="Nunito" font-weight="800">Fragen!</text>
+  </svg>`,
+
+  arp: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- IP-Päckchen with megaphone -->
+    <rect x="30" y="90" width="64" height="52" rx="8" fill="#ffd166"/>
+    <path d="M30 98 L62 116 L94 98" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="120" r="6" fill="white"/>
+    <circle cx="76" cy="120" r="6" fill="white"/>
+    <circle cx="49" cy="121" r="3" fill="#1a2a4a"/>
+    <circle cx="77" cy="121" r="3" fill="#1a2a4a"/>
+    <!-- Megaphone -->
+    <path d="M95 110 L115 100 L115 130 L95 120 Z" fill="#ff6b9d"/>
+    <ellipse cx="115" cy="115" rx="6" ry="15" fill="#ff9f1c"/>
+    <path d="M115 90 L135 80 L135 150 L115 140" fill="#ff6b9d" opacity="0.5"/>
+    <!-- Sound waves -->
+    <path d="M140 90 Q160 115 140 140" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M150 82 Q178 115 150 148" stroke="#ffd166" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <!-- Speech bubble broadcast -->
+    <rect x="155" y="35" width="160" height="50" rx="12" fill="white" stroke="#4a9eff" stroke-width="2.5"/>
+    <polygon points="185,85 175,95 195,85" fill="white" stroke="#4a9eff" stroke-width="2.5"/>
+    <polygon points="185,85 175,93 195,85" fill="white"/>
+    <text x="235" y="58" text-anchor="middle" font-size="11" fill="#2d7dd2" font-family="Nunito" font-weight="800">📢 HEY ALLE!</text>
+    <text x="235" y="74" text-anchor="middle" font-size="10" fill="#4a5568" font-family="Nunito">Wer hat IP 192.168.1.1?</text>
+    <!-- Router raising hand -->
+    <rect x="275" y="100" width="52" height="50" rx="10" fill="#4a9eff"/>
+    <rect x="281" y="108" width="40" height="8" rx="4" fill="#2d7dd2"/>
+    <!-- Arm raised -->
+    <path d="M275 112 Q255 95 250 82" stroke="#4a9eff" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <circle cx="249" cy="80" r="8" fill="#4a9eff"/>
+    <circle cx="293" cy="116" r="5" fill="white"/>
+    <circle cx="307" cy="116" r="5" fill="white"/>
+    <circle cx="294" cy="117" r="2.5" fill="#1a2a4a"/>
+    <circle cx="308" cy="117" r="2.5" fill="#1a2a4a"/>
+    <path d="M291 128 Q300 133 309 128" stroke="#1a2a4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Speech bubble router -->
+    <rect x="198" y="100" width="72" height="32" rx="8" fill="#e8f4ff" stroke="#4a9eff" stroke-width="1.5"/>
+    <text x="234" y="114" text-anchor="middle" font-size="9" fill="#2d7dd2" font-family="Nunito" font-weight="700">Ich! Meine MAC:</text>
+    <text x="234" y="126" text-anchor="middle" font-size="9" fill="#2d7dd2" font-family="Nunito" font-weight="800">00:11:22:33:44</text>
+  </svg>`,
+
+  osi: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- OSI layer cake! -->
+    <text x="30" y="22" font-size="13" fill="#4a5568" font-family="Nunito" font-weight="800">OSI-Torte 🎂</text>
+    <!-- Layer 7 - top (blue) -->
+    <rect x="60" y="30" width="200" height="19" rx="5" fill="#4a9eff"/>
+    <text x="160" y="43" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">7 · Anwendung (HTTP, DNS)</text>
+    <!-- Layer 6 -->
+    <rect x="55" y="50" width="210" height="19" rx="5" fill="#6bb5ff"/>
+    <text x="160" y="63" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">6 · Darstellung</text>
+    <!-- Layer 5 -->
+    <rect x="50" y="70" width="220" height="19" rx="5" fill="#a855f7"/>
+    <text x="160" y="83" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">5 · Sitzung</text>
+    <!-- Layer 4 -->
+    <rect x="45" y="90" width="230" height="19" rx="5" fill="#06d6a0"/>
+    <text x="160" y="103" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">4 · Transport (TCP/UDP)</text>
+    <!-- Layer 3 → highlight -->
+    <rect x="40" y="110" width="240" height="19" rx="5" fill="#ff9f1c"/>
+    <rect x="40" y="110" width="240" height="19" rx="5" fill="none" stroke="#ff6b9d" stroke-width="2.5"/>
+    <text x="160" y="123" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="800">3 · Netzwerk (IP!) ← hier!</text>
+    <!-- Layer 2 -->
+    <rect x="35" y="130" width="250" height="19" rx="5" fill="#ff6b9d"/>
+    <text x="160" y="143" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">2 · Sicherung (MAC/Ethernet)</text>
+    <!-- Layer 1 - bottom -->
+    <rect x="30" y="150" width="260" height="19" rx="5" fill="#ef4444"/>
+    <text x="160" y="163" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="700">1 · Bitübertragung (Kabel/WLAN)</text>
+    <!-- Mini IP-Päckchen on the side -->
+    <rect x="295" y="100" width="48" height="38" rx="7" fill="#ffd166"/>
+    <path d="M295 107 L319 120 L343 107" stroke="#ff9f1c" stroke-width="1.5" fill="none"/>
+    <circle cx="308" cy="127" r="5" fill="white"/>
+    <circle cx="330" cy="127" r="5" fill="white"/>
+    <circle cx="309" cy="128" r="2.5" fill="#1a2a4a"/>
+    <circle cx="331" cy="128" r="2.5" fill="#1a2a4a"/>
+    <!-- Arrow pointing to layer 3 -->
+    <path d="M292 119 L283 119" stroke="#ff9f1c" stroke-width="2.5" fill="none" marker-end="url(#arr-orange)" stroke-linecap="round"/>
+    <defs>
+      <marker id="arr-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#ff9f1c"/>
+      </marker>
+    </defs>
+  </svg>`,
+
+  routing: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- Crossroads / Routing -->
+    <!-- Roads -->
+    <rect x="140" y="0" width="30" height="180" rx="0" fill="#d1d5db"/>
+    <rect x="0" y="75" width="360" height="30" fill="#d1d5db"/>
+    <!-- Road markings -->
+    <rect x="153" y="10" width="4" height="25" rx="2" fill="white" opacity="0.6"/>
+    <rect x="153" y="50" width="4" height="25" rx="2" fill="white" opacity="0.6"/>
+    <rect x="153" y="130" width="4" height="25" rx="2" fill="white" opacity="0.6"/>
+    <rect x="153" y="155" width="4" height="25" rx="2" fill="white" opacity="0.6"/>
+    <rect x="20" y="88" width="30" height="4" rx="2" fill="white" opacity="0.6"/>
+    <rect x="70" y="88" width="30" height="4" rx="2" fill="white" opacity="0.6"/>
+    <rect x="265" y="88" width="30" height="4" rx="2" fill="white" opacity="0.6"/>
+    <rect x="315" y="88" width="30" height="4" rx="2" fill="white" opacity="0.6"/>
+    <!-- Router in the middle -->
+    <circle cx="155" cy="90" r="28" fill="#4a9eff"/>
+    <circle cx="155" cy="90" r="22" fill="#2d7dd2"/>
+    <text x="155" y="86" text-anchor="middle" font-size="9" fill="white" font-family="Nunito" font-weight="800">Router</text>
+    <circle cx="147" cy="95" r="4" fill="white"/>
+    <circle cx="163" cy="95" r="4" fill="white"/>
+    <circle cx="148" cy="96" r="2" fill="#1a2a4a"/>
+    <circle cx="164" cy="96" r="2" fill="#1a2a4a"/>
+    <path d="M146 102 Q155 107 164 102" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Signs at each road -->
+    <!-- Left: 192.168.1.0/24 -->
+    <rect x="6" y="50" width="100" height="25" rx="6" fill="#06d6a0"/>
+    <text x="56" y="62" text-anchor="middle" font-size="8.5" fill="white" font-family="Nunito" font-weight="700">🏠 192.168.1.0/24</text>
+    <text x="56" y="71" text-anchor="middle" font-size="7.5" fill="#d0fff4" font-family="Nunito">Heimnetz</text>
+    <!-- Right: Internet -->
+    <rect x="250" y="50" width="104" height="25" rx="6" fill="#ff6b9d"/>
+    <text x="302" y="62" text-anchor="middle" font-size="8.5" fill="white" font-family="Nunito" font-weight="700">🌍 0.0.0.0/0</text>
+    <text x="302" y="71" text-anchor="middle" font-size="7.5" fill="#ffd0e8" font-family="Nunito">Internet (Standard)</text>
+    <!-- IP Päckchen coming from bottom -->
+    <rect x="138" y="138" width="36" height="30" rx="6" fill="#ffd166"/>
+    <circle cx="148" cy="160" r="4" fill="white"/>
+    <circle cx="168" cy="160" r="4" fill="white"/>
+    <circle cx="149" cy="161" r="2" fill="#1a2a4a"/>
+    <circle cx="169" cy="161" r="2" fill="#1a2a4a"/>
+    <!-- Arrow going right (Internet direction) with glow -->
+    <path d="M183 90 Q218 90 245 90" stroke="#ff9f1c" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#arr-inet)"/>
+    <defs>
+      <marker id="arr-inet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#ff9f1c"/>
+      </marker>
+    </defs>
+    <text x="214" y="80" text-anchor="middle" font-size="10" fill="#ff9f1c" font-family="Nunito" font-weight="800">Longest Match!</text>
+  </svg>`,
+
+  nat: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- NAT as a costume change booth -->
+    <!-- Changing booth -->
+    <rect x="145" y="30" width="70" height="120" rx="8" fill="#a855f7"/>
+    <rect x="153" y="38" width="54" height="104" rx="6" fill="#c084fc"/>
+    <text x="180" y="60" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="800">NAT</text>
+    <text x="180" y="74" text-anchor="middle" font-size="9" fill="#e9d5ff" font-family="Nunito">Umkleidekabine</text>
+    <!-- Stars/magic -->
+    <text x="165" y="100" font-size="18" opacity="0.8">✨</text>
+    <text x="183" y="116" font-size="16" opacity="0.7">🎩</text>
+    <!-- LEFT: private IP Päckchen (timid) -->
+    <rect x="22" y="88" width="60" height="46" rx="8" fill="#ffd166"/>
+    <path d="M22 96 L52 111 L82 96" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="38" cy="112" r="5.5" fill="white"/>
+    <circle cx="66" cy="112" r="5.5" fill="white"/>
+    <circle cx="39" cy="113" r="2.5" fill="#1a2a4a"/>
+    <circle cx="67" cy="113" r="2.5" fill="#1a2a4a"/>
+    <path d="M38 122 Q52 127 66 122" stroke="#ff9f1c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Name tag private -->
+    <rect x="24" y="65" width="56" height="18" rx="4" fill="#fca5a5" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="52" y="76" text-anchor="middle" font-size="8" fill="#7f1d1d" font-family="Nunito" font-weight="700">192.168.1.42 🏠</text>
+    <!-- Arrow into booth -->
+    <path d="M84 111 L143 111" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6,3" fill="none" stroke-linecap="round" marker-end="url(#arr-purple)"/>
+    <defs>
+      <marker id="arr-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#a855f7"/>
+      </marker>
+    </defs>
+    <!-- RIGHT: public IP Päckchen (confident) -->
+    <rect x="278" y="85" width="62" height="48" rx="8" fill="#ffd166"/>
+    <path d="M278 93 L309 109 L340 93" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="294" cy="109" r="5.5" fill="white"/>
+    <circle cx="322" cy="109" r="5.5" fill="white"/>
+    <circle cx="295" cy="110" r="2.5" fill="#1a2a4a"/>
+    <circle cx="323" cy="110" r="2.5" fill="#1a2a4a"/>
+    <!-- Big smile = confident -->
+    <path d="M292 120 Q309 128 326 120" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Shades / sunglasses = cool -->
+    <rect x="288" y="106" width="14" height="7" rx="3" fill="#1a2a4a" opacity="0.8"/>
+    <rect x="307" y="106" width="14" height="7" rx="3" fill="#1a2a4a" opacity="0.8"/>
+    <line x1="302" y1="109" x2="307" y2="109" stroke="#1a2a4a" stroke-width="1.5"/>
+    <!-- Name tag public -->
+    <rect x="277" y="62" width="66" height="18" rx="4" fill="#a7f3d0" stroke="#06d6a0" stroke-width="1.5"/>
+    <text x="310" y="73" text-anchor="middle" font-size="8" fill="#065f46" font-family="Nunito" font-weight="700">85.123.45.67 🌍</text>
+    <!-- Arrow out of booth -->
+    <path d="M218 111 L275 111" stroke="#06d6a0" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr-green2)"/>
+    <defs>
+      <marker id="arr-green2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+      </marker>
+    </defs>
+  </svg>`,
+
+  tcp: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- TCP Handshake as a wave/greeting -->
+    <!-- IP Päckchen left -->
+    <rect x="20" y="55" width="60" height="48" rx="8" fill="#ffd166"/>
+    <path d="M20 63 L50 78 L80 63" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="35" cy="79" r="6" fill="white"/>
+    <circle cx="65" cy="79" r="6" fill="white"/>
+    <circle cx="36" cy="80" r="3" fill="#1a2a4a"/>
+    <circle cx="66" cy="80" r="3" fill="#1a2a4a"/>
+    <path d="M35 90 Q50 96 65 90" stroke="#ff9f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <text x="50" y="120" text-anchor="middle" font-size="11" fill="#4a5568" font-family="Nunito" font-weight="700">Client</text>
+    <!-- Server right -->
+    <rect x="280" y="55" width="60" height="48" rx="8" fill="#a855f7"/>
+    <rect x="288" y="65" width="44" height="6" rx="3" fill="#7c3aed"/>
+    <rect x="288" y="77" width="44" height="6" rx="3" fill="#7c3aed"/>
+    <rect x="288" y="89" width="44" height="6" rx="3" fill="#7c3aed"/>
+    <text x="310" y="120" text-anchor="middle" font-size="11" fill="#4a5568" font-family="Nunito" font-weight="700">Server</text>
+    <!-- Arrows: 3-way handshake -->
+    <!-- SYN -->
+    <path d="M82 72 L276 72" stroke="#4a9eff" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr-b)"/>
+    <rect x="148" y="55" width="64" height="16" rx="8" fill="#4a9eff"/>
+    <text x="180" y="66" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="800">1️⃣ SYN</text>
+    <!-- SYN-ACK -->
+    <path d="M278 100 L84 100" stroke="#06d6a0" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr-g)"/>
+    <rect x="148" y="83" width="64" height="16" rx="8" fill="#06d6a0"/>
+    <text x="180" y="94" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="800">2️⃣ SYN-ACK</text>
+    <!-- ACK -->
+    <path d="M82 130 L276 130" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr-o)"/>
+    <rect x="148" y="113" width="64" height="16" rx="8" fill="#ff9f1c"/>
+    <text x="180" y="124" text-anchor="middle" font-size="10" fill="white" font-family="Nunito" font-weight="800">3️⃣ ACK</text>
+    <defs>
+      <marker id="arr-b" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4a9eff"/></marker>
+      <marker id="arr-g" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/></marker>
+      <marker id="arr-o" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#ff9f1c"/></marker>
+    </defs>
+    <!-- Connected! label -->
+    <rect x="136" y="148" width="88" height="18" rx="9" fill="#ffd166"/>
+    <text x="180" y="160" text-anchor="middle" font-size="10" fill="#7a4f00" font-family="Nunito" font-weight="800">🤝 Verbunden!</text>
+  </svg>`,
+
+  http: `<svg width="360" height="180" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- HTTP as letter delivery -->
+    <!-- Happy IP-Päckchen delivered -->
+    <rect x="30" y="80" width="68" height="56" rx="10" fill="#ffd166"/>
+    <rect x="30" y="80" width="68" height="56" rx="10" fill="none" stroke="#ff9f1c" stroke-width="3"/>
+    <path d="M30 90 L64 110 L98 90" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Green checkmark badge -->
+    <circle cx="92" cy="84" r="12" fill="#06d6a0"/>
+    <path d="M86 84 L90 88 L98 80" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Eyes happy -->
+    <circle cx="48" cy="114" r="7" fill="white"/>
+    <circle cx="80" cy="114" r="7" fill="white"/>
+    <circle cx="50" cy="115" r="3.5" fill="#1a2a4a"/>
+    <circle cx="82" cy="115" r="3.5" fill="#1a2a4a"/>
+    <circle cx="52" cy="113" r="1.5" fill="white"/>
+    <circle cx="84" cy="113" r="1.5" fill="white"/>
+    <!-- Rosy cheeks -->
+    <circle cx="40" cy="120" r="6" fill="#ff9f9f" opacity="0.6"/>
+    <circle cx="88" cy="120" r="6" fill="#ff9f9f" opacity="0.6"/>
+    <!-- Big smile -->
+    <path d="M46 126 Q64 136 82 126" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- The HTTP "letter" being received -->
+    <rect x="145" y="40" width="170" height="115" rx="12" fill="white" stroke="#e2eaf5" stroke-width="2"/>
+    <rect x="153" y="50" width="154" height="18" rx="6" fill="#4a9eff"/>
+    <text x="230" y="62" text-anchor="middle" font-size="11" fill="white" font-family="Nunito" font-weight="800">GET /index.html HTTP/1.1</text>
+    <line x1="153" y1="75" x2="307" y2="75" stroke="#e2eaf5" stroke-width="1.5"/>
+    <text x="160" y="89" font-size="9.5" fill="#4a5568" font-family="Nunito">Host: www.example.com</text>
+    <text x="160" y="103" font-size="9.5" fill="#4a5568" font-family="Nunito">User-Agent: Browser 1.0</text>
+    <line x1="153" y1="110" x2="307" y2="110" stroke="#e2eaf5" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <rect x="153" y="116" width="154" height="28" rx="6" fill="#e8f4ff"/>
+    <text x="230" y="129" text-anchor="middle" font-size="9" fill="#2d7dd2" font-family="Nunito" font-weight="700">🔒 HTTPS = +TLS</text>
+    <text x="230" y="141" text-anchor="middle" font-size="9" fill="#2d7dd2" font-family="Nunito">Verschlüsselt! Port 443</text>
+    <!-- Arrow from Päckchen to letter -->
+    <path d="M100 107 Q125 107 142 107" stroke="#ff9f1c" stroke-width="2.5" fill="none" stroke-linecap="round" marker-end="url(#arr-http)"/>
+    <defs>
+      <marker id="arr-http" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#ff9f1c"/>
+      </marker>
+    </defs>
+    <!-- Stars -->
+    <text x="116" y="68" font-size="14">🌟</text>
+  </svg>`,
+};
+
+/* ═══════════════════════════════════════════
+   STORY DATA
+═══════════════════════════════════════════ */
+const SCENES = [
+  {
+    id: "dhcp",
+    tag: "🏠 Zuhause · DHCP",
+    title: "Wer bin ich eigentlich?",
+    illus: "dhcp",
+    text: `Hallo! Ich bin <strong>IP-Päckchen</strong> 📦 und ich möchte durch das Internet reisen – aber ich habe noch keine Adresse!<br><br>
+Ich stehe vor dem Netzwerk-Eingang und weiß nicht einmal, wie ich heiße. Ohne eine IP-Adresse kann ich nirgendwo hin!<br><br>
+Da sehe ich einen freundlichen Automaten: den <span class="highlight">DHCP-Server</span>. Er verteilt Adressen an alle neuen Gäste.
+<div class="factbox">
+  <div class="fact-title">💡 Was ist DHCP?</div>
+  DHCP steht für „Dynamic Host Configuration Protocol". Es ist wie ein Empfang im Hotel – du kommst an, gibst deinen Namen und bekommst eine Zimmernummer (= IP-Adresse) zugeteilt!
+</div>
+Aber wie frage ich den DHCP-Server, wenn ich noch keine Adresse habe?`,
+    choices: [
+      { icon: '📢', text: 'Ich rufe laut in alle Richtungen: „Heeey! Kann mir jemand eine IP-Adresse geben?“ (Broadcast an 255.255.255.255)', correct: true },
+      { icon: "🤫", text: "Ich gehe direkt zum DHCP-Server, denn ich kenne seine Adresse schon.", correct: false, penalty: 10 },
+      { icon: "🎲", text: "Ich wähle einfach selbst eine Adresse aus, die ich toll finde (z.B. 10.0.0.1).", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Genau richtig! Ich ruf einfach alle auf einmal an – das nennt man <b>Broadcast</b>!<br><br>
+Der Ablauf ist wie beim Postamt:<br>
+<b>1. DISCOVER</b> – Ich rufe: „Heeey, gibt's hier einen DHCP-Server?"<br>
+<b>2. OFFER</b> – Der Server ruft zurück: „Ich habe eine Adresse für dich: 192.168.1.42!"<br>
+<b>3. REQUEST</b> – Ich sage: „Ja bitte, die nehme ich!"<br>
+<b>4. ACK</b> – Der Server: „Ok, die gehört dir für 24 Stunden!"<br><br>
+Ich habe jetzt auch meine <b>Subnetzmaske</b>, ein <b>Standard-Gateway</b> und einen <b>DNS-Server</b> bekommen. 🎊`,
+    wrongFeedback: `😅 Ups! Das geht leider nicht. Ich kenne ja noch gar keine Adressen im Netz! Den DHCP-Server direkt anzuschreiben geht nicht, und eine Adresse selbst wählen führt zu Chaos (was wenn jemand anderes die gleiche hat?). Die richtige Lösung: <b>laut rufen = Broadcast!</b>`,
+    points: 10,
+  },
+  {
+    id: "subnetting",
+    tag: "🗺️ Stadtplan · Subnetting",
+    title: "Gehört mein Ziel ins gleiche Viertel?",
+    illus: "subnetting",
+    text: `Super! Ich habe jetzt meine Adresse: <span class="highlight">192.168.1.42/24</span> 🏷️<br><br>
+Mein Ziel ist der Server von <strong>www.example.com</strong> mit der Adresse <span class="highlight">93.184.216.34</span>.<br><br>
+Bevor ich losrenne, muss ich wissen: Wohnt mein Ziel im gleichen Viertel wie ich, oder muss ich ins Ausland?
+<div class="factbox">
+  <div class="fact-title">💡 Was bedeutet /24?</div>
+  Das <b>/24</b> ist meine Subnetzmaske (255.255.255.0). Mein „Viertel" sind alle Adressen von 192.168.1.<b>0</b> bis 192.168.1.<b>255</b>. Das sind genau 254 Häuser für Freunde wie mich!
+</div>
+Liegt <strong>93.184.216.34</strong> in meinem Viertel (192.168.1.xxx)?`,
+    choices: [
+      { icon: "🏠", text: "Ja! 93.184.216.34 liegt bei mir im Viertel. Ich geh direkt hin!", correct: false, penalty: 10 },
+      { icon: "🌍", text: "Nein! 93.xxx ist ein fremdes Viertel – ich muss durch das Stadttor (den Router)!", correct: true },
+      { icon: "🤔", text: "Ich weiß es nicht, ich schick die Post einfach los ohne nachzudenken.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `🎉 Richtig! <b>93.184.216.34</b> gehört NICHT zu meinem Viertel 192.168.1.0/24.<br><br>
+Ich prüfe es ganz einfach: Beginnt die Adresse mit „192.168.1"? Nein! „93" ist ganz was anderes.<br><br>
+Also muss ich zum <b>Standard-Gateway</b> (meinem Router, z.B. 192.168.1.1) – das ist das Stadttor ins große Internet! 🚪`,
+    wrongFeedback: `😅 Falsch! 93.184.216.34 ist NICHT in meinem Viertel. In meinem /24-Netz gibt es nur Adressen von 192.168.1.0 bis 192.168.1.255. „93.xxx" ist weit weg – ich brauche den Router als Stadttor! 🚪`,
+    points: 10,
+  },
+  {
+    id: "dns",
+    tag: "📒 Telefonbuch · DNS",
+    title: "Wo genau ist www.example.com?",
+    illus: "dns",
+    text: `Ich weiß jetzt: Ich muss durch den Router. Aber ich brauche noch die genaue Adresse meines Ziels!<br><br>
+Ich kenne den Namen <strong>www.example.com</strong> – aber für Reisen brauche ich eine <span class="highlight">IP-Adresse</span> (wie eine Hausnummer). Namen allein reichen nicht!<br><br>
+Gut dass es das <span class="highlight">DNS-Telefonbuch</span> gibt! 📒
+<div class="factbox">
+  <div class="fact-title">💡 Was ist DNS?</div>
+  DNS = Domain Name System. Es ist wie das Telefonbuch des Internets! Du schaust nach einem Namen (google.com) und findest die Nummer (IP-Adresse). DNS fragt dabei von groß nach klein: erst die Wurzel, dann .com, dann example.com.
+</div>
+Wie bekomme ich die IP-Adresse von www.example.com?`,
+    choices: [
+      { icon: "📒", text: "Ich frage meinen DNS-Resolver (den bekomme ich automatisch von DHCP). Der sucht für mich nach!", correct: true },
+      { icon: "🌳", text: "Ich frage direkt den Wurzel-DNS-Server (Root-Server) der ganzen Welt.", correct: false, penalty: 10 },
+      { icon: '📢', text: 'Ich brülle ins Netz: „Wer kennt www.example.com?“ (Broadcast).', correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Genau! Ich hab ja schon eine Adresse für meinen DNS-Resolver bekommen (von DHCP).<br><br>
+Der Resolver ist wie ein super-fleißiger Assistent:<br>
+<b>1.</b> Er fragt den Root-Server: „Wer kennt .com?"<br>
+<b>2.</b> Er fragt den .com-Server: „Wer kennt example.com?"<br>
+<b>3.</b> Er fragt den example.com-Server: „Was ist die IP von www?"<br>
+<b>4.</b> Antwort: <b>93.184.216.34</b>! ✅<br><br>
+Das Ergebnis wird sich gemerkt (<b>gecacht</b>) – beim nächsten Mal geht's schneller! ⚡`,
+    wrongFeedback: `😅 Root-Server direkt fragen machen nur die Profis (Resolver). Broadcast für DNS? Das würde das ganze Netz stören! Ich verlasse mich auf meinen <b>DNS-Resolver</b> – der macht die ganze Detektivarbeit für mich! 🕵️`,
+    points: 10,
+  },
+  {
+    id: "arp",
+    tag: "📣 Rufzeichen · ARP",
+    title: "Wie lautet die Hausnummer meines Routers?",
+    illus: "arp",
+    text: `Ich kenne jetzt die IP des Routers (192.168.1.1). Aber im Netz wird alles mit <span class="highlight">MAC-Adressen</span> (Hardware-Adressen) weitergeleitet – das sind so etwas wie Namen auf Briefkästen!<br><br>
+Ich kenne den Namen, aber nicht die Adresse auf dem Briefkasten. Was tun?
+<div class="factbox">
+  <div class="fact-title">💡 Was ist ARP?</div>
+  ARP = Address Resolution Protocol. Es übersetzt IP-Adressen in MAC-Adressen. MAC-Adressen sehen so aus: AA:BB:CC:DD:EE:FF – jede Netzwerkkarte hat eine einmalige! Im Gegensatz zu IPs ändern sie sich nicht.
+</div>
+Wie finde ich heraus, welche MAC-Adresse zum Router (192.168.1.1) gehört?`,
+    choices: [
+      { icon: '📣', text: 'Ich rufe laut an alle im Viertel: „Wer hat IP 192.168.1.1? Bitte meld dich bei mir!“ (ARP Broadcast)', correct: true },
+      { icon: "📒", text: "Ich schaue im DNS-Telefonbuch nach der MAC-Adresse.", correct: false, penalty: 10 },
+      { icon: "🤐", text: "Ich schicke das Paket einfach ohne MAC los – der findet schon den Weg.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Richtig! Ich brüll ins ganze Viertel – alle hören es, aber nur der Router antwortet:<br><br>
+<b>ARP Request</b> (Broadcast an alle): „Wer hat 192.168.1.1? Ich bin 192.168.1.42!"<br>
+<b>ARP Reply</b> (Unicast, nur an mich): „Ich! Meine MAC: 00:11:22:33:44:55"<br><br>
+Das Ergebnis merke ich mir im <b>ARP-Cache</b> – dann muss ich nicht jedes Mal wieder fragen. Super effizient! 💪`,
+    wrongFeedback: `😅 DNS kennt keine MAC-Adressen – das ist für IP-Adressen zuständig! Und ohne MAC kann das Paket nicht transportiert werden. Die Lösung: <b>ARP Broadcast</b> – laut ins Viertel rufen! 📣`,
+    points: 10,
+  },
+  {
+    id: "osi",
+    tag: "🎂 Schichten-Torte · OSI-Modell",
+    title: "In welcher Schicht lebe ich?",
+    illus: "osi",
+    text: `Jetzt wird's ein bisschen philosophisch 🤔 – in welcher Schicht des Netzwerks lebe ICH eigentlich?<br><br>
+Das Internet funktioniert wie eine <span class="highlight">Torte</span> mit 7 Schichten. Jede Schicht hat eine besondere Aufgabe und packt mich in eine neue Hülle ein.
+<div class="factbox">
+  <div class="fact-title">💡 Merkhilfe für die 7 Schichten</div>
+  Von oben nach unten: <b>A</b>lle <b>D</b>eutschen <b>S</b>ehen <b>T</b>olle <b>N</b>ackte <b>S</b>chauspiele <b>B</b>ei... <br>
+  Anwendung → Darstellung → Sitzung → Transport → Netzwerk → Sicherung → Bitübertragung
+</div>
+Auf welcher Schicht wird mein <strong>IP-Header</strong> (mit meiner Absender- und Zieladresse) hinzugefügt?`,
+    choices: [
+      { icon: "🔌", text: "Schicht 1 (Bitübertragung) – hier wird alles zu Nullen und Einsen!", correct: false, penalty: 10 },
+      { icon: "📦", text: "Schicht 3 (Netzwerkschicht) – hier kommen IP-Adressen drauf! Das bin ich!", correct: true },
+      { icon: "🖥️", text: "Schicht 7 (Anwendungsschicht) – hier wohnt HTTP und alles was man anfasst.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `🎉 Richtig! Ich lebe in <b>Schicht 3 – der Netzwerkschicht</b>! 🌐<br><br>
+So werde ich von oben nach unten eingepackt:<br>
+🔷 <b>L7</b> HTTP-Daten: „GET /index.html"<br>
+🔶 <b>L4</b> + TCP-Header (Port-Nummer drauf)<br>
+🟠 <b>L3</b> + IP-Header (meine Reise-Adresse!) ← ICH!<br>
+🟡 <b>L2</b> + Ethernet-Header (MAC-Adresse drauf)<br>
+⚡ <b>L1</b> Alles wird zu Bits und rausgeschickt!<br><br>
+Beim Empfänger wird das Ganze wieder <b>ausgepackt</b> – von unten nach oben! 🎁`,
+    wrongFeedback: `😅 Schicht 1 macht aus mir nur Nullen und Einsen – keine Ahnung wer ich bin! Schicht 7 ist für Anwendungen wie HTTP. Ich mit meiner IP-Adresse gehöre zu <b>Schicht 3 – Netzwerkschicht</b>! 🏷️`,
+    points: 10,
+  },
+  {
+    id: "routing",
+    tag: "🗺️ Weggabelung · Routing",
+    title: "Welchen Weg nehme ich?",
+    illus: "routing",
+    text: `Ich bin beim Router angekommen! Der Router ist wie ein superschlauer Wegweiser 🗺️ – er weiß zu jedem Ziel den besten Weg.<br><br>
+Er schaut in seine <span class="highlight">Routing-Tabelle</span> und entscheidet wohin er mich schickt.
+<div class="factbox">
+  <div class="fact-title">💡 Die Routing-Tabelle (vereinfacht)</div>
+  📍 192.168.1.0/24 → hier zu Hause (eth0)<br>
+  📍 10.0.0.0/8 → anderes Büro (eth1)<br>
+  📍 0.0.0.0/0 → Standard: Internet (eth2) ← passt auf ALLES!<br>
+  <br>Regel: Der <b>spezifischste</b> Eintrag gewinnt (Longest Prefix Match)!
+</div>
+Mein Ziel ist <strong>93.184.216.34</strong>. Welcher Tabelleneintrag passt am besten?`,
+    choices: [
+      { icon: "🏠", text: "192.168.1.0/24 – das ist mein Heimnetz, da wohne ich doch!", correct: false, penalty: 10 },
+      { icon: "🌍", text: "0.0.0.0/0 – die Standard-Route ins Internet, denn kein spezifischerer Eintrag passt.", correct: true },
+      { icon: "🏢", text: "10.0.0.0/8 – das klingt nach einer großen Adresse, da muss er wohl hin.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Genau! Die Regel lautet: <b>Longest Prefix Match</b> – der spezifischste Eintrag gewinnt!<br><br>
+93.184.216.34 passt zu keinem Heimnetz-Eintrag → also nimmt der Router die <b>Default-Route 0.0.0.0/0</b> – die passt auf ALLES was sonst nirgends hinpasst.<br><br>
+Der Router dekrementiert auch mein <b>TTL</b> (Time to Live) um 1. Wenn TTL = 0 wird ich weggeschmissen – damit verhindert man, dass ich ewig durch's Netz irre! ♻️`,
+    wrongFeedback: `😅 192.168.1.0/24 ist mein Heimnetz – dort ist das Ziel aber nicht! 10.0.0.0/8 beginnt mit 10 – 93.184 passt da nicht rein. Die Antwort: <b>Default Route 0.0.0.0/0</b> – wenn nichts anderes passt, ab ins Internet! 🌍`,
+    points: 10,
+  },
+  {
+    id: "nat",
+    tag: "🎭 Umkleidekabine · NAT",
+    title: "Ich brauche ein Internet-Kostüm!",
+    illus: "nat",
+    text: `Ich bin fast draußen im großen Internet – aber Moment! Ich trage noch mein <span class="highlight">Haus-Kostüm</span>: <strong>192.168.1.42</strong>.<br><br>
+Das Problem: Im Internet kennt niemand private Adressen wie 192.168.x.x. Die werden einfach ignoriert! 😱 Ich brauche ein offizielles Internet-Kostüm!
+<div class="factbox">
+  <div class="fact-title">💡 Private IP-Adressen (nur zu Hause)</div>
+  🏠 10.0.0.0 – 10.255.255.255<br>
+  🏠 172.16.0.0 – 172.31.255.255<br>
+  🏠 192.168.0.0 – 192.168.255.255<br>
+  <br>Diese Adressen funktionieren nur <b>zu Hause im lokalen Netz</b>. Im Internet werden sie geblockt!
+</div>
+Was hilft mir, mit meiner privaten IP ins Internet zu kommen?`,
+    choices: [
+      { icon: "🎭", text: "NAT! Der Router tauscht meine private IP gegen seine öffentliche Internet-IP aus. Ich zieh ein Internet-Kostüm an!", correct: true },
+      { icon: "🙈", text: "Nichts, ich geh einfach so ins Internet – der findet schon irgendwie hin.", correct: false, penalty: 10 },
+      { icon: "📞", text: "Ich bitte per DHCP um eine neue öffentliche IP-Adresse.", correct: false, penalty: 5 },
+    ],
+    correctFeedback: `🎉 Richtig! <b>NAT (Network Address Translation)</b> ist meine Umkleidekabine! 🎭<br><br>
+<b>Raus:</b> 192.168.1.42:51234 → wird zu → 85.123.45.67:41234<br>
+<b>Zurück:</b> 85.123.45.67:41234 → wird wieder zu → 192.168.1.42:51234<br><br>
+Der Router merkt sich in einer <b>NAT-Tabelle</b> welche Port-Nummer zu welchem Heimgerät gehört. So können hunderte Geräte mit <b>einer</b> öffentlichen IP ins Internet! 🤩`,
+    wrongFeedback: `😅 Private IPs werden im Internet einfach weggeworfen – ich käme nie an! DHCP gibt IPs im lokalen Netz, nicht im Internet. Die Lösung: <b>NAT</b> – der Router zieht mir das Internet-Kostüm an! 🎭`,
+    points: 10,
+  },
+  {
+    id: "tcp",
+    tag: "🤝 Handschlag · TCP",
+    title: "Hallo, darf ich reinkommen?",
+    illus: "tcp",
+    text: `Ich bin fast angekommen! Jetzt muss ich noch anklopfen und mich vorstellen.<br><br>
+TCP (Transmission Control Protocol) ist wie ein <span class="highlight">höflicher Handschlag</span> bevor man anfängt zu reden. Erst wenn beide Seiten sich begrüßt haben, fängt die eigentliche Unterhaltung an.
+<div class="factbox">
+  <div class="fact-title">💡 TCP vs UDP – der Unterschied</div>
+  🤝 <b>TCP</b>: Zuverlässig! Alles kommt an, in der richtigen Reihenfolge. Für Webseiten, Emails.<br>
+  ⚡ <b>UDP</b>: Schnell! Aber manche Pakete gehen verloren. Für Streams, Gaming, DNS.
+</div>
+In welcher Reihenfolge begrüße ich den Server beim <strong>TCP 3-Way-Handshake</strong>?`,
+    choices: [
+      { icon: '👋', text: 'SYN → SYN-ACK → ACK: Ich rufe an, der Server sagt „Hallo zurück!“, ich bestätige.', correct: true },
+      { icon: "🔄", text: "ACK → SYN → SYN-ACK: Der Server fängt an zu reden, ich antworte dann.", correct: false, penalty: 10 },
+      { icon: "📤", text: "Ich schick einfach direkt meine Daten raus ohne Handshake – geht schneller!", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Perfekt! Der <b>TCP 3-Way-Handshake</b>:<br><br>
+<b>1. SYN</b> 👋 – Ich: „Hallo! Ich bin 192.168.1.42, ich möchte reden!" (Port 80 für HTTP)<br>
+<b>2. SYN-ACK</b> 🤝 – Server: „Hallo! Ich hörte dich. Ich bin auch bereit!"<br>
+<b>3. ACK</b> ✅ – Ich: „Super, ich bestätige. Fangen wir an!"<br><br>
+Jetzt kann die Unterhaltung losgehen! Wichtige Ports:<br>
+HTTP = <b>80</b> · HTTPS = <b>443</b> · DNS = <b>53</b> · SSH = <b>22</b> 🔑`,
+    wrongFeedback: `😅 Beim TCP Handshake beginnt immer der <b>Client</b> mit SYN! Dann kommt SYN-ACK vom Server, dann ACK vom Client. Einfach losschicken ohne Handshake? Das ist dann UDP – kein Handshake, dafür schnell!`,
+    points: 10,
+  },
+  {
+    id: "http",
+    tag: "📬 Ziel erreicht · HTTP",
+    title: "Angekommen! 🎉",
+    illus: "http",
+    text: `Ich hab's geschafft! 🎊 Die Verbindung steht. Jetzt schicke ich meine eigentliche Nachricht – den <span class="highlight">HTTP-Request</span>!<br><br>
+HTTP ist die Sprache, die Browser und Webserver miteinander sprechen. Eine letzte wichtige Frage noch:
+<div class="factbox">
+  <div class="fact-title">💡 HTTP-Request sieht so aus</div>
+  GET /index.html HTTP/1.1<br>
+  Host: www.example.com<br>
+  ...<br>
+  <br>Der Server antwortet mit: <b>200 OK</b> + der Webseite! 🌐
+</div>
+Was ist der Unterschied zwischen <strong>HTTP</strong> und <strong>HTTPS</strong>?`,
+    choices: [
+      { icon: "🔒", text: "HTTPS verschlüsselt alles mit TLS – niemand kann mitschielen! HTTP ist unverschlüsselt.", correct: true },
+      { icon: "⚡", text: "HTTPS ist einfach schneller, weil es Port 443 nutzt statt 80.", correct: false, penalty: 5 },
+      { icon: "📡", text: "HTTPS nutzt UDP statt TCP – das macht es sicherer.", correct: false, penalty: 10 },
+    ],
+    correctFeedback: `🎉 Richtig! <b>HTTPS = HTTP + TLS-Verschlüsselung</b> 🔒<br><br>
+Bevor ich meine HTTP-Nachricht schicke, macht TLS noch einen <b>Schlüsseltausch</b>:<br>
+1. Server zeigt sein <b>Zertifikat</b> (wie ein Ausweis von einer vertrauenswürdigen Stelle)<br>
+2. Wir einigen uns auf einen geheimen Schlüssel<br>
+3. <b>Alles ist verschlüsselt</b> – niemand kann mitlesen! 🕵️<br><br>
+HTTP = Port <b>80</b> (unverschlüsselt)<br>
+HTTPS = Port <b>443</b> (verschlüsselt mit TLS)<br><br>
+<b>🏆 Ich bin angekommen! Mission erfüllt!</b>`,
+    wrongFeedback: `😅 Port-Nummern machen Verbindungen nicht sicher – das ist nur eine Nummer! HTTPS nutzt immer noch TCP, nicht UDP. Der Unterschied ist <b>TLS-Verschlüsselung</b> – mit HTTPS kann niemand meine Nachricht lesen! 🔒`,
+    points: 10,
+    last: true,
+  },
+];
+
+const ICONS = ["🏠", "🗺️", "📒", "📣", "🎂", "🛤️", "🎭", "🤝", "📬"];
+
+/* ═══════════════════════════════════════════
+   GAME LOGIC
+═══════════════════════════════════════════ */
+let currentScene = 0;
+let score = 0;
+
+function buildProgressDots() {
+  const row = document.getElementById('progress-row');
+  row.innerHTML = '';
+  SCENES.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'prog-dot';
+    d.id = 'dot-' + i;
+    d.title = s.tag;
+    d.textContent = ICONS[i] || (i + 1);
+    row.appendChild(d);
+  });
+}
+
+function updateDots(idx) {
+  SCENES.forEach((_, i) => {
+    const d = document.getElementById('dot-' + i);
+    if (!d) return;
+    d.className = 'prog-dot';
+    if (i < idx) d.classList.add('done');
+    else if (i === idx) d.classList.add('active');
+  });
+}
+
+function showScene(idx) {
+  if (idx >= SCENES.length) { showEnd(); return; }
+  const s = SCENES[idx];
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('game-area').style.display = 'block';
+  document.getElementById('end-screen').style.display = 'none';
+
+  // Illustration
+  document.getElementById('illustration').innerHTML = ILLUSTRATIONS[s.illus] || '';
+
+  // Text
+  document.getElementById('scene-location').textContent = s.tag;
+  document.getElementById('scene-title').textContent = s.title;
+  document.getElementById('story-text').innerHTML = s.text;
+
+  // Choices
+  const ca = document.getElementById('choices-area');
+  ca.innerHTML = '';
+  s.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-icon">${c.icon}</span><span>${c.text}</span>`;
+    btn.onclick = () => handleChoice(c, btn);
+    ca.appendChild(btn);
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedback-area');
+  fb.style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('retry-btn').style.display = 'none';
+
+  updateDots(idx);
+
+  // Animation
+  const card = document.getElementById('scene-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'cardIn 0.4s cubic-bezier(.34,1.56,.64,1)';
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleChoice(choice, btn) {
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = true; b.style.opacity = '0.6';
+  });
+  const fb = document.getElementById('feedback-area');
+  fb.style.display = 'block';
+  fb.style.animation = 'none'; void fb.offsetWidth; fb.style.animation = 'fadeUp 0.35s ease';
+
+  if (choice.correct) {
+    score += SCENES[currentScene].points;
+    btn.classList.add('correct-ans'); btn.style.opacity = '1';
+    fb.className = 'correct';
+    document.getElementById('fb-head').innerHTML = '🎉 Super gemacht! +' + SCENES[currentScene].points + ' Punkte!';
+    document.getElementById('fb-body').innerHTML = SCENES[currentScene].correctFeedback;
+    document.getElementById('next-btn').style.display = 'inline-block';
+  } else {
+    score = Math.max(0, score - (choice.penalty || 10));
+    btn.classList.add('wrong-ans'); btn.style.opacity = '1';
+    fb.className = 'wrong';
+    document.getElementById('fb-head').innerHTML = '😅 Nicht ganz! -' + (choice.penalty || 10) + ' Punkte';
+    document.getElementById('fb-body').innerHTML = SCENES[currentScene].wrongFeedback;
+    document.getElementById('retry-btn').style.display = 'inline-block';
+  }
+  fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function nextScene() {
+  currentScene++;
+  showScene(currentScene);
+}
+
+function retryScene() { showScene(currentScene); }
+
+function showEnd() {
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'block';
+  document.getElementById('start-btn-area').style.display = 'none';
+  document.getElementById('score-bubble').textContent = score + ' / 90 Punkte ⭐';
+  updateDots(SCENES.length);
+
+  let msg = '';
+  const pct = score / 90;
+  if (pct >= 0.9) msg = '🏆 Wow! Du bist ein echtes Netzwerk-Genie! Die Klausur wird ein Kinderspiel!';
+  else if (pct >= 0.7) msg = '👍 Sehr gut! Mit ein bisschen Wiederholen wird das eine super Klausur!';
+  else if (pct >= 0.5) msg = '📚 Gut gemacht! Nochmal spielen festigt die Konzepte!';
+  else msg = '💪 Du lernst gerade viel Neues – nochmal spielen hilft!';
+  document.getElementById('end-text').innerHTML = 'Du hast IP-Päckchen sicher durch das Internet gebracht – von DHCP bis HTTP! 🌐<br><br><strong>' + msg + '</strong>';
+}
+
+function startGame() {
+  currentScene = 0;
+  score = 0;
+  buildProgressDots();
+  document.getElementById('start-btn-area').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'none';
+  showScene(0);
+}
+
+// Build initial dots (visual only)
+buildProgressDots();
+</script>
+</body>
+</html>
