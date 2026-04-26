@@ -667,6 +667,9 @@ Die inoffizielle Coldmirror Dating Sim V1.5.2
 &lt;/div&gt;\
 &lt;/center&gt;</tw-passagedata><tw-passagedata pid="2" name="StoryInit" tags="" position="100,100" size="100,100">/* StoryInit */
 
+/*GameState */
+&lt;&lt; set $gameState to &quot;Intro&quot;&gt;&gt;
+
 /* Spieler-Stats */
 &lt;&lt;set $name to &quot;Der Neue&quot;&gt;&gt;
 &lt;&lt;set $hermineZuneigung to 0&gt;&gt;
@@ -723,7 +726,8 @@ Die inoffizielle Coldmirror Dating Sim V1.5.2
 &lt;&lt;set $round to 1&gt;&gt;
 &lt;&lt;set $feedbackText to &quot;&quot;&gt;&gt;
 &lt;&lt;set $moodyText to &quot;&quot;&gt;&gt;
-&lt;&lt;set $moodyText to &quot;Also was ist die wichtigste Zutat für Eierkuchen?&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="100,200" size="100,100">&lt;strong&gt;Tag:&lt;/strong&gt; $tag
+&lt;&lt;set $moodyText to &quot;Also was ist die wichtigste Zutat für Eierkuchen?&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="100,200" size="100,100">&lt;&lt;if $gameState == &quot;Hogwarts&quot;&gt;&gt;
+&lt;strong&gt;Tag:&lt;/strong&gt; $tag
 &lt;strong&gt;Uhrzeit:&lt;/strong&gt; $zeit:00 Uhr
 &lt;strong&gt;Ort:&lt;/strong&gt; $ort
 &lt;hr&gt;
@@ -755,7 +759,14 @@ Die inoffizielle Coldmirror Dating Sim V1.5.2
 
 &lt;div id=&quot;player-anchor&quot;&gt;
    &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="Widget" tags="widget" position="100,0" size="100,100">/* Widget: &lt;&lt;zeitplus stunden &quot;ZielPassage&quot;&gt;&gt; */
+&lt;/div&gt;
+&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;\
+Hier entsteht weiterer Content für Telekaddy
+
+&lt;&lt;else&gt;&gt;\
+Hier steht am Anfang nüscht.
+&lt;&lt;/if&gt;&gt;\
+</tw-passagedata><tw-passagedata pid="4" name="Widget" tags="widget" position="100,0" size="100,100">/* Widget: &lt;&lt;zeitplus stunden &quot;ZielPassage&quot;&gt;&gt; */
 &lt;&lt;widget &quot;zeitplus&quot;&gt;&gt;
   &lt;&lt;set _stunden to $args[0]&gt;&gt;
   &lt;&lt;set _ziel to $args[1]&gt;&gt;
@@ -1149,7 +1160,8 @@ Herzlichen Glückwunsch. Nimm dir ein Zitronenbonbon.
 [[zurück|Hof][$inventar.push(&quot;Zitronenbonbon&quot;)]]
 
 
-</tw-passagedata><tw-passagedata pid="15" name="Credits" tags="" position="100,500" size="100,100">Dieses Spiel ist proudly presented by Tripheur.
+</tw-passagedata><tw-passagedata pid="15" name="Credits" tags="" position="100,500" size="100,100">&lt;&lt;set $gameState to &quot;Intro&quot;&gt;&gt;
+Dieses Spiel ist proudly presented by Tripheur.
 
 Das ist ein Spiel für Fans des Gesamtwerks von Coldmirror. Höchst inoffiziell und einfach nur dafür gedacht, die Zeit bis zur nächsten Podcast-Folge zu überbrücken.
 
@@ -1885,14 +1897,16 @@ Das ist das Letzte, was du hörst, bevor Hagrid dich mit einem präzise gegen de
 &lt;div class=&quot;menu-button&quot;&gt;\
     &lt;&lt;link &quot;Wer ist schuld? (Credits)&quot; &quot;Credits&quot;&gt;&gt;
   &lt;&lt;/link&gt;&gt;
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="48" name="Hogwarts_Start" tags="" position="500,0" size="100,100">Willkommen in Hogwarts (Synchro Edition).
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="48" name="Hogwarts_Start" tags="" position="500,0" size="100,100">&lt;&lt;set $gameState to &quot;Hogwarts&quot;&gt;&gt;\ 
+Willkommen in Hogwarts (Synchro Edition).
 Du bist neu hier. Dein Ziel: Liebe.
 Viel Glück, du wirst es brauchen.
 
-[[Aufwachen|Schlafsaal]]</tw-passagedata><tw-passagedata pid="49" name="Telekaddy_Start" tags="" position="500,1300" size="100,100">Ein experimentelles Jump&#39;N Run. 
+[[Aufwachen|Schlafsaal]]</tw-passagedata><tw-passagedata pid="49" name="Telekaddy_Start" tags="" position="500,1300" size="100,100">&lt;&lt;set $gameState to &quot;Telekaddy&quot;&gt;&gt;\ 
+Ein experimentelles Jump&#39;N Run. 
 
-Sammel Items um deinen Schwarm zu erobern.
-
+Spring auf die Plattformen und sammel Items um deinen Schwarm zu erobern.
+Jede Item-Art steht für einen anderen Schwarm - oder auch nicht.
 Aber vorsicht,: liebst du zwei Charaktere gleich doll, explodiert dein Gehirn.
 
 [[Start Telekaddy]]</tw-passagedata><tw-passagedata pid="50" name="Start Telekaddy" tags="" position="500,1425" size="100,100">&lt;script&gt;
@@ -1925,7 +1939,12 @@ Viel Erfolg beim nächsten Mal!
 
 [[Ende|Credits]]</tw-passagedata><tw-passagedata pid="55" name="KaddiEnde_burger" tags="" position="700,1500" size="100,100">Spongebob
 
-[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="56" name="KaddiEnde_explosion" tags="" position="700,1600" size="100,100">Boom!
+[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="56" name="KaddiEnde_explosion" tags="" position="700,1600" size="100,100">&lt;img src=&quot;images/brain_explodes.gif&quot;&gt;
+
+
+Tja, du konntest dich nicht entscheiden und dein Gehirn ist leider explodiert.
+
+Der Grund? Brutale Killerspiele.
 
 [[Ende|Credits]]</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
