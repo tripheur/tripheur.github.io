@@ -648,7 +648,11 @@ Config.ui.stowBarInitially = 800;
 
 window.addEventListener("message", function(event) {
     var ergebnis = event.data;
-    var gueltig = ["blume","ei","dose","donut","burger","explosion"];
+    if (ergebnis === "menu") {
+        SugarCube.Engine.play("Start-Menu");
+        return;
+    }
+    var gueltig = ["blume","ei","dose","donut","burger","explosion","snape"];
     if (gueltig.includes(ergebnis)) {
         SugarCube.Engine.play("KaddiEnde_" + ergebnis);
     }
@@ -769,7 +773,7 @@ Die inoffizielle Coldmirror Dating Sim V2.0
    &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;
 &lt;/div&gt;
 &lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;\
-Hier entsteht weiterer Content für Telekaddy
+Hier entsteht weiterer Content für Telekaddy. Schon wieder. 1
 
 &lt;&lt;else&gt;&gt;\
 Hier steht am Anfang nüscht.
