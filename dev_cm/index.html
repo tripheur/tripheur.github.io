@@ -648,7 +648,6 @@ Config.ui.stowBarInitially = 800;
 
 window.addEventListener("message", function(event) {
     var ergebnis = event.data;
-    alert("Empfangen: " + ergebnis);
     if (ergebnis === "menu") {
         SugarCube.Engine.play("Start-Menu");
         return;
@@ -773,8 +772,29 @@ Die inoffizielle Coldmirror Dating Sim V2.0
 &lt;div id=&quot;player-anchor&quot;&gt;
    &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;
 &lt;/div&gt;
-&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;\
-Hier entsteht weiterer Content für Telekaddy. Schon wieder. 3
+&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;
+&lt;script&gt;
+var gesammelt = JSON.parse(localStorage.getItem(&quot;telekaddy_enden&quot;) || &quot;[]&quot;);
+var alle = [&quot;blume&quot;,&quot;ei&quot;,&quot;dose&quot;,&quot;donut&quot;,&quot;burger&quot;,&quot;explosion&quot;];
+var namen = {
+    &quot;blume&quot;: &quot;Benjamin Buchsbaum&quot;,
+    &quot;ei&quot;: &quot;Robbie Sinclair&quot;,
+    &quot;dose&quot;: &quot;Grüner Powerranger&quot;,
+    &quot;donut&quot;: &quot;Pikachu&quot;,
+    &quot;burger&quot;: &quot;Spongebob&quot;,
+    &quot;explosion&quot;: &quot;Gehirn explodiert&quot;
+};
+var html = &quot;&lt;strong&gt;Telekaddy-Enden: &quot; + gesammelt.length + &quot;/6 gesammelt&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&quot;;
+alle.forEach(function(e) {
+    if (gesammelt.includes(e)) {
+        html += &quot;&lt;a onclick=\&quot;SugarCube.Engine.play(&#39;KaddiEnde_&quot; + e + &quot;&#39;)\&quot; style=&#39;cursor:pointer&#39;&gt;&quot; + namen[e] + &quot;&lt;/a&gt;&lt;br&gt;&quot;;
+    } else {
+        html += &quot;???&lt;br&gt;&quot;;
+    }
+});
+document.write(html);
+&lt;/script&gt;
+
 
 &lt;&lt;else&gt;&gt;\
 Hier steht am Anfang nüscht.
@@ -1946,7 +1966,7 @@ Aber vorsicht,: liebst du zwei Charaktere gleich doll, explodiert dein Gehirn.
     style=&quot;border: none; display: block; margin: 0 auto;&quot;&gt;
 &lt;/iframe&gt;</tw-passagedata><tw-passagedata pid="51" name="KaddiEnde_blume" tags="" position="100,1400" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 
-&lt;img src=&quot;images/buchsbaum.jpg&quot;&gt;
+&lt;img src=&quot;images/buchsbaum.jpg&quot; width=&quot;400&quot;&gt;
 
 
 Benjamin Buchsbaum!
@@ -1960,13 +1980,47 @@ Möge eure Liebe auf ewig blühen.
 
 
 &lt;h1&gt; Happy End!&lt;/h1&gt;
-[Ende|Credits]]</tw-passagedata><tw-passagedata pid="52" name="KaddiEnde_dose" tags="" position="100,1500" size="100,100">Grüner Powerranger
+[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="52" name="KaddiEnde_dose" tags="" position="100,1500" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 
-[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="53" name="KaddiEnde_ei" tags="" position="100,1600" size="100,100">Robby Dino
+&lt;img src=&quot;images/powerranger.webp&quot; width=&quot;400&quot;&gt;
+
+
+der grüne Ranger!
+
+Tommy Oliver gilt als der bedeutendste Power Ranger aller Zeiten. Bekanntheit erlangte er ursprünglich als der erste Grüne Ranger, der unter dem Zauber von Rita Repulsa fast das ursprüngliche Team besiegte. Nach seiner Befreiung wurde er jedoch zu einem der wichtigsten Verbündeten und Anführer.
+
+Über mehrere Staffeln hinweg – von Mighty Morphin bis Dino Thunder – verkörperte er insgesamt sechs verschiedene Ranger-Formen (darunter den Weißen, Roten und Schwarzen Ranger). Neben seinen Kräften zeichnet ihn seine lebenslange Erfahrung in den Kampfsportarten aus, in denen er im Laufe der Serie bis zum schwarzen Gürtel 6. Grades aufstieg. 
+Tommy zeichnet sich durch eine enorme Resilienz und einen starken moralischen Kompass aus. Er entwickelte sich vom manipulierten Außenseiter zu einem Mentor und Anführer, der bereit ist, seine eigenen Fähigkeiten und seine Sicherheit stets hinter das Wohl des Teams und der Erde zu stellen.
+(Quelle Wikipedia, lose übersetzt)
+
+Seid so glücklich miteinander, wie Rita Repulsa auf diesem Bild.
+
+&lt;img src=&quot;images/repulsa.gif&quot;&gt;
+
+
+&lt;h1&gt; Happy End!&lt;/h1&gt;
+
+[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="53" name="KaddiEnde_ei" tags="" position="100,1600" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
+
+&lt;img src=&quot;images/robbie.webp&quot; width=&quot;400&quot;&gt;
+
+
+Robbie Sinclair!
+
+Robert „Robbie“ Mark Sinclair
+Der 14-jährige Hypsilophodon ist der erste Sohn der Familie. Sein Charakter zeichnet sich durch Gutmütigkeit, Empathie, aber auch oft durch Willensschwäche aus. Er vertritt häufig progressive Ansichten, wodurch er mit seinem eher konservativen Vater Earl häufig aneinandergerät. Sein bester Freund Spike übt oftmals schlechten Einfluss auf ihn aus.(Quelle Wikipedia)
+
+Eine Liebe, die anhält bis zum Ende des Universums - oder zumindest bis zum nächsten Meteoriteneinschlag.
+
+&lt;img src=&quot;images/meteor.gif&quot;&gt;
+
+
+&lt;h1&gt; Happy End!&lt;/h1&gt;
+
 
 [[Ende|Credits]]</tw-passagedata><tw-passagedata pid="54" name="KaddiEnde_donut" tags="" position="700,1400" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 
-&lt;img src=&quot;images/pikachu.gif&quot;&gt;
+&lt;img src=&quot;images/pikachu.gif&quot; width=&quot;400&quot;&gt;
 
 
 
@@ -1980,7 +2034,7 @@ Viel Spaß mit Britzelpieps und mehr Erfolg beim nächsten Mal!
 
 [[Ende|Credits]]</tw-passagedata><tw-passagedata pid="55" name="KaddiEnde_burger" tags="" position="700,1500" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 
-&lt;img src=&quot;images/spongebob.gif&quot;&gt;
+&lt;img src=&quot;images/spongebob.gif&quot; width=&quot;400&quot;&gt;
 
 Spongebob?
 
@@ -1995,7 +2049,7 @@ Aber hier ist ein Trostpreis:
 
 &lt;h1&gt; Verloren!&lt;/h1&gt;
 
-[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="56" name="KaddiEnde_explosion" tags="" position="700,1600" size="100,100">&lt;img src=&quot;images/brain_explodes.gif&quot;&gt;
+[[Ende|Credits]]</tw-passagedata><tw-passagedata pid="56" name="KaddiEnde_explosion" tags="" position="700,1600" size="100,100">&lt;img src=&quot;images/brain_explodes.gif&quot; width=&quot;400&quot;&gt;
 
 
 Tja, du konntest dich nicht entscheiden und dein Gehirn ist leider explodiert.
