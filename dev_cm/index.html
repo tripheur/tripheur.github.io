@@ -656,6 +656,32 @@ window.addEventListener("message", function(event) {
     if (gueltig.includes(ergebnis)) {
         SugarCube.Engine.play("KaddiEnde_" + ergebnis);
     }
+});
+
+$(document).on(':passageend', function(ev) {
+    if (State.variables.gameState !== 'Telekaddy') return;
+    
+    var gesammelt = JSON.parse(localStorage.getItem('telekaddy_enden') || '[]');
+    var alle = ['blume','ei','dose','donut','burger','explosion'];
+    var namen = {
+        'blume': 'Benjamin Buchsbaum',
+        'ei': 'Robbie Sinclair',
+        'dose': 'Grüner Powerranger',
+        'donut': 'Pikachu',
+        'burger': 'Spongebob',
+        'explosion': 'Gehirn explodiert'
+    };
+    
+    var html = '<strong>Telekaddy-Enden: ' + gesammelt.length + '/6 gesammelt</strong><br><br>';
+    alle.forEach(function(e) {
+        if (gesammelt.includes(e)) {
+            html += '<a onclick="SugarCube.Engine.play(\'KaddiEnde_' + e + '\')" style="cursor:pointer">' + namen[e] + '</a><br>';
+        } else {
+            html += '???<br>';
+        }
+    });
+    
+    document.getElementById('telekaddy-enden').innerHTML = html;
 });</script><tw-passagedata pid="1" name="Start-Menu" tags="start-menu" position="250,50" size="100,100">&lt;center&gt;
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
 &lt;h1 class=&quot;titel&quot;&gt;Uhh, das daten wir nicht!&lt;/h1&gt;
@@ -769,32 +795,12 @@ Die inoffizielle Coldmirror Dating Sim V2.0
   &lt;/ul&gt;\
 &lt;&lt;/if&gt;&gt;\
 
-&lt;div id=&quot;player-anchor&quot;&gt;
-   &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;
-&lt;/div&gt;
-&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;
-&lt;script&gt;
-var gesammelt = JSON.parse(localStorage.getItem(&quot;telekaddy_enden&quot;) || &quot;[]&quot;);
-var alle = [&quot;blume&quot;,&quot;ei&quot;,&quot;dose&quot;,&quot;donut&quot;,&quot;burger&quot;,&quot;explosion&quot;];
-var namen = {
-    &quot;blume&quot;: &quot;Benjamin Buchsbaum&quot;,
-    &quot;ei&quot;: &quot;Robbie Sinclair&quot;,
-    &quot;dose&quot;: &quot;Grüner Powerranger&quot;,
-    &quot;donut&quot;: &quot;Pikachu&quot;,
-    &quot;burger&quot;: &quot;Spongebob&quot;,
-    &quot;explosion&quot;: &quot;Gehirn explodiert&quot;
-};
-var html = &quot;&lt;strong&gt;Telekaddy-Enden: &quot; + gesammelt.length + &quot;/6 gesammelt&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&quot;;
-alle.forEach(function(e) {
-    if (gesammelt.includes(e)) {
-        html += &quot;&lt;a onclick=\&quot;SugarCube.Engine.play(&#39;KaddiEnde_&quot; + e + &quot;&#39;)\&quot; style=&#39;cursor:pointer&#39;&gt;&quot; + namen[e] + &quot;&lt;/a&gt;&lt;br&gt;&quot;;
-    } else {
-        html += &quot;???&lt;br&gt;&quot;;
-    }
-});
-document.write(html);
-&lt;/script&gt;
+&lt;div id=&quot;player-anchor&quot;&gt;\
+   &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;\
+&lt;/div&gt;\
 
+&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;
+&lt;div id=&quot;telekaddy-enden&quot;&gt;&lt;/div&gt;
 
 &lt;&lt;else&gt;&gt;\
 Hier steht am Anfang nüscht.
@@ -1200,7 +1206,8 @@ Das ist ein Spiel für Fans des Gesamtwerks von Coldmirror. Höchst inoffiziell 
 
 Fast alles ist irgendwie geklaut - die Sprüche, die Bilder, die Gifs sowieso und Harry Potter gehört mir auch nicht.
 Die meisten Bilder, die keine Gifs sind, stammen von Pixabay.
-Die Lieder sind mit Suno AI erstellt. 
+Die Lieder im Hogwarts-Teil sind mit Suno AI erstellt. 
+Das Spiel Telekaddy wurde mit Godot erstellt, die Graphiken und Sounds sind alle von opengameart.org oder pixabay.
 
 Die ganze Zusammenstellung... das habe ich entschieden. Ich, die Programmiererin, aka Paula Ratte.
 
@@ -1716,7 +1723,11 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
         &lt;span class=&quot;blinking-cursor&quot;&gt;_&lt;/span&gt; SYSTEM LOG FILE GELADEN...
                 &lt;span class=&quot;version-header&quot;&gt;v 2.0 - TELEKADDY!&lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
-            &quot;Neues Jumpn Run Abenteuer Telekaddy&quot;
+            Neues Jump&#39;n Run Abenteuer Telekaddy
+            Nicht schön, aber selten (ich habs versucht).
+           &lt;li&gt;[NEU] &lt;b&gt;Godot-Game&lt;/b&gt;Statt in Hogwarts rumzuhängen, kann man jetzt auch in die Telekaddy-Welt reisen.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Mehr Liebe&lt;/b&gt;Finde Kaddys Kindheits-Schwarm. Oder auch nicht - 5 verschiedene Traumpartner warten auf dich. Wenn du zu viele gleichzeitig liebst, explodiert dein Gehirn.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Gänsehaut-Hölle&lt;/b&gt;Spring von Plattform zu Plattform und fall bloss nicht herunter. Die Schreibmaschine wartet schon auf dich.&lt;/li&gt;
         &lt;/div&gt;\
         &lt;span class=&quot;version-header&quot;&gt;v 1.5.1 - KUNST &amp; KATASTROPHEN&lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
@@ -1826,6 +1837,9 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
         &lt;li&gt;\
             &lt;strong&gt;Fühle die Leichtigkeit!&lt;/strong&gt; Diese reine Leichtigkeit, leicht wie ein Federchen, fast ohne Gewicht, die man nur spürt, wenn man etwas Weiches, Warmes bewegt, etwas, das man am Morgen lebendig erlebt hat. Dieses Gefühl genau. In spielerischer Form. Jetzt digital und interaktiv.\
         &lt;/li&gt;\
+        &lt;li&gt;\
+    &lt;strong&gt;Renne.&lt;/strong&gt; Einfach rennen. Keine Zeit zum Nachdenken. Keine Zeit zum Zweifeln. Sammle die Dinge. Welche Dinge? &lt;span style=&quot;color: red;&quot;&gt;Das erfährst du am Ende.&lt;/span&gt; Falle nicht in die Grube. &lt;u&gt;Falle wirklich nicht in die Grube.&lt;/u&gt; Dort warten zwei Bücher und eine Schreibmaschine auf dich. Du hast einen Finger.
+&lt;/li&gt;\
     &lt;/ul&gt;\
     &lt;hr style=&quot;border: 2px dashed black; margin: 10px 0;&quot;&gt;\
     &lt;h2 class=&quot;manual-heading&quot;&gt;Warum dieses Spiel?&lt;/h2&gt;\
@@ -1837,9 +1851,10 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
     &lt;p style=&quot;font-weight: bold; text-align: center; margin-top: 10px; margin-bottom: 5px;&quot;&gt;\
         Das Spiel, das du nie im Leben gebraucht hast, aber jetzt trotzdem besitzt.\
     &lt;/p&gt;\
-    &lt;div style=&quot;background-color: black; color: white; padding: 5px; margin-top: 10px; text-align: center; font-weight: bold;&quot;&gt;\
-        Tippe, sammle, wirf und fühle am Ende wieder die Realität.\
-    &lt;/div&gt;\
+&lt;div style=&quot;background-color: black; color: white; padding: 5px; margin-top: 10px; text-align: center; font-weight: bold;&quot;&gt;
+    Tippe, sammle, wirf und fühle am Ende wieder die Realität.&lt;br&gt;
+    &lt;span style=&quot;color: #ffcc00;&quot;&gt;Oder springe einfach. Finde die Liebe im Abfall.&lt;/span&gt;
+&lt;/div&gt;
     &lt;p style=&quot;text-align: center; font-size: 1.2em; margin-top: 10px; margin-bottom: 0;&quot;&gt;\
         Du wirst es lieben. Oder hassen. Oder beides. &lt;br&gt;\
         &lt;span style=&quot;text-decoration: underline wavy red;&quot;&gt;Wie ein Abdruck.&lt;/span&gt;\
@@ -1950,11 +1965,12 @@ Du bist neu hier. Dein Ziel: Liebe.
 Viel Glück, du wirst es brauchen.
 
 [[Aufwachen|Schlafsaal]]</tw-passagedata><tw-passagedata pid="49" name="Telekaddy_Start" tags="" position="500,1300" size="100,100">&lt;&lt;set $gameState to &quot;Telekaddy&quot;&gt;&gt;\ 
-Ein experimentelles Jump&#39;N Run. 
+Ein experimentelles Jump&#39;n Run. 
 
 Spring auf die Plattformen und sammel Items um deinen Schwarm zu erobern.
 Jede Item-Art steht für einen anderen Schwarm - oder auch nicht.
-Aber vorsicht,: liebst du zwei Charaktere gleich doll, explodiert dein Gehirn.
+Aber vorsicht: Liebst du zwei Charaktere gleich doll, explodiert dein Gehirn.
+Achja -  und wenn du runterfällst, wartet die Gänsehaut-Hölle auf dich.
 
 [[Start Telekaddy]]</tw-passagedata><tw-passagedata pid="50" name="Start Telekaddy" tags="" position="500,1425" size="100,100">
 
