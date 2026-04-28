@@ -673,7 +673,7 @@ window.addEventListener("message", function(event) {
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
 &lt;h1 class=&quot;titel&quot;&gt;Uhh, das daten wir nicht!&lt;/h1&gt;
 &lt;div style=&quot;text-align:center; font-size: 1.5em;&quot;&gt;\
-Die inoffizielle Coldmirror Dating Sim V2.0 BugFix 2
+Die inoffizielle Coldmirror Dating Sim V2.0 
 
 
 &lt;/div&gt;
@@ -797,18 +797,18 @@ Die inoffizielle Coldmirror Dating Sim V2.0 BugFix 2
    &lt;&lt;include &quot;AudioPlayer&quot;&gt;&gt;\
 &lt;/div&gt;\
 
-&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;
+&lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;\
 &lt;strong&gt;Telekaddy-Enden: &lt;&lt;print $gesammeltEnden.length&gt;&gt;/7&lt;/strong&gt;&lt;br&gt;
-&lt;hr&gt;
-&lt;&lt;if $gesammeltEnden.length == 0&gt;&gt;
-    &lt;em&gt;Noch nichts entdeckt.&lt;/em&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;&lt;for _ende range $gesammeltEnden&gt;&gt;
-        &lt;&lt;capture _ende&gt;&gt;
+&lt;hr&gt;\
+&lt;&lt;for _ende range [&quot;blume&quot;,&quot;ei&quot;,&quot;dose&quot;,&quot;donut&quot;,&quot;burger&quot;,&quot;explosion&quot;,&quot;snape&quot;]&gt;&gt;\
+    &lt;&lt;capture _ende&gt;&gt;
+        &lt;&lt;if $gesammeltEnden.includes(_ende)&gt;&gt;\
             &lt;&lt;link $namenEnden[_ende]&gt;&gt;&lt;&lt;goto `&quot;KaddiEnde_&quot; + _ende`&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;br&gt;
-        &lt;&lt;/capture&gt;&gt;\
-    &lt;&lt;/for&gt;&gt;\
-&lt;&lt;/if&gt;&gt;\
+        &lt;&lt;else&gt;&gt;\
+            ???&lt;br&gt;
+        &lt;&lt;/if&gt;&gt;\
+    &lt;&lt;/capture&gt;&gt;\
+&lt;&lt;/for&gt;&gt;\
 
 &lt;&lt;else&gt;&gt;\
 Hier steht am Anfang nüscht.
@@ -1733,9 +1733,9 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
         &lt;div class=&quot;version-content&quot;&gt;\
             Neues Jump&#39;n Run Abenteuer Telekaddy
             Nicht schön, aber selten (ich habs versucht).
-           &lt;li&gt;[NEU] &lt;b&gt;Godot-Game&lt;/b&gt;Statt in Hogwarts rumzuhängen, kann man jetzt auch in die Telekaddy-Welt reisen.&lt;/li&gt;
-           &lt;li&gt;[NEU] &lt;b&gt;Mehr Liebe&lt;/b&gt;Finde Kaddys Kindheits-Schwarm. Oder auch nicht - 5 verschiedene Traumpartner warten auf dich. Wenn du zu viele gleichzeitig liebst, explodiert dein Gehirn.&lt;/li&gt;
-           &lt;li&gt;[NEU] &lt;b&gt;Gänsehaut-Hölle&lt;/b&gt;Spring von Plattform zu Plattform und fall bloss nicht herunter. Die Schreibmaschine wartet schon auf dich.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Godot-Game: &lt;/b&gt;Statt in Hogwarts rumzuhängen, kann man jetzt auch in die Telekaddy-Welt reisen.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Mehr Liebe: &lt;/b&gt;Finde Kaddys Kindheits-Schwarm. Oder auch nicht - 5 verschiedene Traumpartner warten auf dich. Wenn du zu viele gleichzeitig liebst, explodiert dein Gehirn.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Gänsehaut-Hölle: &lt;/b&gt;Spring von Plattform zu Plattform und fall bloss nicht herunter. Die Schreibmaschine wartet schon auf dich.&lt;/li&gt;
         &lt;/div&gt;\
         &lt;span class=&quot;version-header&quot;&gt;v 1.5.1 - KUNST &amp; KATASTROPHEN&lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
@@ -1980,7 +1980,7 @@ Jede Item-Art steht für einen anderen Schwarm - oder auch nicht.
 Aber vorsicht: Liebst du zwei Charaktere gleich doll, explodiert dein Gehirn.
 Achja -  und wenn du runterfällst, wartet die Gänsehaut-Hölle auf dich.
 
-[[Start Telekaddy]]</tw-passagedata><tw-passagedata pid="50" name="Start Telekaddy" tags="" position="500,1425" size="100,100">
+[[Start Telekaddy]]</tw-passagedata><tw-passagedata pid="50" name="Start Telekaddy" tags="" position="500,1425" size="100,100">&lt;&lt;set $gameState to &quot;Telekaddy&quot;&gt;&gt;\ 
 
 &lt;iframe 
     src=&quot;telekaddy/telekaddy.html&quot; 
@@ -2006,6 +2006,7 @@ Möge eure Liebe auf ewig blühen.
 
 &lt;h1&gt; Happy End!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="52" name="KaddiEnde_dose" tags="" position="100,1500" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 &lt;div align=&quot;center&quot;&gt;
@@ -2027,6 +2028,7 @@ Seid so glücklich miteinander, wie Rita Repulsa auf diesem Bild.
 
 &lt;h1&gt; Happy End!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="53" name="KaddiEnde_ei" tags="" position="100,1600" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 &lt;div align=&quot;center&quot;&gt;
@@ -2045,6 +2047,7 @@ Eine Liebe, die anhält bis zum Ende des Universums - oder zumindest bis zum nä
 
 &lt;h1&gt; Happy End!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="54" name="KaddiEnde_donut" tags="" position="700,1400" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 &lt;div align=&quot;center&quot;&gt;
@@ -2060,6 +2063,7 @@ Viel Spaß mit Britzelpieps und mehr Erfolg beim nächsten Mal!
 
 &lt;h1&gt; Verloren!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="55" name="KaddiEnde_burger" tags="" position="700,1500" size="100,100">&lt;h1&gt; Deine neue Liebe ist...&lt;/h1&gt;
 
@@ -2078,6 +2082,7 @@ Aber hier ist ein Trostpreis:
 
 &lt;h1&gt; Verloren!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]</tw-passagedata><tw-passagedata pid="56" name="KaddiEnde_explosion" tags="" position="700,1600" size="100,100">&lt;img src=&quot;images/brain_explodes.gif&quot; width=&quot;400&quot;&gt;
 
 
@@ -2088,6 +2093,7 @@ Der Grund? Brutale Killerspiele.
 
 &lt;h1&gt; Verloren!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]</tw-passagedata><tw-passagedata pid="57" name="KaddiEnde_snape" tags="" position="100,1700" size="100,100">&lt;h1&gt; Deine einzige Liebe ist...&lt;/h1&gt;
 &lt;div align=&quot;center&quot;&gt;
 &lt;img src=&quot;images/mylove.png&quot; width=&quot;400&quot;&gt;
@@ -2097,6 +2103,7 @@ My Love. Always.
 
 &lt;h1&gt; Happy End!&lt;/h1&gt;
 
+[[Nochmal|Start Telekaddy]]
 [[Ende|Credits]]
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
