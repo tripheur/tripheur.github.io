@@ -673,7 +673,7 @@ window.addEventListener("message", function(event) {
 &lt;img src=&quot;images/liebe-harry-liebe.gif&quot; width=&quot;400&quot;&gt;
 &lt;h1 class=&quot;titel&quot;&gt;Uhh, das daten wir nicht!&lt;/h1&gt;
 &lt;div style=&quot;text-align:center; font-size: 1.5em;&quot;&gt;\
-Die inoffizielle Coldmirror Dating Sim V2.0 BugFix 1
+Die inoffizielle Coldmirror Dating Sim V2.0 BugFix 2
 
 
 &lt;/div&gt;
@@ -800,14 +800,15 @@ Die inoffizielle Coldmirror Dating Sim V2.0 BugFix 1
 &lt;&lt;elseif $gameState == &quot;Telekaddy&quot;&gt;&gt;
 &lt;strong&gt;Telekaddy-Enden: &lt;&lt;print $gesammeltEnden.length&gt;&gt;/7&lt;/strong&gt;&lt;br&gt;
 &lt;hr&gt;
-
-&lt;&lt;for _ende range $gesammeltEnden&gt;&gt;
-	&lt;&lt;capture _ende&gt;&gt;
-		* &lt;&lt;link $namenEnden[_ende]&gt;&gt;&lt;&lt;goto `&quot;KaddiEnde_&quot; + _ende`&gt;&gt;&lt;&lt;/link&lt;br&gt;
-	&lt;&lt;/capture&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-
-&lt;&lt;if $gesammeltEnden.length == 0&gt;&gt;&lt;em&gt;Noch nichts entdeckt.&lt;/em&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if $gesammeltEnden.length == 0&gt;&gt;
+    &lt;em&gt;Noch nichts entdeckt.&lt;/em&gt;
+&lt;&lt;else&gt;&gt;
+    &lt;&lt;for _ende range $gesammeltEnden&gt;&gt;
+        &lt;&lt;capture _ende&gt;&gt;
+            &lt;&lt;link $namenEnden[_ende]&gt;&gt;&lt;&lt;goto `&quot;KaddiEnde_&quot; + _ende`&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;br&gt;
+        &lt;&lt;/capture&gt;&gt;\
+    &lt;&lt;/for&gt;&gt;\
+&lt;&lt;/if&gt;&gt;\
 
 &lt;&lt;else&gt;&gt;\
 Hier steht am Anfang nüscht.
