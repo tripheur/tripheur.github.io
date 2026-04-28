@@ -801,11 +801,11 @@ Die inoffizielle Coldmirror Dating Sim V2.0
 &lt;strong&gt;Telekaddy-Enden: &lt;&lt;print $gesammeltEnden.length&gt;&gt;/7&lt;/strong&gt;&lt;br&gt;
 &lt;hr&gt;\
 &lt;&lt;for _ende range [&quot;blume&quot;,&quot;ei&quot;,&quot;dose&quot;,&quot;donut&quot;,&quot;burger&quot;,&quot;explosion&quot;,&quot;snape&quot;]&gt;&gt;\
-    &lt;&lt;capture _ende&gt;&gt;
+    &lt;&lt;capture _ende&gt;&gt;\
         &lt;&lt;if $gesammeltEnden.includes(_ende)&gt;&gt;\
-            &lt;&lt;link $namenEnden[_ende]&gt;&gt;&lt;&lt;goto `&quot;KaddiEnde_&quot; + _ende`&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;br&gt;
+            &lt;&lt;link $namenEnden[_ende]&gt;&gt;&lt;&lt;goto `&quot;KaddiEnde_&quot; + _ende`&gt;&gt;&lt;&lt;/link&gt;&gt;\
         &lt;&lt;else&gt;&gt;\
-            ???&lt;br&gt;
+            ???
         &lt;&lt;/if&gt;&gt;\
     &lt;&lt;/capture&gt;&gt;\
 &lt;&lt;/for&gt;&gt;\
