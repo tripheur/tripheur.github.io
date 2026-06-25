@@ -977,8 +977,7 @@ Hier steht am Anfang nüscht.
                 console.log(&quot;Musik lief, wird pausiert...&quot;);
                 bgm.pause();
 
-                // --- VARIANTE A: Event Listener (Der saubere Weg) ---
-                // WICHTIG: &quot;ended&quot; statt &quot;end&quot;
+          
                 var onSoundEnded = function() {
                     console.log(&quot;Event &#39;ended&#39; gefeuert. Starte Musik neu...&quot;);
                     bgm.play();
@@ -1078,7 +1077,7 @@ Nur Dumbledore schaut irgendwie traurig...
 
 /* Dumbledore Event */
 &lt;&lt;if $inventar.includes(&quot;Zitronenbonbon&quot;)&gt;&gt;\
-[[Dumbledore ein Zitronenbonbon anbieten|Zitronenbonbon]]
+[[Dumbledore ein Zitronenbonbon anbieten|Zitronenbonbon][$inventar.delete(&quot;Zitronenbonbon&quot;)]]
 &lt;&lt;/if&gt;&gt;\
 \
 /* Hermine Interaktion */
@@ -1135,23 +1134,25 @@ Der Apfel ist aus Plastik...
   &lt;&lt;case 2&gt;&gt;\
     &lt;h1&gt;ZAUBERKUNST BEI FLITWICK&lt;/h1&gt;\
     Der kleine Professor steht auf einem Stapel Bücher.
-    &quot;Wutschen und Wedeln, meine Freunde! Nicht fuchteln!&quot;
-
+    &quot;Herzlich willkommen zum Feder-fliegen-lass-Unterricht. Das ist zu nichts nütze.&quot;
+ 
     Neben dir jagt Seamus Finnigan versehentlich seine Augenbrauen in die Luft.
-    &lt;br&gt;&lt;em&gt;(Es riecht nach verbranntem Haar, aber du beherrschst jetzt &#39;Wingardium Levio-SA&#39;.)&lt;/em&gt;
+    
+    &lt;br&gt;&lt;em&gt;(Du kannst jetzt fehlerfrei &quot;Das ist zu nichts nütze&quot; sagen.)&lt;/em&gt;
 &lt;&lt;set $hermineZuneigung += 2&gt;&gt;\
 &lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;Hermine lobt deinen Fleiß (+2)&lt;/span&gt;
   &lt;&lt;case 3&gt;&gt;\
     &lt;h1&gt;VERWANDLUNG BEI MCGONAGALL&lt;/h1&gt;\
-    Sie verwandelt ihren Schreibtisch in ein Schwein und wieder zurück.
+    
     &lt;span style=&quot;color:red&quot;&gt;McGonagall:&lt;/span&gt; &quot;Das ist viel schwieriger als es aussieht. Wehe, ihr albert damit herum!&quot;
+    Sie verwandelt ihren Schreibtisch in ein Schwein und wieder zurück.
+    Dann erzählt sie ein paar Witze. 
 
-    Du versuchst, eine Nadel in ein Streichholz zu verwandeln. Es wird eine Nadel, die nach Schwefel riecht.
+    Du versuchst, deinen Tisch in ein Schwein zu verwandeln. Es wird eine schimmlige, gammelige Mandarine.
     &lt;br&gt;&lt;em&gt;(Close enough.)&lt;/em&gt;
 &lt;&lt;set $hermineZuneigung += 2&gt;&gt;\
 &lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;Hermine lobt deinen Fleiß (+2)&lt;/span&gt;
   &lt;&lt;case 4&gt;&gt;\
-    /* &lt;&lt;set $heuteKochen to $rezepte.random()&gt;&gt;*/\
     &lt;&lt;set $heuteKochen to $rezepte.random()&gt;&gt;\
     &lt;h1&gt;HAUSWIRTSCHAFTSKUNDE&lt;/h1&gt;\
 
@@ -1159,18 +1160,29 @@ Der Apfel ist aus Plastik...
     
     &lt;img src=&quot;images/moody.gif&quot;&gt;
 
-    Er klatscht lustlos in die Hände (es staubt Mehl).
-    &quot;Ich habe keinen Bock auf Theorie. Wir fangen sofort an.&quot;
+    Er schreibt (wie in jeder Stunde) seinen Namen an die Tafel.
 
-    Er zeigt auf die Tafel.
-    &quot;Heute machen wir: &lt;strong&gt;$heuteKochen.name&lt;/strong&gt;!&quot;
+    Dann beginnt sein bionisches Auge zu drehen und bleibt auf einem Schüler stehen. &quot;Du da! Schlag mal ein Rezept vor!&quot;:
+    &quot;Ähm... &lt;strong&gt;$heuteKochen.name&lt;/strong&gt;?&quot;
 
     &lt;br&gt;&lt;br&gt;\
-    /* Hier übergeben wir das variable Ziel ($heuteKochen.passage) an das Widget */\
     &lt;&lt;link &quot;An den Herd stellen und kochen&quot;&gt;&gt;\
       &lt;&lt;zeitplus 1 $heuteKochen.passage&gt;&gt;\
     &lt;&lt;/link&gt;&gt;\
+    &lt;br&gt;
     &lt;&lt;set $hermineZuneigung += 2&gt;&gt;\
+&lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;Hermine lobt deinen Fleiß (+2)&lt;/span&gt;
+
+  &lt;&lt;case 5&gt;&gt;\
+    &lt;h1&gt;BESENFLIEGEN BEI HOOCH&lt;/h1&gt;\
+ &lt;span style=&quot;color:red&quot;&gt;Madam Hooch:&lt;/span&gt;
+    &quot;So ihr hebt die Hand und haltet sie über den Besen. Dann sagt ihr &quot;AUF&quot;.
+ Für Linkshänder gilt das natürlich umgekehrt.&quot;
+ 
+ Du hältst den Besen über deine herabhängende Hand und sagst &quot;FUA&quot;. Der Besen knallt dir voll in die Fresse.
+    
+    &lt;br&gt;&lt;em&gt;Du bist ein Naturtalent.&lt;/em&gt;
+&lt;&lt;set $hermineZuneigung += 2&gt;&gt;\
 &lt;span style=&quot;color: gold; font-weight: bold;&quot;&gt;Hermine lobt deinen Fleiß (+2)&lt;/span&gt;
 &lt;&lt;/switch&gt;&gt;\
 \
@@ -1257,7 +1269,7 @@ Du stehst auf dem Hof und bist verwirrt.
 
 &lt;&lt;elseif $zeit &gt;= 18&gt;&gt;\
 [[Abendessen|Grosse Halle]]
-&lt;&lt;link &quot;Geh in den Schlafsaal&quot;&gt;&gt; &lt;&lt;goto &quot;Gemeinschaftsraum&quot;&gt;&gt;&lt;&lt;zeitplus 1&gt;&gt;&lt;&lt;/link&gt;&gt;
+&lt;&lt;link &quot;Geh in den Gemeinschaftsraum&quot;&gt;&gt; &lt;&lt;goto &quot;Gemeinschaftsraum&quot;&gt;&gt;&lt;&lt;zeitplus 1&gt;&gt;&lt;&lt;/link&gt;&gt;
 
 &lt;&lt;else&gt;&gt;\
 &lt;&lt;link &quot;Finde das Klassenzimmer&quot;&gt;&gt;&lt;&lt;zeitplus 1 &quot;Klassenzimmer&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
@@ -1280,7 +1292,7 @@ Du stehst auf dem Hof und bist verwirrt.
 
 
 [[Telekaddy|Telekaddy_Start]]
-(Achtung! Funktioniert nicht auf dem Handy, nur am PC.)</tw-passagedata><tw-passagedata pid="12" name="HermineTalk" tags="" position="450,325" size="100,100">Du gehst zu Hermine und legst &quot;Das Gehirn&quot; auf den Tisch.
+(Achtung! Funktioniert nicht auf dem Handy, nur am PC.)</tw-passagedata><tw-passagedata pid="12" name="HermineTalk" tags="" position="450,325" size="100,100">Du gehst zu Hermine und legst das Gehirn auf den Tisch.
 Hermine schaut auf. &quot;Endlich! Jemand mit Verstand.&quot;
 
 &lt;img src=&quot;images/herminesmile.gif&quot;&gt;
@@ -1547,9 +1559,9 @@ Du bist tot.
 
 &lt;img src=&quot;images/dumbledore.gif&quot;&gt;
 
-[[Mach, das Snape voll verliebt in mich ist!|SnapeFlirt][$snapeZuneigung to 100]]
+[[Mach, dass Snape voll verliebt in mich ist!|SnapeFlirt][$snapeZuneigung to 100]]
 
-[[Mach, das Hermine voll verliebt in mich ist!|HermineFlirt][$hermineZuneigung to 100]]
+[[Mach, dass Hermine voll verliebt in mich ist!|HermineFlirt][$hermineZuneigung to 100]]
 
 [[Ich wünsche mir eine heiße Nacht mit dem Pornodarsteller Anal Dickman!|AnalDickman]]
 
@@ -1560,17 +1572,34 @@ Nenne die korrekten Zutaten in der richtigen Reihenfolge! Vorsicht - wenn du zu 
 [[Eh ich kann das!|Game]]
 
 
-[[Nichts wie weg hier!|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="26" name="Rezept_Soup" tags="" position="650,675" size="100,100">Rezept für Soup Soup Soup
-wip
+[[Nichts wie weg hier!|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="26" name="Rezept_Soup" tags="" position="650,675" size="100,100">&lt;h1&gt;Rezept für Soup Soup Soup&lt;/h1&gt;
 
-[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="27" name="Rezept_Felsenkekse" tags="" position="750,675" size="100,100">Rezept für Felsenkekse
-wip
+Es folg... ein episches Minigame zum Thema Soup Soup Soup. 
 
-[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="28" name="Rezept_Pommes" tags="" position="850,675" size="100,100">Rezept für Pommes
-wip
+Sobald ich eins hab. Ganz bestimmt.
 
-[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="29" name="Rezept_Gelee" tags="" position="450,675" size="100,100">Rezept für Geleebanane
-wip
+Soup Soup Soup.
+
+
+
+[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="27" name="Rezept_Felsenkekse" tags="" position="750,675" size="100,100">&lt;h1&gt;Rezept für Felsenkekse&lt;/h1&gt;
+
+Oh, da müssen wir wohl [[Hagrid]] fragen...
+
+[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="28" name="Rezept_Pommes" tags="" position="850,675" size="100,100">&lt;h1&gt;Rezept für Pommes&lt;/h1&gt;
+
+1 Kartoffel
+1 Zwiebel
+1 kleine Zwiebel
+
+Das ganze 5 Minuten aufmerksam betrachten. 
+Dazu ein Glas Chardonnay für die Kinder.
+
+[[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="29" name="Rezept_Gelee" tags="" position="450,675" size="100,100">&lt;h1&gt;Rezept für Geleebanane&lt;/h1&gt;
+
+&lt;img src=&quot;images/cho-chang.gif&quot;&gt;&lt;br&gt;
+
+Fertig!
 
 [[zurück|Klassenzimmer]]</tw-passagedata><tw-passagedata pid="30" name="Steine" tags="" position="1100,200" size="100,100">Das ist der Hof. Ein paar Statisten-Kinder laufen herum und schauen dabei voll in die Kamera.
 
@@ -1633,7 +1662,7 @@ Und er hat einen Stein in der Hand!
 Immerhin hat sich Voldemort so erschreckt, dass er weggelaufen ist.
 Es ist ja auch noch nicht das Ende des Schuljahrs...
 
-[[weiter|Hof]]</tw-passagedata><tw-passagedata pid="36" name="BadEnd" tags="" position="250,1025" size="100,100">&lt;h1&gt;The End&lt;/h1&gt;\
+[[weiter|Hof]]</tw-passagedata><tw-passagedata pid="36" name="BadEnd" tags="" position="300,1000" size="100,100">&lt;h1&gt;The End&lt;/h1&gt;\
 &lt;&lt;interrupt &quot;lappen&quot;&gt;&gt;\
 &lt;img src=&quot;images/voldikills.gif&quot;&gt;
 
@@ -1832,11 +1861,13 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
     &lt;/div&gt;\
     &lt;div class=&quot;terminal-body&quot;&gt;
         &lt;span class=&quot;blinking-cursor&quot;&gt;_&lt;/span&gt; SYSTEM LOG FILE GELADEN...
-         &lt;span class=&quot;version-header&quot;&gt;v 2.1 - Ab in den Pornokeller&lt;/span&gt;
+         &lt;span class=&quot;version-header&quot;&gt;v 2.1 - PORNOS &amp; BILDUNG &lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
-            Neuer Wunsch bei Fresh D: Eine Nacht mit Anal Dickman! 
-           &lt;li&gt;[NEU] &lt;b&gt;Pornokeller: &lt;/b&gt;Verbring eine heiße Nacht mit dem bekannten Pornodarsteller Anal Dickman&lt;/li&gt;
-           &lt;li&gt;[FIX] &lt;b&gt; FÜr Fehler und Schrift, haftet der Stift: &lt;/b&gt; Ein paar Schreibfehler ausgebessert. Der Künstlaahhh ist jetzt richtig geschrieben.&lt;/li&gt;
+            Neuer Wunsch bei Fresh D: Eine Nacht mit Anal Dickman.
+           &lt;li&gt;[NEU] &lt;b&gt;Pornokeller: &lt;/b&gt;Verbringe eine heiße Nacht mit dem bekannten Pornodarsteller Anal Dickman.&lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Besserer Unterricht: &lt;/b&gt;Madame Hooch gibt jetzt ebenfalls Untericht. Außerdem wurde der Lehrplan (Leerplan?) verbessert. &lt;/li&gt;
+           &lt;li&gt;[NEU] &lt;b&gt;Udos Gourmetküche: &lt;/b&gt;Es gibt jetzt neue Rezepte, die man in Udos Küche kochen kann.&lt;/li&gt;
+           &lt;li&gt;[FIX] &lt;b&gt; Für Fehler und Schrift, haftet der Stift: &lt;/b&gt; Ein paar Schreibfehler ausgebessert. Der Künstlahhhhh ist jetzt richtig geschrieben.&lt;/li&gt;
            &lt;li&gt;[FIX] &lt;b&gt; Halt die Fresse!: &lt;/b&gt; Fresh D sollte jetzt aufhören zu rhymen, wenn man die Szene wechselt.&lt;/li&gt;
         &lt;/div&gt;\
                 &lt;span class=&quot;version-header&quot;&gt;v 2.0 - TELEKADDY!&lt;/span&gt;
@@ -1846,18 +1877,7 @@ Tja - du bist gestorben. Viel Glück beim nächsten Versuch...
            &lt;li&gt;[NEU] &lt;b&gt;Godot-Game: &lt;/b&gt;Statt in Hogwarts rumzuhängen, kann man jetzt auch in die Telekaddy-Welt reisen.&lt;/li&gt;
            &lt;li&gt;[NEU] &lt;b&gt;Mehr Liebe: &lt;/b&gt;Finde Kaddys Kindheits-Schwarm. Oder auch nicht - 5 verschiedene Traumpartner warten auf dich. Wenn du zu viele gleichzeitig liebst, explodiert dein Gehirn.&lt;/li&gt;
            &lt;li&gt;[NEU] &lt;b&gt;Gänsehaut-Hölle: &lt;/b&gt;Spring von Plattform zu Plattform und fall bloss nicht herunter. Die Schreibmaschine wartet schon auf dich.&lt;/li&gt;
-        &lt;/div&gt;\
-        &lt;span class=&quot;version-header&quot;&gt;v 1.5.1 - KUNST &amp; KATASTROPHEN&lt;/span&gt;
-        &lt;div class=&quot;version-content&quot;&gt;\
-            &quot;Das &#39;Kulturelle Bildung&#39; Update&quot;
-            &lt;ul&gt;
-                &lt;li&gt;[AUDIO] &lt;b&gt;Ohrenbluten 2.0:&lt;/b&gt; Fresh D droppt jetzt Freestyles. Und die schwarzen untoten Waschlappen... &quot;singen&quot;. Außerdem enthält der Schrottmusik Player 3000 jetzt einen Hinweis auf das geplante Update 2.0.&lt;/li&gt;
-                &lt;li&gt;[NEU] &lt;b&gt;Hagrids Hütte:&lt;/b&gt; Jetzt besuchbar! Also zumindest kann man klingeln. Auf eigene Gefahr.&lt;/li&gt;
-                &lt;li&gt;[NEU] &lt;b&gt;Gang-Galerie:&lt;/b&gt; Gelegentlich bekommt man die Gelegenheit &quot;Kunst&quot; zu betrachten&lt;/li&gt;
-                &lt;li&gt;[FIX] &lt;b&gt;Wahre Liebe:&lt;/b&gt; Happy Ends (Snape/Hermine) feuern jetzt auch ohne Bonbon-Zwang.&lt;/li&gt;
-                &lt;li&gt;[BALANCE] &lt;b&gt;Snape-Grind:&lt;/b&gt; Unterricht gibt abnehmende Zuneigung. Irgendwann nervst du ihn einfach nur noch.&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;\
+        &lt;/div&gt;
         &lt;span class=&quot;version-header&quot;&gt;v 1.5.2 - OPTIK &amp; PANIK&lt;/span&gt;
         &lt;div class=&quot;version-content&quot;&gt;\
             &quot;Das &#39;Es passt jetzt aufs Handy&#39; Update&quot;
