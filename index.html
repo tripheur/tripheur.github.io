@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRIPHEUR</title>
+  <title>TRIPHEUR — Creative Works</title>
+  <meta name="description" content="Spiele, Kurzgeschichten und Rollenspiele von Tripheur. Writer, Gamedesigner, Programmer — you name it.">
+  <meta property="og:title" content="TRIPHEUR — Creative Works">
+  <meta property="og:description" content="Spiele, Kurzgeschichten und Rollenspiele von Tripheur.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tripheur.de">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TRIPHEUR — Creative Works">
+  <meta name="twitter:description" content="Spiele, Kurzgeschichten und Rollenspiele von Tripheur.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -16,12 +25,14 @@
       --bg-card-h:    #101e2e;
       --border:       #1a2e45;
       --border-a:     rgba(0,229,255,0.18);
-      --text:         #aacadc;
-      --text-bright:  #c8e0ee;
-      --text-muted:   #8aa7bd;
+      --text:         #b8d4e8;
+      --text-bright:  #e0f0f8;
+      --text-muted:   #7a9ab5;
       --accent:       #00e5ff;
       --accent-dim:   #006e88;
       --accent-glow:  rgba(0,229,255,0.09);
+      --ash:          #ff6b35;
+      --ash-dim:      #8b3a1a;
       --red:          #ff2244;
     }
 
@@ -35,7 +46,6 @@
       overflow-x: hidden;
     }
 
-    /* scanlines */
     body::before {
       content: '';
       position: fixed;
@@ -51,7 +61,6 @@
       z-index: 900;
     }
 
-    /* background grid */
     body::after {
       content: '';
       position: fixed;
@@ -72,7 +81,6 @@
       padding: 0 2rem;
     }
 
-    /* ── HEADER ── */
     header {
       padding: 5rem 0 2.5rem;
       text-align: center;
@@ -93,6 +101,7 @@
         0 0 60px rgba(0,229,255,0.12);
       animation: logo-flicker 9s infinite;
       user-select: none;
+      cursor: default;
     }
 
     .logo::before,
@@ -151,7 +160,6 @@
 
     .tagline span { color: var(--accent-dim); }
 
-    /* ── NAV ── */
     nav {
       display: flex;
       align-items: center;
@@ -179,13 +187,34 @@
       cursor: pointer;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      transition: border-color 0.18s, color 0.18s, background 0.18s;
+      transition: border-color 0.18s, color 0.18s, background 0.18s, box-shadow 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav button::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transition: left 0.3s ease;
     }
 
     nav button:hover {
       border-color: var(--accent-dim);
       color: var(--text-bright);
       background: var(--accent-glow);
+      box-shadow: 0 0 12px rgba(0,229,255,0.08);
+    }
+
+    nav button:hover::after { left: 0; }
+
+    nav button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     nav button.active {
@@ -193,9 +222,11 @@
       color: var(--accent);
       background: var(--accent-glow);
       text-shadow: 0 0 10px rgba(0,229,255,0.5);
+      box-shadow: 0 0 15px rgba(0,229,255,0.1), inset 0 0 10px rgba(0,229,255,0.03);
     }
 
-    /* ── SECTIONS ── */
+    nav button.active::after { left: 0; }
+
     .section { display: none; }
     .section.active {
       display: block;
@@ -232,7 +263,6 @@
 
     .prompt-char { color: var(--accent-dim); font-size: 0.9rem; }
 
-    /* ── CARDS ── */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -244,7 +274,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       position: relative;
-      transition: border-color 0.22s, background 0.22s, transform 0.22s;
+      transition: border-color 0.22s, background 0.22s, transform 0.22s, box-shadow 0.22s;
       overflow: hidden;
     }
 
@@ -262,9 +292,53 @@
       border-color: var(--accent-dim);
       background: var(--bg-card-h);
       transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,229,255,0.06), 0 0 20px rgba(0,229,255,0.03);
     }
 
     .card:hover::before { opacity: 1; }
+
+    .card.story-featured {
+      border-color: var(--ash-dim);
+    }
+
+    .card.story-featured::before {
+      background: linear-gradient(90deg, var(--ash), transparent);
+    }
+
+    .card.story-featured:hover {
+      border-color: var(--ash);
+      box-shadow: 0 8px 30px rgba(255,107,53,0.06), 0 0 20px rgba(255,107,53,0.03);
+    }
+
+    .card.story-featured .card-titlebar {
+      background: rgba(255,107,53,0.04);
+    }
+
+    .card.story-featured .card-title {
+      color: var(--ash);
+    }
+
+    .card.story-featured .tag {
+      border-color: var(--ash-dim);
+      color: var(--ash);
+    }
+
+    .card.story-featured:hover .tag {
+      border-color: var(--ash);
+      color: var(--text-bright);
+    }
+
+    .card.story-featured .card-link {
+      border-color: var(--ash-dim);
+      color: var(--ash);
+    }
+
+    .card.story-featured .card-link:hover {
+      background: var(--ash);
+      color: var(--bg);
+      border-color: var(--ash);
+      box-shadow: 0 0 15px rgba(255,107,53,0.3);
+    }
 
     .card-placeholder { opacity: 0.38; }
     .card-placeholder:hover { opacity: 0.55; }
@@ -306,7 +380,7 @@
 
     .card-desc {
       font-size: 0.78rem;
-      color: var(--text-muted);
+      color: var(--text);
       line-height: 1.75;
       margin-bottom: 0.9rem;
     }
@@ -325,6 +399,18 @@
       color: var(--text-muted);
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      transition: border-color 0.18s, color 0.18s;
+    }
+
+    .card:hover .tag {
+      border-color: var(--accent-dim);
+      color: var(--text);
+    }
+
+    .card-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .card-link {
@@ -335,15 +421,36 @@
       letter-spacing: 0.15em;
       border: 1px solid var(--accent-dim);
       padding: 0.3rem 0.75rem;
-      transition: background 0.18s, color 0.18s;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s, border-color 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,229,255,0.15), transparent);
+      transition: left 0.4s ease;
     }
 
     .card-link:hover {
       background: var(--accent);
       color: var(--bg);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(0,229,255,0.3);
     }
 
-    /* ── INFO ── */
+    .card-link:hover::before { left: 100%; }
+
+    .card-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     .info-block {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -352,7 +459,23 @@
       margin-bottom: 4rem;
       font-size: 0.83rem;
       line-height: 2.2;
+      position: relative;
+      overflow: hidden;
     }
+
+    .info-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-dim), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .info-block:hover::before { opacity: 1; }
 
     .info-block .label { color: var(--accent-dim); }
     .info-block .val   { color: var(--text);       }
@@ -360,11 +483,19 @@
     .info-block a {
       color: var(--accent);
       text-decoration: none;
+      transition: text-shadow 0.18s;
     }
 
-    .info-block a:hover { text-decoration: underline; }
+    .info-block a:hover {
+      text-decoration: underline;
+      text-shadow: 0 0 8px rgba(0,229,255,0.3);
+    }
 
-    /* ── FOOTER ── */
+    .info-block a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     footer {
       border-top: 1px solid var(--border);
       padding: 1.4rem 0 2.5rem;
@@ -377,6 +508,19 @@
       letter-spacing: 0.12em;
       flex-wrap: wrap;
       gap: 0.5rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    footer a:focus-visible {
+      outline: 1px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .cursor {
@@ -393,35 +537,105 @@
       0%, 100% { opacity: 0.8; }
       50%       { opacity: 0;   }
     }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.04;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section.active .section-header h2 {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { text-shadow: 0 0 5px rgba(0,229,255,0.3); }
+      50% { text-shadow: 0 0 15px rgba(0,229,255,0.6), 0 0 30px rgba(0,229,255,0.2); }
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0,229,255,0.03) 50%,
+        transparent 100%
+      );
+      transition: top 0.6s ease;
+      pointer-events: none;
+    }
+
+    .card:hover::after { top: 100%; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .logo { animation: none; }
+      .logo::before, .logo::after { animation: none; opacity: 0; }
+      .cursor { animation: none; opacity: 0.8; }
+      #matrix-canvas { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .wrapper { padding: 0 1rem; }
+      nav { justify-content: center; }
+      .card-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
   </style>
 </head>
 <body>
+<canvas id="matrix-canvas"></canvas>
+
 <div class="wrapper">
 
   <header>
-    <div class="logo" data-text="TRIPHEUR">TRIPHEUR</div>
+    <div class="logo" data-text="TRIPHEUR" tabindex="0" aria-label="TRIPHEUR">TRIPHEUR</div>
     <p class="tagline"><span>//</span> creative works</p>
   </header>
 
-  <nav>
+  <nav role="tablist" aria-label="Hauptnavigation">
     <span class="nav-prompt">root@tripheur:~$</span>
-    <button class="active" onclick="show('spiele', this)">Spiele</button>
-    <button onclick="show('shortstories', this)">Shortstories</button>
-    <button onclick="show('brettspiele', this)">Sonstiges</button>
-    <button onclick="show('info', this)">Info</button>
+    <button class="active" onclick="show('spiele', this)" role="tab" aria-selected="true" aria-controls="spiele" id="tab-spiele" tabindex="0">Spiele</button>
+    <button onclick="show('shortstories', this)" role="tab" aria-selected="false" aria-controls="shortstories" id="tab-shortstories" tabindex="0">Shortstories</button>
+    <button onclick="show('rollenspiele', this)" role="tab" aria-selected="false" aria-controls="rollenspiele" id="tab-rollenspiele" tabindex="0">Rollenspiele</button>
+    <button onclick="show('info', this)" role="tab" aria-selected="false" aria-controls="info" id="tab-info" tabindex="0">Info</button>
   </nav>
 
   <main>
 
-    <!-- SPIELE -->
-    <section id="spiele" class="section active">
+    <section id="spiele" class="section active" role="tabpanel" aria-labelledby="tab-spiele">
       <div class="section-header">
         <span class="prompt-char">></span>
         <h2>Spiele</h2>
       </div>
       <div class="card-grid">
 
-        <div class="card card-placeholder">
+        <div class="card reveal">
           <div class="card-titlebar">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
@@ -435,11 +649,13 @@
               <span class="tag">Twine</span>
               <span class="tag">Dating Sim</span>
             </div>
-            <a href="media/coldmirror/index.html" class="card-link">[SPIELEN]</a>
+            <div class="card-links">
+              <a href="/media/coldmirror/index.html" class="card-link">[SPIELEN]</a>
+            </div>
           </div>
         </div>
 
-        <div class="card card-placeholder">
+        <div class="card reveal">
           <div class="card-titlebar">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
@@ -453,11 +669,13 @@
               <span class="tag">Twine</span>
               <span class="tag">CYOA</span>
             </div>
-            <a href="/media/dasbuch/index.html" class="card-link">[SPIELEN]</a>
+            <div class="card-links">
+              <a href="/media/dasbuch/index.html" class="card-link">[SPIELEN]</a>
+            </div>
           </div>
         </div>
 
-                <div class="card card-placeholder">
+        <div class="card reveal">
           <div class="card-titlebar">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
@@ -471,23 +689,24 @@
               <span class="tag">Twine</span>
               <span class="tag">CYOA</span>
             </div>
-            <a href="media/cyoa/cyoa.html" class="card-link">[Deutsche Fassung]</a>
-            <a href="media/cyoa/cyoa_en.html" class="card-link">[English Version]</a>
+            <div class="card-links">
+              <a href="/media/cyoa/cyoa.html" class="card-link">[Deutsche Fassung]</a>
+              <a href="/media/cyoa/cyoa_en.html" class="card-link">[English Version]</a>
+            </div>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- SHORTSTORIES -->
-    <section id="shortstories" class="section">
+    <section id="shortstories" class="section" role="tabpanel" aria-labelledby="tab-shortstories">
       <div class="section-header">
         <span class="prompt-char">></span>
         <h2>Shortstories</h2>
       </div>
       <div class="card-grid">
 
-        <div class="card card-placeholder">
+        <div class="card story-featured reveal">
           <div class="card-titlebar">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
@@ -496,27 +715,31 @@
           </div>
           <div class="card-body">
             <div class="card-title">No more super</div>
-            <p class="card-desc">Kurze Inhaltsangabe. Sprache, Genre, Stimmung.</p>
+            <p class="card-desc">Elena Voss ist Guardian Angel — Lichtflügel, Energieschild, unendliche Opferbereitschaft. Doch als die geheimnisvolle Ash auftaucht und ihre Schwester Mia ins Visier nimmt, zerbricht Elenas Welt aus Heldentum und Selbstaufopferung. Ein Dach. Ein Dolch aus Licht. Ein Verrat im Gerichtssaal. Und die Erkenntnis, dass manchmal der größte Feind der ist, den man am meisten liebt — oder der, den man selbst werden wird.</p>
             <div class="card-tags">
               <span class="tag">Deutsch</span>
               <span class="tag">Fiction</span>
+              <span class="tag">Superhelden</span>
+              <span class="tag">Psychodrama</span>
             </div>
-            <a href="media\shortstories\no_more_super.pdf" class="card-link">[LESEN]</a>
+            <div class="card-links">
+              <a href="nomoresuper.html" class="card-link">[ONLINE LESEN]</a>
+              <a href="/media/shortstories/no_more_super.pdf" class="card-link">[PDF]</a>
+            </div>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- BRETTSPIELE -->
-    <section id="brettspiele" class="section">
+    <section id="rollenspiele" class="section" role="tabpanel" aria-labelledby="tab-rollenspiele">
       <div class="section-header">
         <span class="prompt-char">></span>
         <h2>Rollenspiele</h2>
       </div>
       <div class="card-grid">
 
-        <div class="card card-placeholder">
+        <div class="card reveal">
           <div class="card-titlebar">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
@@ -529,50 +752,210 @@
             <div class="card-tags">
               <span class="tag">3+ Spielerinnen</span>
             </div>
-            <a href="media/othergames/WGdesGrauens.pdf" class="card-link">[Deutsche Fassung]</a>
-            <a href="media/othergames/feral_flatmates.pdf" class="card-link">[English Version]</a>
+            <div class="card-links">
+              <a href="/media/othergames/WGdesGrauens.pdf" class="card-link">[Deutsche Fassung]</a>
+              <a href="/media/othergames/feral_flatmates.pdf" class="card-link">[English Version]</a>
+            </div>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- INFO -->
-    <section id="info" class="section">
+    <section id="info" class="section" role="tabpanel" aria-labelledby="tab-info">
       <div class="section-header">
         <span class="prompt-char">></span>
         <h2>Info</h2>
       </div>
-      <div class="info-block">
+      <div class="info-block reveal">
         <span class="label">// handle   </span><span class="val">Tripheur</span><br>
         <span class="label">// kontakt  </span><span class="val">info@tripheur.de</span><br>
-        <span class="label">// github   </span><a href="https://github.com/tripheur">github.com/tripheur</a><br>
+        <span class="label">// github   </span><a href="https://github.com/tripheur" target="_blank" rel="noopener noreferrer">github.com/tripheur</a><br>
         <br>
-        <span class="label">// bio     </span><span class="val">Writer, Gamedesigner, Programmer - you name it.<span class="cursor"></span></span>
+        <span class="label">// bio     </span><span class="val">Writer, Gamedesigner, Programmer — you name it.<span class="cursor"></span></span>
       </div>
-
     </section>
 
   </main>
 
-<footer>
-  <span>TRIPHEUR // creative works</span>
-  <span>root@tripheur:~$ <span class="cursor"></span></span>
-  <span class="legal-links">
-    <a href="/media/law/impressum.html">Impressum</a> | 
-    <a href="/media/law/datenschutz.html">Datenschutz</a>
-  </span>
-</footer>
+  <footer>
+    <span>TRIPHEUR // creative works</span>
+    <span>root@tripheur:~$ <span class="cursor"></span></span>
+    <span class="legal-links">
+      <a href="/media/law/impressum.html">Impressum</a> | 
+      <a href="/media/law/datenschutz.html">Datenschutz</a>
+    </span>
+  </footer>
 
 </div>
 
 <script>
   function show(id, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.section').forEach(s => {
+      s.classList.remove('active');
+      s.setAttribute('aria-hidden', 'true');
+    });
+    const target = document.getElementById(id);
+    target.classList.add('active');
+    target.setAttribute('aria-hidden', 'false');
+
+    document.querySelectorAll('nav button').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+
+    history.replaceState(null, null, '#' + id);
+
+    setTimeout(() => {
+      target.querySelectorAll('.reveal').forEach((el, i) => {
+        el.classList.remove('visible');
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    }, 50);
+
+    announceChange('Bereich ' + btn.textContent + ' geladen');
   }
+
+  function restoreFromHash() {
+    const hash = window.location.hash.slice(1);
+    const validIds = ['spiele', 'shortstories', 'rollenspiele', 'info'];
+    if (hash && validIds.includes(hash)) {
+      const btn = document.getElementById('tab-' + hash);
+      if (btn) show(hash, btn);
+    }
+  }
+
+  document.querySelectorAll('nav button').forEach((btn, index, buttons) => {
+    btn.addEventListener('keydown', (e) => {
+      let nextIndex = index;
+      if (e.key === 'ArrowRight') {
+        nextIndex = (index + 1) % buttons.length;
+        e.preventDefault();
+      } else if (e.key === 'ArrowLeft') {
+        nextIndex = (index - 1 + buttons.length) % buttons.length;
+        e.preventDefault();
+      } else if (e.key === 'Home') {
+        nextIndex = 0;
+        e.preventDefault();
+      } else if (e.key === 'End') {
+        nextIndex = buttons.length - 1;
+        e.preventDefault();
+      }
+      if (nextIndex !== index) {
+        buttons[nextIndex].focus();
+        buttons[nextIndex].click();
+      }
+    });
+  });
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  (function initMatrix() {
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    window.addEventListener('resize', () => {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    });
+
+    function draw() {
+      ctx.fillStyle = 'rgba(6, 11, 16, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+      ctx.font = fontSize + 'px "Share Tech Mono", monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 50);
+  })();
+
+  function announceChange(message) {
+    let announcer = document.getElementById('sr-announcer');
+    if (!announcer) {
+      announcer = document.createElement('div');
+      announcer.id = 'sr-announcer';
+      announcer.setAttribute('aria-live', 'polite');
+      announcer.setAttribute('aria-atomic', 'true');
+      announcer.style.position = 'absolute';
+      announcer.style.left = '-10000px';
+      announcer.style.width = '1px';
+      announcer.style.height = '1px';
+      announcer.style.overflow = 'hidden';
+      document.body.appendChild(announcer);
+    }
+    announcer.textContent = message;
+  }
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const title = card.querySelector('.card-title');
+      if (!title || title.dataset.glitching) return;
+      title.dataset.glitching = 'true';
+      const original = title.textContent;
+      const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      let iterations = 0;
+      const interval = setInterval(() => {
+        title.textContent = original
+          .split('')
+          .map((char, i) => {
+            if (i < iterations) return original[i];
+            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
+          })
+          .join('');
+        if (iterations >= original.length) {
+          clearInterval(interval);
+          title.textContent = original;
+          delete title.dataset.glitching;
+        }
+        iterations += 1 / 2;
+      }, 30);
+    });
+  });
+
+  console.log('%c TRIPHEUR ', 'background: #00e5ff; color: #060b10; font-size: 24px; font-family: Orbitron; padding: 8px 16px;');
+  console.log('%c creative works // writer, gamedesigner, programmer ', 'color: #00e5ff; font-family: "Share Tech Mono";');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    restoreFromHash();
+    document.querySelectorAll('.section.active .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 150);
+    });
+  });
+
+  window.addEventListener('hashchange', restoreFromHash);
 </script>
 </body>
 </html>

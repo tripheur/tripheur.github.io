@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No More Super — P.K. Koch | TRIPHEUR</title>
+  <meta name="description" content="No More Super: Eine Kurzgeschichte von P.K. Koch. Elena Voss ist Guardian Angel — doch als die geheimnisvolle Ash auftaucht, zerbricht ihre Welt aus Heldentum und Selbstaufopferung.">
+  <meta property="og:title" content="No More Super — P.K. Koch">
+  <meta property="og:description" content="Elena Voss ist Guardian Angel. Doch als die geheimnisvolle Ash auftaucht, zerbricht ihre Welt aus Heldentum und Selbstaufopferung.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tripheur.de/nomoresuper.html">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="No More Super — P.K. Koch">
+  <meta name="twitter:description" content="Elena Voss ist Guardian Angel. Doch als die geheimnisvolle Ash auftaucht, zerbricht ihre Welt aus Heldentum und Selbstaufopferung.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #060b10;
+      --bg-card:      #0b1520;
+      --bg-card-h:    #101e2e;
+      --border:       #1a2e45;
+      --border-a:     rgba(0,229,255,0.18);
+      --text:         #b8d4e8;
+      --text-bright:  #e0f0f8;
+      --text-muted:   #7a9ab5;
+      --accent:       #00e5ff;
+      --accent-dim:   #006e88;
+      --accent-glow:  rgba(0,229,255,0.09);
+      --ash:          #ff6b35;
+      --ash-dim:      #8b3a1a;
+      --red:          #ff2244;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    /* scanlines */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.07) 2px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 900;
+    }
+
+    /* background grid */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      padding: 2.5rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .site-header .logo-link {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: text-shadow 0.2s;
+    }
+
+    .site-header .logo-link:hover {
+      text-shadow: 0 0 12px rgba(0,229,255,0.4);
+    }
+
+    .site-header .back-link {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+    }
+
+    .site-header .back-link:hover {
+      border-color: var(--accent-dim);
+      color: var(--text-bright);
+      background: var(--accent-glow);
+    }
+
+    .site-header .back-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 5rem 0 3rem;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ash-dim), transparent);
+    }
+
+    .hero .story-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 6vw, 3.2rem);
+      font-weight: 900;
+      color: var(--text-bright);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 0 20px rgba(255,107,53,0.15);
+    }
+
+    .hero .story-subtitle {
+      font-size: 0.8rem;
+      color: var(--ash);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero .story-author {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+    }
+
+    .hero .story-author span {
+      color: var(--accent-dim);
+    }
+
+    .hero .story-quote {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      color: var(--ash);
+      font-style: italic;
+      letter-spacing: 0.08em;
+      margin-top: 2rem;
+      opacity: 0.7;
+    }
+
+    .hero .story-quote::before {
+      content: '"';
+      font-size: 1.5rem;
+      line-height: 0;
+      vertical-align: middle;
+      margin-right: 0.3rem;
+    }
+
+    .hero .story-quote::after {
+      content: '"';
+      font-size: 1.5rem;
+      line-height: 0;
+      vertical-align: middle;
+      margin-left: 0.3rem;
+    }
+
+    /* ── CHAPTER NAV ── */
+    .chapter-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(6, 11, 16, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 0;
+      margin-bottom: 3rem;
+      z-index: 100;
+    }
+
+    .chapter-nav .wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    .chapter-nav a {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid transparent;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+    }
+
+    .chapter-nav a:hover {
+      border-color: var(--ash-dim);
+      color: var(--ash);
+      background: rgba(255,107,53,0.05);
+    }
+
+    .chapter-nav a:focus-visible {
+      outline: 1px solid var(--ash);
+      outline-offset: 1px;
+    }
+
+    /* ── CHAPTERS ── */
+    .chapter {
+      margin-bottom: 5rem;
+      scroll-margin-top: 60px;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chapter-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--ash-dim);
+      line-height: 1;
+      opacity: 0.4;
+    }
+
+    .chapter-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ash);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .chapter-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--ash-dim), transparent);
+      opacity: 0.3;
+    }
+
+    .chapter-body p {
+      margin-bottom: 1.2rem;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .chapter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── SPECIAL FORMATTING ── */
+    .scene-break {
+      text-align: center;
+      color: var(--ash-dim);
+      letter-spacing: 0.8em;
+      font-size: 0.8rem;
+      margin: 2.5rem 0;
+      opacity: 0.5;
+    }
+
+    .time-jump {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: var(--accent-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 2rem 0 1.5rem;
+    }
+
+    .voice {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.92rem;
+      color: var(--ash);
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 8px rgba(255,107,53,0.15);
+    }
+
+    .echo {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--ash-dim);
+      letter-spacing: 0.15em;
+      opacity: 0.6;
+    }
+
+    .hashtag {
+      color: var(--accent-dim);
+      font-size: 0.9em;
+    }
+
+    .social-post {
+      background: var(--bg-card);
+      border-left: 2px solid var(--accent-dim);
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .social-thread {
+      background: var(--bg-card);
+      border-left: 2px solid var(--border);
+      padding: 0.9rem 1.2rem;
+      margin: 0.6rem 0;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .social-thread.reply {
+      margin-left: 1.5rem;
+      border-left-color: var(--accent-dim);
+      opacity: 0.85;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--ash-dim), var(--ash));
+      z-index: 1000;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px rgba(255,107,53,0.3);
+    }
+
+    /* ── FOOTER ── */
+    .story-footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 4rem;
+      text-align: center;
+    }
+
+    .story-footer .end-mark {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: var(--ash-dim);
+      letter-spacing: 0.5em;
+      margin-bottom: 1.5rem;
+      opacity: 0.4;
+    }
+
+    .story-footer .end-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+    }
+
+    .story-footer .back-btn {
+      display: inline-block;
+      font-size: 0.73rem;
+      color: var(--ash);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid var(--ash-dim);
+      padding: 0.4rem 1.2rem;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+
+    .story-footer .back-btn:hover {
+      background: var(--ash);
+      color: var(--bg);
+      box-shadow: 0 0 15px rgba(255,107,53,0.3);
+    }
+
+    .story-footer .back-btn:focus-visible {
+      outline: 2px solid var(--ash);
+      outline-offset: 2px;
+    }
+
+    /* ── SELECTION ── */
+    ::selection {
+      background: rgba(255,107,53,0.25);
+      color: var(--text-bright);
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .progress-bar { display: none; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .wrapper { padding: 0 1.2rem; }
+      body { font-size: 14px; }
+      .hero { padding: 3rem 0 2rem; }
+      .chapter-header { gap: 0.6rem; }
+      .chapter-number { font-size: 1.5rem; }
+      .social-thread.reply { margin-left: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<div class="wrapper">
+
+  <header class="site-header">
+    <a href="index.html#shortstories" class="logo-link">Tripheur</a>
+    <a href="index.html#shortstories" class="back-link">← Zurück</a>
+  </header>
+
+  <div class="hero">
+    <div class="story-title">No More Super</div>
+    <div class="story-subtitle">Eine Kurzgeschichte</div>
+    <div class="story-author"><span>//</span> von P.K. Koch</div>
+    <div class="story-quote">Was bist du bereit, für sie zu geben?</div>
+  </div>
+
+</div>
+
+<nav class="chapter-nav" aria-label="Kapitelnavigation">
+  <div class="wrapper">
+    <a href="#kapitel-1">Kapitel 1</a>
+    <a href="#kapitel-2">Kapitel 2</a>
+    <a href="#kapitel-3">Kapitel 3</a>
+    <a href="#kapitel-4">Kapitel 4</a>
+  </div>
+</nav>
+
+<main class="wrapper">
+
+    <section class="chapter" id="kapitel-1">
+      <div class="chapter-header">
+        <span class="chapter-number">01</span>
+        <h2>Kapitel 1</h2>
+        <div class="chapter-line"></div>
+      </div>
+      <div class="chapter-body">
+        <p>"Ich hab gesagt, Schnauze halten und liegen bleiben!" Karl trat einer älteren Dame gegen den Kopf. Sie wimmerte leise. Er sah nicht einmal hin, sondern ging einfach weiter durch die Bankfiliale, das Maschinengewehr im Anschlag.</p>
+
+<p>Die übrigen Kunden lagen zitternd am Boden, einige schluchzten leise. "Wie siehts aus?"</p>
+
+<p>"Die Hälfte haben wir." Jimmy und Bluey standen im Tresorraum und stopften Geldscheine in Sporttaschen. Das vierte Bandenmitglied, Dale, hielt das Bankpersonal hinter dem Tresen in Schach.</p>
+
+<p>"Macht schneller. Kein Bock dass die Bullen noch hier aufkreuzen." Karl trat einen weiteren Kunden – diesmal ein junger Mann – in die Seite: "Du da, geh und hilf mit. Du weißt ja – viele Hände, schnelles Ende." Er grinste. Kurz, ohne Humor. Der junge Mann rappelte sich vom Boden auf und lief mit unsicheren Schritten Richtung Tresorraum.</p>
+
+<p>Mit einem dumpfen Knall flog die Eingangstür aus den Angeln. Wo diese eben noch gewesen war, strömte helles Tageslicht in das Bankgebäude. Eine Gestalt stand im Türrahmen. Im Licht war nur ihr Umriss zu erkennen.</p>
+
+<p>"Scheiße, wer bist du denn?" Karl richtete sein Maschinengewehr Richtung Tür.</p>
+
+<p>"Muss ich dir das wirklich erklären?" Eine spöttische Frauenstimme. Die Gestalt trat langsam ein, scheinbar unbeeindruckt von der auf sie gerichteten Waffe. Karl kniff die Augen zusammen. Lange blonde Haare, eisblaue Augen, Flügel aus Licht, die sich hinter ihrem Rücken ausbreiteten.</p>
+
+<p>"Scheiße... das ist Guardian Angel", keuchte Dale hinter ihm.</p>
+
+<p>Ihr Mund verzog sich zu einem Lächeln. "Doch schon von mir gehört, ja? Dann wisst ihr ja auch, wie es ausgeht. Ergebt euch, dann können wir alle pünktlich Feierabend machen."</p>
+
+<p>Karl hatte sich wieder gefangen. Entschlossen richtete er seine Waffe auf die junge Frau und schoss. Die Kugeln prallten wirkungslos an einem Schild aus reinem Licht ab.</p>
+
+<p>"Das wird nicht funktionieren. Lass es einfach. Das spart uns allen Zeit und Nerven." Guardian Angel trat einen weiteren Schritt auf ihn zu.</p>
+
+<p>Karl überlegte kurz. Er musste Zeit gewinnen, damit die anderen die Kohle hier rausbringen konnten. "Sind sicher nicht alle so kugelfest wie du." Er richtete die Waffe auf ein junges Paar, das am anderen Ende der Halle lag und zitterte.</p>
+
+<p>Die Kugeln flogen durch die Luft und prallten erneut gegen ein Schild. Guardian Angel kniete jetzt vor den beiden Bankkunden, die Arme schützend ausgestreckt. Für einen Moment flackerte der Lichtschild, dann wurde er wieder stabil.</p>
+
+<p>"Netter Partytrick." Dale trat in den Vorraum, die Waffe an den Kopf einer jungen Bankangestellten gepresst. "Aber schaffst du das auch aus dieser Entfernung?"</p>
+
+<p>Im nächsten Moment schoss eine Peitsche aus konzentriertem Tageslicht auf ihn zu und wickelte sich um sein Handgelenk. Dale schrie auf. Die Pistole fiel klappernd herunter, er selbst wurde durch die Luft gerissen und prallte gegen die gegenüberliegende Wand. Stöhnend sackte er zusammen.</p>
+
+<p>Karl feuerte weiter. Er war sicher, Guardian Angel zusammenzucken zu sehen, aber sie bewegte sich zu schnell. Der Schild aus Licht wurde größer. Ein Blick zur Seite: Die anderen kamen jetzt aus dem Tresorraum, Sporttaschen über der Schulter. Karl musste die Kleine nur lange genug ablenken.</p>
+
+<p>"Guck hier rüber, Puppe, ich hab was für dich." Der nächste Schuss durchschlug ihr Schild. Ihr weißer Ärmel färbte sich rot.</p>
+
+<p>Karls Waffe klickte – das Magazin war leer. "Verdammt!" Dales Pistole lag noch immer auf dem Boden, keine zwei Meter entfernt. Karl machte einen Hechtsprung, aber etwas hielt ihn am Kragen und riss ihn zurück.</p>
+
+<p>Er drehte sich um und das Letzte, das er sah, waren eisblaue Augen und eine Faust, die auf sein Gesicht zuflog.</p>
+
+<p>Dann Dunkelheit.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Müde ließ Elena sich auf die Couch fallen. Was für ein beschissener Tag.</p>
+
+<p>Ein Verkehrsunfall auf einer Brücke, ein Bauarbeiter, der aus einem defekten Kran gerettet werden musste, dann dieser Banküberfall und dann hatte einer dieser Typen sie auch noch angeschossen.</p>
+
+<p>Es war zum Glück nur ein Streifschuss, aber ihr Oberarm pochte bei jeder Bewegung. Elena hasste es, wenn sie blutete.</p>
+
+<p>Erstens, weil das Blut auf ihrem weißblauen Superheldenkostüm sofort auffiel und wahrscheinlich längst in allen möglichen Clips in ihren Feeds zu sehen war. Einige der geretteten Bankkunden hatten Selfies mit ihr machen wollen, und natürlich hatte sie nicht nein sagen können.</p>
+
+<p>Das führte zum zweiten Problem: Elena hatte besondere Kräfte, aber sie war nicht unverwundbar. Verletzungen brauchten genau so lange zum Heilen wie bei normalen Menschen. Das hätte sie lieber geheim gehalten. Vor ihren Fans – viele davon noch sehr jung – und vor ihren Feinden erst recht.</p>
+
+<p>Nach der Selfiestunde war sie in die Notaufnahme geflogen und hatte die Wunde nähen lassen. Das würde eine weitere Narbe geben.</p>
+
+<p>Zum Glück hatte sie ansonsten nur blaue Flecken, die keiner sehen konnte. Nichts, was ein entspannter Abend auf der Couch nicht wenigstens erträglich machte.</p>
+
+<p>Seufzend lehnte sich Elena zurück und griff nach ihrem Handy. Ihr Arm pochte jetzt stärker, die Betäubung ließ wohl nach. Sie ignorierte es und scrollte durch ihre Social-Media-Feeds.</p>
+
+<p><span class="hashtag">#GuardianAngel</span> trendete leicht, meist in Verbindung mit <span class="hashtag">#Blessed</span>, <span class="hashtag">#Saviour</span> und <span class="hashtag">#OurAngel</span>.</p>
+
+<p>Lächelnd las sie einige der Kommentare. Das Lächeln verschwand, als sie über ein Meme stolperte: Irgendein Witzbold hatte eine Aufnahme der Überwachungskamera der Bank in die Finger bekommen und rückwärts abgespielt. Jetzt sah es so aus, als würden die Bankräuber auf sie zufliegen, bevor sie selbst rückwärts aus der Bank stolperte.</p>
+
+<p class="social-post">"POV: Wenn Typen auf dich fliegen, tritt den Rückzug an"</p>
+
+<p>Sie verzog das Gesicht. Nicht lustig. Aber der Post hatte eine Menge Likes.</p>
+
+<p>Elena beschloss, die Kommentare darunter nicht zu lesen.</p>
+
+<p>"Hast du gerade Zeit?"</p>
+
+<p>Elena sah zu ihrer Schwester hoch. Es war eine Stunde später und sie war immer noch mit den Kommentaren beschäftigt. Sie hatte sogar ihren Fake-Account benutzt, um auf ein paar Kommentare zu antworten.</p>
+
+<p>"Was gibts denn?"</p>
+
+<p>Mia ließ sich neben ihr auf die Couch fallen. Ihr Blick streifte kurz den laufenden Fernseher. Ein Lokalreporter berichtete von dem vereitelten Banküberfall, dann wurden Aufnahmen von Elena eingespielt. Mia verdrehte die Augen und wandte sich ihrer Schwester zu.</p>
+
+<p>"Ich hab Hunger."</p>
+
+<p>Wenn Mia diesen weinerlichen Ton anschlug, musste Elena sich zusammenreißen.</p>
+
+<p>"Im Kühlschrank ist Aufschnitt. Brot müsste auch noch da sein."</p>
+
+<p>"Schon wieder kalte Küche?" Mia machte ihren patentierten Bettelblick. Insgeheim nannte Elena ihn den Niedlichkeitsblick des Todes. "Was hältst du von Pizza? Wir haben ewig nichts von Tony's gegessen."</p>
+
+<p>"Tony's liegt am anderen Ende der Stadt."</p>
+
+<p>"Ja, das wäre ziemlich weit. Für jemanden, der nicht fliegen kann. Komm schon, Elena, bitte!"</p>
+
+<p>Elena schloss kurz die Augen. Atmete einmal tief durch.</p>
+
+<p>Ihr Blick fiel auf das Foto auf dem Sideboard. Sie und Mia, damals sechs und sechzehn, eng umschlungen. Das Bild war entstanden, kurz nachdem sie ihre Kräfte bekommen hatte.</p>
+
+<p>Sie schluckte herunter, was sie eigentlich sagen wollte.</p>
+
+<p>"Gib mir fünf Minuten, okay?", sagte sie und stand auf.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p class="time-jump">Zehn Jahre zuvor:</p>
+
+<p>"Guck mal, ich bin eine Rakete!" Mia trat eifrig in die Pedale, während Elena ihr Fahrrad am Gepäckträger festhielt.</p>
+
+<p>Die Sechsjährige hatte gestern ein neues Fahrrad bekommen. Es war ein schickes Rennrad für Kinder, ohne Rücktritt oder Hilfsräder. Elena hatte Mia geholfen, die Höhe richtig einzustellen, und unterstützte sie jetzt bei den ersten wackeligen Metern.</p>
+
+<p>Die Straße vor ihrem Wohnblock war glücklicherweise kaum befahren. Sie drehten eine Runde.</p>
+
+<p>"Und jetzt ohne Festhalten." Mia stieß sich ab und strampelte los, so schnell sie konnte.</p>
+
+<p>"Warte, Mia, nicht so schnell!" Lachend rannte Elena ihrer kleinen Schwester hinterher.</p>
+
+<p>"Du kriegst mich nicht", rief Mia über ihre Schulter – und übersah dabei das Auto, das um die Kurve bog.</p>
+
+<p>"Pass auf!" Elena schrie, rannte so schnell sie konnte, versuchte Mia irgendwie zu erreichen.</p>
+
+<p>Aber es war zu spät.</p>
+
+<p>Es war, als wäre Elena plötzlich taub geworden.</p>
+
+<p>Oder als wäre ein Schneesturm gekommen, obwohl es Juli war. Elena fror. Sie hörte nur das Pochen in ihren Ohren. Die Welt ging in weißem Rauschen unter. Alles war grau. Nur das Blut auf dem Asphalt leuchtete rot.</p>
+
+<p>Das Blut – und Mias weitaufgerissene blaue Augen, die ins Nichts starrten.</p>
+
+<p>Elena kniete jetzt auf dem Boden. Wie war sie dahin gekommen? Sie wusste es nicht. Tränen liefen über ihr Gesicht.</p>
+
+<p>Und in ihrem Kopf hallte endlos ein Gedanke: "Ich muss es verhindern, ich muss es verhindern, ich muss..."</p>
+
+<p>Ich. Es ist meine Schuld. Ich habe nicht aufgepasst. Wegen mir ist sie tot.</p>
+
+<p>Elena sah nicht den Fahrer, der ausgestiegen war und mit ihr sprach. Sie sah nur das Blut. Die starren blauen Augen.</p>
+
+<p>Meine Schuld. Ich hätte das verhindern können.</p>
+
+<p>Und plötzlich war da eine andere Stimme in ihrem Kopf. Eine, die nicht ihr gehörte. Eine, die mächtig und alt und jung zugleich klang. Eine kalte, gleichgültige Stimme.</p>
+
+<p class="voice">"Was bist du bereit, für sie zu geben?"</p>
+
+<p>Elena antwortete ohne zu zögern:</p>
+
+<p class="voice">"Alles."</p>
+
+<p>Und die Stimme sagte: <span class="voice">"So sei es."</span></p>
+
+<p>Licht. Für einen Moment sah Elena nur Licht. Dann war sie zurück. Sie stand wieder vor dem Haus, statt auf der Kreuzung zu knien. Sie sah Mia auf ihrem kleinen Fahrrad davonradeln. Sah sie den Kopf nach hinten drehen. Hörte sie: "Du kriegst mich nicht!". Sah das Auto, das viel zu schnell um die Ecke bog.</p>
+
+<p>Elena wusste, was gleich passieren würde. Sie wusste es, weil es bereits geschehen war. Aber diesmal war sie nicht zu spät.</p>
+
+<p>Elena schoss nach vorn, getragen von Schwingen aus Licht. Sie riss ihre Schwester an sich und bildete instinktiv einen Schild. Es krachte, als das Auto dagegen fuhr. Elena biss die Zähne zusammen. Der Aufprall fuhr ihr durch den ganzen Körper.</p>
+
+<p>Dann war es vorbei. Das Auto stand. Und Mia sah mit ihren großen blauen Augen zu ihr hoch: "Wow Leni, du hast ja Flügel!"</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="kapitel-2">
+      <div class="chapter-header">
+        <span class="chapter-number">02</span>
+        <h2>Kapitel 2</h2>
+        <div class="chapter-line"></div>
+      </div>
+      <div class="chapter-body">
+        <p>Die Sonne schien, der Küchenboden glänzte. Elena war zufrieden. Sie hatte das Haus aufgeräumt, ihren Papierkram erledigt, Mias Zimmer gelüftet und ihre Social Media Feeds gemieden. Jetzt saß sie in der Sonne, eine Tasse Cappuccino vor sich, und genoss den Moment.</p>
+
+<p>Mia machte heute einen Schulausflug zu einer Düngemittelfabrik außerhalb der Stadt.</p>
+
+<p>"Gequirlter Kuhmist. Das wird sicher suuuuper spannend", hatte sie geätzt, als Elena ihr am Morgen ihre Lunchbox in die Hand gedrückt hatte. "Du hast es gut, dass du dir diesen Mist nicht mehr antun musst."</p>
+
+<p>Elena hielt ihr eine Wasserflasche hin.</p>
+
+<p>"Noch zwei Jahre, dann hast du es geschafft. Ich würde gern mit dir tauschen. Mir fehlt die Schule."</p>
+
+<p>"Ja, aber du hast dafür coole Superkräfte bekommen und kannst den ganzen Tag rumfliegen und Verbrecher bekämpfen. Wenn du tauschen willst, ich wär sofort dabei."</p>
+
+<p>"Du weißt, dass das keine Option ist. Und jetzt mach dich fertig. Dein Bus kommt gleich."</p>
+
+<p>Elena blickte prüfend auf den Rucksack ihrer Schwester. "Hast du dein Handy dabei? Und den Pieper? GPS-Tracker eingeschaltet?"</p>
+
+<p>"Mann, Elena, das ist ein Schulausflug, kein Kriegseinsatz." Mia riss ihren Rucksack an sich und lief zur Tür. Im Gehen wandte sie sich halb um und rief über ihre Schulter: "Hab dich lieb, Leni!"</p>
+
+<p>Dann war sie weg.</p>
+
+<p>Elena nahm einen Schluck Cappuccino. Vielleicht konnte sie ihr Buch weiterlesen? Sie hatte es so lange nicht in der Hand gehabt, dass sie vermutlich von vorn anfangen musste.</p>
+
+<p>Ob es Mia gut ging? Manchmal flog sie in großer Höhe über den Schulbus, unsichtbar in den Wolken, nur um sicherzugehen, dass keine Reifen platzten oder Raser die Spur schnitten. Sie wusste, dass es Mia wahnsinnig machte. Aber Mia wusste auch nicht, wie knapp sie dem Tod damals entronnen war.</p>
+
+<p>Elena griff nach ihrem Handy. Nur kurz schauen, ob ihre Schwester etwas gepostet hatte. Das zählte nicht. Oder?</p>
+
+<p>Das Funkgerät auf dem Tisch piepte. Sie nahm es auf. "Ja?"</p>
+
+<p>"Einsatz in der Düngemittelfabrik. Es brennt. Guardian Angel? Wir brauchen Sie."</p>
+
+<p>Düngemittelfabrik?</p>
+
+<p>Elena sprang auf, manifestierte ihre Flügel aus Licht und hob ab. Zurück blieb eine Tasse Cappuccino, die langsam kalt wurde.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Die Flammen standen meterhoch. Beißender Rauch hing in der Luft. Der Lichtschild schützte sie vor der Hitze, aber nicht vor dem Gestank.</p>
+
+<p>"Guardian Angel! Das Ventil klemmt! Wir brauchen Wasser!", schrie ein Feuerwehrmann.</p>
+
+<p>Elena hörte ihn kaum. Ihr Blick hastete über die Anlage. Wo war Mia? Da – am Rand des Geländes, neben dem geparkten Bus stand eine Gruppe Jugendlicher, zwischen ihnen ein vertrauter Blondschopf. Ein Stein fiel ihr vom Herzen.</p>
+
+<p>Die Schüler standen da und filmten den Großbrand mit ihren Handys, als würden sie live für CNN berichten.</p>
+
+<p>Elena dachte nach. Der Hydrant war von den Flammen eingeschlossen. Sie kam nicht heran, die Hitze war selbst für sie zu groß. Sie brauchte Wasser. Oder – Da entdeckte sie die Baustelle auf der gegenüberliegenden Straßenseite. Die aufgestapelten Sandsäcke.</p>
+
+<p>Sie flog hinüber, griff sich so viele Säcke wie sie tragen konnte und flog zurück. Dann begann sie Sack um Sack über der brennenden Anlage auszuleeren. Die erste Ladung bewirkte fast nichts. Bei der fünften schien das Feuer kleiner zu werden.</p>
+
+<p>Elena machte immer weiter – sie wusste selbst nicht wie lange. Irgendwann war das Feuer weit genug zurückgedrängt.</p>
+
+<p>Elena landete, ihre Knie waren weich. Mit zitternden Händen griff sie nach dem Ventil. Es war glühend heiß, aber Elena ließ nicht los. Sie biss die Zähne zusammen und drehte mit aller Kraft. Langsam löste sich das Gewinde, bis schließlich ein erlösender Schwall kühles Wasser hervorschoss. Elena richtete sich auf. Sie trat einen Schritt zurück, um den Feuerwehrleuten Platz zu machen. Kritisch betrachtete sie ihre Handflächen – sie waren von Brandblasen übersät. Die nächsten Tage würden kein Vergnügen werden.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Mia starrte auf ihr Handy. Nur noch ein Gegner. Wenn sie jetzt die Super-Attacke zündete –</p>
+
+<p>"Hey Minimi, sieht so aus, als hätte deine Schwester mal wieder den Tag gerettet", sagte Justin neben ihr.</p>
+
+<p>"Nenn mich nicht so. Du weißt, dass ich das hasse." Mia machte eine abwehrende Geste.</p>
+
+<p>"Ich weiß." Justin grinste unschuldig. Dann schaute er auf Mias Handy: "Brawl Stars? Ich dachte du filmst den großen Auftritt deiner besseren Hälfte?"</p>
+
+<p>"Wenn ich jede ihrer Heldentaten filmen wollte, müsste ich ein ganzes Rechenzentrum mit mir rumtragen."</p>
+
+<p>"Klingt nicht so, als würdet ihr euch besonders gut verstehen."</p>
+
+<p>"Ich liebe meine Schwester", Mia seufzte. "Aber sie muss immer übertreiben. Warum kann sie nicht einfach mal chill sein?"</p>
+
+<p>Justin zuckte nur mit den Schultern. Mit Superhelden-Geschwistern kannte er sich auch nicht aus.</p>
+
+<p>"Hoffentlich ist das hier bald vorbei." Genervt sah Mia sich um.</p>
+
+<p>Sie verzog das Gesicht, als sie die rußigen Wasserlachen sah, die sich überall ausbreiteten. Da entdeckte sie etwas: Eine Gestalt stand im Schatten eines Nebengebäudes und schien sie zu beobachten. Es war eine Frau, aber sie sah aus, als wäre sie gerade direkt durch das Inferno gelaufen. Ihre Kleidung hing in verbrannten dunklen Fetzen an ihr herab. Ihr Haar war ein wirres Nest aus kurzen schwarzen Strähnen, ihr Gesicht verbrannt.</p>
+
+<p>Plötzlich verzerrte sich das Gesicht der Fremden. Mit einem unmenschlichen Satz schoss sie auf Mia zu. Mia hatte nicht einmal Zeit, das Handy fallen zu lassen.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Elena hörte einen gellenden Schrei. Instinktiv wandte sie sich um. Mia lag auf dem Boden. Eine schwarzgekleidete Gestalt saß auf ihr und würgte sie.</p>
+
+<p>"Stirb endlich!", kreischte die Fremde.</p>
+
+<p>Elena war ein Blitz aus weißem Licht. Sie zerrte die Fremde von ihrer Schwester herunter und schleuderte sie über den Vorplatz, wo sie in einem Stapel Müllsäcke landete. Der Schmerz in ihren malträtierten Händen ließ sie zusammenzucken.</p>
+
+<p>"Bist du okay?" Elena packte Mia an den Schultern. "Hat sie dich verletzt? Sag was!"</p>
+
+<p>"Mensch, Elena! Lass das... du tust mir weh!", keuchte Mia und stieß ihre verbrannten Hände weg.</p>
+
+<p>Elena wirbelte in Richtung der unbekannten Frau, die sich langsam aufrappelte. Aus ihrem Rücken ragten zwei verkohlte Stumpen, die Elena an Äste erinnerten.</p>
+
+<p>"Was ist dein Problem?"</p>
+
+<p>Die Fremde drehte sich um. Blutunterlaufene Augen blickten Elena höhnisch an. "Sie ist mein Problem." Dann lachte sie auf.</p>
+
+<p>Elena verzog das Gesicht. Eine Irre, na toll. "Wer bist du?", versuchte sie es noch einmal.</p>
+
+<p>"Nenn mich einfach Ash."</p>
+
+<p>Wieder lachte die Frau, noch schmerzhafter diesmal. Dann hob sie die Hand in einer grüßenden Geste. "Wir sehen uns." Sie drehte sich um und lief davon.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Die nächsten Wochen waren die Hölle. Elena schlief kaum noch. Selbst wenn sie es schaffte ins Bett zu gehen, drehten ihre Gedanken sich unaufhörlich um Ash. "Wir sehen uns."</p>
+
+<p>Und das taten sie. Ash war überall: Vor Mias Schule, in ihrem Wohnviertel, selbst in ihrer Lieblingspizzeria tauchte sie auf. Und immer mit dem Ziel, Mia zu töten. Auf einen Kampf mit Elena ließ sie sich nie ein.</p>
+
+<p>Was zur Folge hatte, dass Elena Mia nicht mehr aus den Augen ließ. Sie beurlaubte sie sogar von der Schule, was Mia "absolut cringe" fand.</p>
+
+<p>"Warum machst du die Tussi nicht einfach fertig?", fragte sie, während sie Elena dabei beobachtete, wie sie ein Metallgitter außen an ihrem Fenster befestigte. Ash konnte zwar nicht fliegen und würde wahrscheinlich nicht in den 5. Stock klettern, aber sicher war sicher.</p>
+
+<p>"Mia, ich krieg das hin, das verspreche ich dir. Mach dir keine Sorgen."</p>
+
+<p>Genervt rollte die 16-Jährige mit den Augen. "Du schuldest mir was dafür, aber sowas von."</p>
+
+<p>"ICH schulde DIR was? Ich rette gerade dein verdammtes Leben!", fauchte Elena. "Mal wieder", fügte sie leiser hinzu.</p>
+
+<p>"Du kannst mich mal, Elena! Ohne dich wäre das gar nicht passiert. Ich lebe hier wie eine Gefangene. Meine Freunde wissen wahrscheinlich nicht mal mehr, dass ich existiere." Mia war knallrot im Gesicht, Tränen standen in ihren Augen. "Ich hab keine Lust mehr, deine blöde Superheldenscheiße immer ausbaden zu müssen!"</p>
+
+<p>"Diese Superheldenscheiße wäre gar nicht nötig, wenn du endlich lernen würdest auf dich aufzupassen!"</p>
+
+<p>"WIE DENN?", kreischte Mia. "Du lässt mich ja kaum allein aufs Klo gehen, geschweige denn eigene Fehler machen. Lass Ash einfach machen, dann hab ich endlich meine Ruhe!"</p>
+
+<p>Klatsch.</p>
+
+<p>Fassungslos starrte Elena auf ihre Hand. Auf Mias Wange, die sich langsam rot färbte.</p>
+
+<p>"Mia, es tut mir –"</p>
+
+<p>"Spars dir", sagte Mia kalt. Dann drehte sie sich um und ging aus dem Raum. Den Rest des Tages gingen sie sich aus dem Weg.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p class="social-thread">#ImportantBrain99 fragt:<br>
+Was ist eigentlich mit GA los? Hat die letzte Woche echt eine Frau angegriffen, nur weil die schwarze Klamotten trug? #GuardianAngel #überspannt #IHateEmosButNotLikeThis</p>
+
+<p class="social-thread reply">#CarlosOhneAuto:<br>
+Hat vielleicht ihre Erdbeertage. Oder mag einfach keine Grufties.</p>
+
+<p class="social-thread reply">#ImportantBrain99:<br>
+Wenn sie so weitermacht, kann sie jedenfalls bald selbst in den Knast. Ist eine Gefahr für die Öffentlichkeit, wenn du mich fragst.</p>
+
+<p class="social-thread reply">#Grammatiknazi12:<br>
+Es heißt Erdbeertage. Das sind Früchte, keine Tiere. Und GA war schon immer gefährlich. Ich halte nichts von Selbstjustiz. Die soll das der Polizei überlassen. #GestapoAngel #NoMoreSuper</p>
+
+<p class="social-thread reply">#OberschlauUndSuperschön:<br>
+Eigentlich sind es Nüsse, keine Früchte. Klugscheißersmiley.</p>
+
+<p class="social-thread reply">#BeautifulLifeLover:<br>
+Ich denke, GA tut was sie kann. Die Frau hatte es sicher verdient. #blessed #OurAngel</p>
+
+<p class="social-thread reply">#Grammatiknazi12:<br>
+Du findest es also okay, wenn sie Leute angreift? Soweit ich weiß, hat die Grufti-Tante einfach nur vor einer Schule abgehangen. Und GA ist völlig ausgerastet. Das Video ist irre. Hier der Link. Schaus dir an, dann checkst du vielleicht mal, dass daran so gar nichts blessed ist.</p>
+
+<p>Elena ließ ihr Handy sinken. Sie wusste auch nicht, was sie darauf noch antworten sollte. Sie hatte das Video schon gesehen. Die Frau war tatsächlich nicht Ash gewesen, hatte aber mit den kurzen schwarzen Haaren und den schwarzen Klamotten so ausgesehen. Elena hatte die Beherrschung verloren. Das durfte nicht passieren. Sie musste sich zusammenreißen.</p>
+
+<p>Sie tippte eine weitere Antwort:</p>
+
+<p class="social-thread">#BeautifulLifeLover:<br>
+Aber was ist mit den vielen guten Sachen, die GA getan hat? Schau dir doch mal das hier an: Link. Sie gibt den Menschen Hoffnung.</p>
+
+<p class="social-thread reply">#CarlosOhneAuto:<br>
+Und Hitler hat die Autobahnen gebaut oder wie? Wahrscheinlich nur so ein Ragebait-Bot. @BeautifulLifeLover: Gib mir mal ein Rezept für Bananenmuffins. Lol</p>
+
+<p class="social-thread reply">#BeautifulLifeLover:<br>
+Fickt euch doch alle! Ihr hasst Guardian Angel? Dann kommt halt ohne sie zurecht!</p>
+
+<p>Wütend steckte Elena ihr Handy weg.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Es war dunkel. Wind peitschte und ließ ihren Umhang wehen, als Elena vor dem Club "Finito" landete. Mia stand neben zwei Freundinnen, alle drei schick zurechtgemacht. Trotzig sah sie Elena an.</p>
+
+<p>"Du solltest nicht hier sein. Lass uns heimgehen, Mia. Du bist hier nicht sicher." Die wummernden Bässe, die aus dem Club drangen, verschluckten ihre Stimme fast.</p>
+
+<p>"Nein!" Mia lief rückwärts einen weiteren Schritt auf den Clubeingang zu. "Ich hab keine Lust mehr, Elena. Ich werde auf diese Party gehen und du wirst mich nicht aufhalten."</p>
+
+<p>"Mia", Elena streckte bittend die Hand nach ihr aus.</p>
+
+<p>Doch Mia drehte sich um, hakte ihre Freundin – Carly oder so, Elena konnte sich die Namen von Mias Freundinnen nie merken – unter und marschierte geradewegs am Türsteher vorbei in den Club. Fluchend folgte Elena ihr.</p>
+
+<p>Drinnen war es dunkel, heiß und laut. Elena lief hektisch durch die Menge, auf der Suche nach Mia. Erfolglos. Es war, als wäre ihre Schwester vom Erdboden verschluckt. Elena bog zu den Toiletten ab.</p>
+
+<p>Da saß jemand zusammengesackt auf dem Boden. Carly? Elena beugte sich zu dem Mädchen herab. Schüttelte sie.</p>
+
+<p>"Alles okay? Wo ist Mia?"</p>
+
+<p>Carly stöhnte leise, die Augen waren halb geschlossen, ihre Schläfe war blutig.</p>
+
+<p>"Fuck!" Elena sah sich hektisch um.</p>
+
+<p>Da.</p>
+
+<p>Am Ende des Flurs war eine weiße, unbeschriftete Tür; die Klinke hing unnatürlich schief. Aufgebrochen. Sie sprang auf und spurtete durch den Gang. Eine Gruppe Mädchen kam lachend aus der Tür der Damentoilette.</p>
+
+<p>"Ruft einen Krankenwagen!", rief Elena ihnen zu und rannte durch die kaputte Tür.</p>
+
+<p>Dahinter lag ein Treppenhaus. Elena hörte weit entfernt eine Tür ins Schloss fallen. Das war von oben gekommen.</p>
+
+<p>Sie breitete ihre Flügel aus und rannte die Treppe hoch.</p>
+
+<p>"Lass mich los!", schrie Mia. Doch Ash hielt sie mit eisernem Griff am Arm gepackt und zerrte sie unerbittlich weiter in Richtung Dachkante. Hier oben blies der Wind unerbittlich, zerrte an ihren Kleidern und Haaren und ließ Mias Schreie in seinem Heulen fast gänzlich verschwinden.</p>
+
+<p>Ash stoppte und drehte sich zu Mia um: "Jetzt beenden wir das."</p>
+
+<p>Ihre Stimme hatte einen merkwürdigen Ton und ihre Augen schimmerten im fahlen Mondlicht.</p>
+
+<p>"Du musst das nicht tun. Bitte", flehte Mia.</p>
+
+<p>Ash wandte den Blick ab. "Es gibt keinen Plan B. Das ist der einzige Weg."</p>
+
+<p>"Mia!" Elena war hier. Erleichterung breitete sich in Mia aus.</p>
+
+<p>Ash zog Mia zu sich. Sie balancierten jetzt auf der Dachkante.</p>
+
+<p>"Noch einen Schritt und ich stürze uns beide in den Tod."</p>
+
+<p>"Ich kann sie auffangen." Elena klang selbstsicher. Sie stand da wie immer. Die perfekte Guardian Angel, bereit die Jungfrau in Nöten zu retten.</p>
+
+<p>Mal wieder.</p>
+
+<p>Elenas Stimme hallte in Mias Kopf wider.</p>
+
+<p>Ashs Griff um Mias Arm verstärkte sich. Ihre Stimme war jetzt leiser, fast ruhig – was irgendwie schlimmer war als das Geschrei.</p>
+
+<p>"Du gibst alles für sie. Weißt du, was sie dafür empfindet? Ich meine... Schau sie dir an, Elena." Ein kurzes Lachen. Es klang unglaublich hässlich. "Die Opfer, die du bringst, interessieren sie nicht. Bei der ersten Gelegenheit wird sie dich fallen lassen. Sie braucht dich nicht. Sie will dich nicht. Du bist ihr Aufpasser, keine Schwester."</p>
+
+<p>Mia wollte etwas sagen. Wollte schreien, dass das nicht stimmte, dass Ash keine Ahnung hatte. Alles, was sie herausbrachte, war ein leises Wimmern.</p>
+
+<p>"Gib sie auf. Sie ist es nicht wert."</p>
+
+<p>Ein kurzes Flackern in Elenas Blick. Etwas veränderte sich in ihrem Gesicht – Mia konnte nicht sagen was. Dann lächelte Elena.</p>
+
+<p>"Mach dir keine Sorgen Mia, ich hab alles unter Kontrolle."</p>
+
+<p>Dann sprang sie nach vorn. Mia spürte, wie Ash nach hinten kippte. Sie schrie. Dann ein Ruck und sie wurden nach vorne gezogen. Im nächsten Moment lag Mia auf den Betonplatten des Flachdachs. Sie sah auf: Elena saß rittlings auf Ash und schlug auf sie ein.</p>
+
+<p>"Du verdammtes Monster!"</p>
+
+<p>Schlag.</p>
+
+<p>"Sie ist unschuldig!"</p>
+
+<p>Schlag. Schlag.</p>
+
+<p>"Lass uns endlich in Ruhe!"</p>
+
+<p>Schlag.</p>
+
+<p>Elenas Fäuste begannen zu glühen.</p>
+
+<p>"Leni! Stop!" Mia bekam Angst. Aber Elena schlug weiter.</p>
+
+<p>"Du bist wertlos!"</p>
+
+<p>Ein weiterer Schlag.</p>
+
+<p>"Sie liebt mich!"</p>
+
+<p>Zwischen Elenas Händen formte sich ein Dolch aus Licht.</p>
+
+<p>Sie hob ihn hoch über ihren Kopf.</p>
+
+<p>Ash sah zu ihr auf. Ihre blutverschmierten Lippen verzerrten sich zu einem Lächeln.</p>
+
+<p>"Wir sehen uns –"</p>
+
+<p>Mit einem Aufschrei stieß Elena den Lichtdolch in Ashs Brust.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="kapitel-3">
+      <div class="chapter-header">
+        <span class="chapter-number">03</span>
+        <h2>Kapitel 3</h2>
+        <div class="chapter-line"></div>
+      </div>
+      <div class="chapter-body">
+        <p>Mia betrat den Zeugenstand, ohne Elena anzusehen.</p>
+
+<p>"Vollständiger Name?"</p>
+
+<p>"Mia Voss."</p>
+
+<p>"Sie sind die Schwester der Angeklagten?"</p>
+
+<p>"Ja."</p>
+
+<p>Elena verfolgte die Befragung gebannt. Mia würde sie rausboxen. Gleich würde sie dem Gerichtssaal erklären, dass es Notwehr gewesen war. Dass Elena Mias Leben gerettet hatte.</p>
+
+<p>Und dass sie eine Medaille verdient hätte, statt einer Anklage wegen Mordes.</p>
+
+<p>"Wir müssen irgendwie den Tatbestand auf Notwehr runterkriegen", hatte Elenas Anwalt gesagt. "Es gibt keine Zeugen und weder Sie noch Ihre Schwester haben Verletzungen davongetragen." Sein Blick war ernst. "Ich wünschte, ich könnte Ihnen bessere Nachrichten bringen, Frau Voss, aber es wird wahrscheinlich auf eine Haftstrafe hinauslaufen. Ich tue natürlich, was ich kann, aber –" Hilflos breitete er die Arme aus.</p>
+
+<p>"Mia wird aussagen, dass ich sie gerettet habe. Dass Ash uns töten wollte." Elena war zuversichtlich. Ihre Schwester würde sie nicht hängen lassen.</p>
+
+<p>"Also gut. Tun Sie mir einen Gefallen: Lassen Sie die Finger von Ihrem Handy, vor allem Social Media. Am besten schauen Sie gar nicht rein. Lassen Sie auch den Fernseher aus. Erholen Sie sich – wir bekommen das schon hin."</p>
+
+<p>Dass er ihr dabei nicht in die Augen gesehen hatte, trug nicht zu ihrer Beruhigung bei.</p>
+
+<p>Elena hatte trotzdem nachgeschaut: <span class="hashtag">#GestapoAngel</span> trendete, dicht gefolgt von <span class="hashtag">#NoMoreSuper</span> und <span class="hashtag">#NotMyGuardian</span>. Die Kommentare waren brutal. Selbst hochrangige Politiker forderten, Elena den Prozess zu machen. Sie sei "eine Gefahr für die Öffentlichkeit" und habe "unprovoziert eine bis dato völlig unauffällige Bürgerin brutal ermordet". Und das waren noch die höflich formulierten.</p>
+
+<p>"...den Tatvorgang schildern?" Die Stimme der Richterin riss Elena aus ihren Gedanken.</p>
+
+<p>Mia sah immer noch nicht zu ihr, sondern hatte die Augen auf ihre Hände gerichtet. Stockend begann sie zu sprechen: "Also die Frau... diese Ash, sie... es ging so schnell. Und Elena –" Mia zögerte.</p>
+
+<p>"Schildern Sie einfach, was vorgefallen ist. In Ihren eigenen Worten."</p>
+
+<p>"Ash hat mich festgehalten. Sie hat Elena gedroht. Und dann hat Elena sie angegriffen. Und auf sie eingeschlagen. Und ich –", Mias Stimme wurde rauer, "ich hab gerufen, sie soll aufhören. Aber dann hatte sie diesen Lichtdolch. Und ich hatte solche Angst. Ich wusste nicht, was sie da tut." Sie weinte jetzt.</p>
+
+<p>Elena saß da wie betäubt. Das ergab keinen Sinn.</p>
+
+<p>"Das Opfer hat die Angeklagte also nicht attackiert?" Die Stimme der Richterin schien von weit her zu kommen. Elena fixierte Mia, als könnte sie ihr so ihre Gedanken schicken. Sag ja! Sag ja, bitte!</p>
+
+<p>"Nein." Mias Stimme war tonlos und kaum zu hören. Und dennoch hallte sie endlos in Elenas Kopf wider.</p>
+
+<p class="echo">Nein. Nein. Nein.</p>
+
+<p>Elena fühlte sich plötzlich, als wäre sie unter Wasser. Die Stimmen der Richterin, das Murmeln des Publikums, alles verschwamm zu einem dumpfen Dröhnen. Sie bekam keine Luft mehr, ihre Brust schnürte sich zusammen.</p>
+
+<p class="echo">Nein. Nein. Nein.</p>
+
+<p>Sie hatte Mia gerettet. Und Mia würde sie retten. Eines Tages würde Mia sie beschützen. Das war der Deal.</p>
+
+<p>Aber Mia hatte sie nicht gerettet. Mia hatte sie fallen gelassen und dabei nicht einmal gezögert.</p>
+
+<p>"Bei der ersten Gelegenheit wird sie dich fallen lassen."</p>
+
+<p class="echo">Nein. Nein. Nein. Doch.</p>
+
+<p>Als wäre eine Blase geplatzt, drangen plötzlich wieder Stimmen zu Elena durch. Sie klangen jetzt aufgeregter, lauter.</p>
+
+<p>"– Sie sollen sich wieder setzen!" Die Stimme der Richterin. Elena sah sich um. Bemerkte, dass sie stand. Dass sie glühte. Ein Lichtschild umgab sie. Rings um sie herum wichen die Menschen zurück, versuchten aus dem Raum zu fliehen.</p>
+
+<p>Als hätten sie Angst vor ihr. Als wäre sie eine Mörderin. Dabei war sie eine Heldin.</p>
+
+<p>Elena richtete ihren Blick auf Mia. Die sich ängstlich in den Zeugenstand krümmte, die Arme schützend über dem Kopf. Den Blick immer noch abgewandt.</p>
+
+<p>"Mia, sieh mich an."</p>
+
+<p>Doch ihre Schwester wimmerte nur und machte sich noch kleiner.</p>
+
+<p>Mit einem Aufschrei flog Elena durch das geschlossene Fenster des Gerichtssaals und verschwand in den trüben grauen Himmel.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Es hatte begonnen zu regnen. Wann genau, wusste Elena nicht. Nur dass sie inzwischen völlig durchweicht war. Ihre nassen Haare hingen ihr ins Gesicht und Regentropfen liefen wie Tränen über ihre Wangen.</p>
+
+<p>Elena weinte nicht. Sie starrte ins Leere.</p>
+
+<p>Wartete.</p>
+
+<p>Sie war zurück auf dem Dach, auf dem sie Ash... auf dem ES passiert war.</p>
+
+<p>Irgendjemand würde kommen. Mit ihr reden, sie verhaften, was auch immer. Aber es würde jemand kommen, ganz bestimmt. Sie hatte weder Handy noch Funkgerät dabei. Aber das spielte keine Rolle. Mia würde wissen, wo Elena war.</p>
+
+<p>Niemand kam.</p>
+
+<p>Elena starrte auf ihre Hände. Ihre Unterarme. Die vielen Narben. Die kaum verheilten Brandblasen, die immer noch schmerzten.</p>
+
+<p class="voice">"Was bist du bereit, für sie zu geben? – Alles."</p>
+
+<p>Aber sie hatte alles gegeben. Sie war da gewesen, hatte sie beschützt. Und Mia? Hatte sie im Stich gelassen. Eine einzelne Träne rann aus Elenas Auge. Die Wärme auf ihrer Wange fühlte sich gut an. Fast wie eine Berührung. Aber dann kam ein Windstoß und Kälte füllte Elenas Brust.</p>
+
+<p>Niemand würde kommen. Sie war ganz allein. <em>Wenn ich verrückt werde, wirst du mich immer noch Superman nennen?</em> Eine Zeile aus einem alten Song ging ihr durch den Kopf.</p>
+
+<p>Die Antwort war einfach: Nein.</p>
+
+<p>Elena stand auf und flog.</p>
+
+<p>Regen peitschte ihr ins Gesicht. Sie fühlte es nicht.</p>
+
+<p>Unbeirrbar flog sie nach oben, bis die Stadt unter ihr nur noch ein verwischter Lichtfleck war.</p>
+
+<p>Bis die Luft so kalt und dünn wurde, dass ihre Lungen bei jedem Atemzug brannten.</p>
+
+<p>Sie durchstieß die Wolken.</p>
+
+<p>Über ihr waren jetzt nur noch Sterne. Der Mond war fast voll. Sie hielt auf dieses Licht zu. Als wäre es ihre Rettung.</p>
+
+<p>Einfach nur immer weiter.</p>
+
+<p>Eis bildete sich auf ihren nach oben gestreckten Armen.</p>
+
+<p>Sie bekam jetzt kaum noch Luft. Ihr Körper zitterte.</p>
+
+<p>Sie war so müde.</p>
+
+<p>Ein Schlag mit ihren Lichtschwingen. Noch einer. Dann ließ sie sie sinken.</p>
+
+<p>Elena fiel.</p>
+
+<p>Sie hatte die Augen geschlossen. Wind rauschte in ihren Ohren.</p>
+
+<p>Ein kurzer Ruck, dann noch einer – ihre Flügel waren zurück.</p>
+
+<p>Ihre Kleidung stand in Flammen. Selbst ihre Haare.</p>
+
+<p>Gut.</p>
+
+<p>Sie wollte brennen.</p>
+
+<p>Einschlagen wie ein Komet. Nur noch Asche sein.</p>
+
+<p>Und dann –</p>
+
+<p>Elena wollte nichts mehr.</p>
+
+<p>Nichts mehr sein müssen. Nichts mehr tun müssen.</p>
+
+<p>Sie war keine Superheldin. Nicht mehr.</p>
+
+<p class="voice">"Was bist du bereit, für sie zu geben? – Nichts."</p>
+
+<p>Sie hatte nichts mehr zu geben.</p>
+
+<p>Ein weißes Licht hinter ihren Augenlidern.</p>
+
+<p>Gleich. Gleich war es vorbei.</p>
+
+<p>Und dann –</p>
+
+<p>Kein Aufprall.</p>
+
+<p>Das Pfeifen des Windes und die Hitze des Feuers waren verschwunden, als hätte es sie nie gegeben.</p>
+
+<p>Elena lag auf dem Boden. Sie roch Flammen, hörte Rufe. Menschen waren in der Nähe. Es regnete nicht mehr.</p>
+
+<p>Eine Stimme rief: "Los, Guardian Angel. Du schaffst es!"</p>
+
+<p>Guardian Angel? Elena runzelte die Stirn. Vorsichtig öffnete sie ihre Augen.</p>
+
+<p>Sie lag auf dem Rücken. Neben ihr ragte die Wand eines Gebäudes empor.</p>
+
+<p>Und über ihr, im strahlenden Sonnenschein, sah sie sich selbst – Guardian Angel – beladen mit Sandsäcken durch die Luft schweben.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="kapitel-4">
+      <div class="chapter-header">
+        <span class="chapter-number">04</span>
+        <h2>Kapitel 4</h2>
+        <div class="chapter-line"></div>
+      </div>
+      <div class="chapter-body">
+        <p>Elena rappelte sich langsam auf.</p>
+
+<p>Alles schwamm.</p>
+
+<p>Sie taumelte.</p>
+
+<p>Irgendwas stimmte mit ihrem Gleichgewicht nicht.</p>
+
+<p>Ach ja, ihre Flügel.</p>
+
+<p>Das vertraute Gewicht zwischen ihren Schulterblättern war verschwunden.</p>
+
+<p>Sie bewegte sich in Richtung der Menge, eng an die Hauswand gedrückt. Es war die Düngemittelfabrik. Hier war sie vor einigen Wochen gewesen. Das Feuer war fast aus – überall lagen Sandhaufen. Und über dem Feuer schwebte sie selbst in der Luft und schüttete weiteren Sand ab.</p>
+
+<p>Was war das? Ein Traum?</p>
+
+<p>Jetzt sank die vor ihr fliegende Guardian Angel auf den Boden herab. Das Feuer war unter Kontrolle. Elena zuckte zusammen, als ihr Double nach dem glühenden Hydranten griff. Unwillkürlich ballte sie ihre eigenen Finger zusammen, an denen immer noch die Brandblasen schmerzten.</p>
+
+<p>Dann ein Zischen. Wasser schoss in den Himmel. Die umstehenden Feuerwehrleute jubelten. Ihr Double ging zur Seite, bereit einzuspringen, wenn sie erneut gebraucht würde. Und Elena konnte sehen, wie erschöpft sie aussah. Wie müde und leer.</p>
+
+<p>Mia. Sie würde auch hier sein. Langsam lief Elena an der Häuserwand entlang zur anderen Seite des Nebengebäudes. Hier hatte die Schulklasse neben ihrem Bus gewartet.</p>
+
+<p>Sie sah sie schon von weitem, wie sie sich lachend unterhielten und das Spektakel mit ihren Handys filmten. Nur eine filmte nicht – Mia. Die starrte stumm auf ihr Telefon, das Gesicht konzentriert. Als wäre ihr völlig egal, wie es ihrer Schwester ging. Elenas Herz krampfte sich zusammen.</p>
+
+<p>Etwas Kaltes berührte Elenas Fuß und sie sah herab. Das Löschwasser breitete sich zu immer tieferen Lachen neben dem Gebäude aus. Erst sah sie nur ihre eigenen nackten Füße – ihre Schuhe hatte sie beim Sturz verloren – doch dann sah sie sich selbst. Aus einer der Wasserpfützen schaute sie eine vertraute Gestalt an. Ihre langen blonden Haare waren zu kurzen schwarzen Strähnen verbrannt. Von ihrem schicken weißblauen Kostüm mit dem Goldenen GA-Logo auf der Brust waren nur schwarze Fetzen übrig. Ihr Gesicht war verbrannt.</p>
+
+<p>Ash.</p>
+
+<p>Das war sie.</p>
+
+<p>Nein, sie war Ash.</p>
+
+<p>Und plötzlich wusste Ash, dass sie nicht zum ersten Mal hier stand. Und dass es einen Grund dafür gab.</p>
+
+<p class="voice">"Was bist du bereit, für sie zu geben? – Alles."</p>
+
+<p>Sie konnte nicht entkommen. Solange Mia am Leben war, gehörte ihr Leben Mia.</p>
+
+<p>Unzählige Male hatte sie hier gestanden. Es war ein Kreislauf, aus dem es kein Entrinnen gab.</p>
+
+<p>Sie sah erneut zu Mia hinüber, die sich jetzt mit einem Jungen unterhielt und eine wegwerfende Geste machte – fast als wollte sie sagen: "Ja, du hast recht und es ist mir egal."</p>
+
+<p>Ihre Brust brannte jetzt. Hass stieg in ihr auf. Brennender Hass auf Mia, die ihr kleines, belangloses Leben lebte, während sie selbst Höllenqualen erlitt.</p>
+
+<p>Ash wusste, warum sie hier war. Sie musste Elena retten. Vor diesem Parasiten, der nahm und nahm und nichts zurückgab. Sie würde Mia auslöschen. Und dann würde sie endlich Stille finden.</p>
+
+<p>Ihre Blicke trafen sich.</p>
+
+<p>Dann stürzte sich Ash auf sie.</p>
+
+<p>Ash rannte auf Mia zu.</p>
+
+<p>Sie würde sie erwürgen. Diesmal wäre sie schneller, diesmal –</p>
+
+<p>Ihr Fuß rutschte weg. Sie fiel.</p>
+
+<p>Das war noch nie passiert.</p>
+
+<p>Verwirrt blieb Ash liegen. Blickte auf – geradewegs in Mias Augen.</p>
+
+<p>Diese sah sie neugierig an. Dann runzelte sie die Stirn.</p>
+
+<p>"Elena? Bist... bist das du?"</p>
+
+<p>Ungläubig starrte Ash sie an. Wusste nicht, was sie sagen sollte.</p>
+
+<p>Jetzt ging Mia in die Knie. Streckte ihr zaghaft die Hand hin.</p>
+
+<p>"Leni?"</p>
+
+<p>Ash wich zurück. Das war nicht richtig. Das war noch nie passiert.</p>
+
+<p>Sie sprang auf und rannte davon.</p>
+
+<p class="scene-break">◈ ◈ ◈</p>
+
+<p>Ash stand im Schatten eines Baumes und beobachtete den Sonntagsausflug.</p>
+
+<p>Sie wusste, was heute passieren würde. Sie hatte es immer wieder gesehen. Und doch war diesmal alles anders.</p>
+
+<p>Gleich. Gleich.</p>
+
+<p>Jetzt.</p>
+
+<p>Mia und Elena fuhren auf Fahrrädern vorbei. Mia machte einen Scherz – Elena lachte.</p>
+
+<p>Sah die beiden an dem kleinen Picknickplatz anhalten. Elena den Korb von ihrem Gepäckträger nehmen, Mia die Decke ausbreiten.</p>
+
+<p>Normalerweise wäre sie an dieser Stelle aus dem Schatten getreten, hätte Mia bedroht. Elena wäre in Panik auf sie losgegangen. Der Picknickkorb landete umgekippt im Gras, der Sonntagsausflug der beiden Schwestern unwiderruflich zerstört – aber diesmal sah Ash nur zu.</p>
+
+<p>Ash spürte wieder den stumpfen Schmerz in ihrer Brust. Bisher hatte sie diesen Schmerz versucht mit blinder Wut zu ersticken.</p>
+
+<p>Aber Mia hatte sie gesehen. Wirklich gesehen. Hatte sogar die Hand nach ihr ausgestreckt. Mia war nicht böse. Sie war nicht das Problem. Also beobachtete Ash.</p>
+
+<p>Versuchte zu verstehen.</p>
+
+<p>Sie beobachtete die Schwestern – ihre gegenseitige Zuneigung, ihren Streit.</p>
+
+<p>Mias Drang nach Freiheit.</p>
+
+<p>Elenas Besessenheit mit ihrem Schutz.</p>
+
+<p>Sie beobachtete, sie fühlte, sie analysierte. Versuchte einen Weg zu finden, in diese Welt zu passen.</p>
+
+<p>Und spürte, dass es keinen gab.</p>
+
+<p>Ash gehörte nicht hierhin. Das war nicht mehr ihre Welt. Sie war ein Echo. Etwas Unvollendetes.</p>
+
+<p>Sie drehte sich um und lief langsam unter den Baumwipfeln davon.</p>
+
+<p>Dann ein Geräusch, das Rauschen von Schwingen. Eine Hand legte sich auf ihre Schulter.</p>
+
+<p>"Du beobachtest uns. Warum?"</p>
+
+<p>Ash drehte sich nicht um.</p>
+
+<p>"Weil ich früher mal du war."</p>
+
+<p>Elena zog Ash zu sich herum. Musterte sie kritisch. Dann nickte sie und fragte ernst: "Was ist passiert?"</p>
+
+<p>"Das willst du nicht wissen." Ein freudloses Lachen. "Pass auf dich auf, okay? Ich werde euch nicht weiter belästigen."</p>
+
+<p>Dann drehte sich Ash wieder um und ging ihren Weg. Ihr Herz brannte. Nicht weniger als vorher. Aber das Feuer hatte keine Richtung mehr.</p>
+
+<p>Sie war jetzt frei – wenn man es so nennen wollte. Ash wusste nicht, ob das das richtige Wort war. Frei fühlte sich anders an. Leichter, vielleicht.</p>
+
+<p>Das hier war nur:</p>
+
+<p class="voice">"Was bist du bereit, für sie zu geben? – Alles."</p>
+
+<p>Sie hatte alles gegeben. Es hatte nichts geändert.</p>
+
+<p>Und die alte Elena würde geben und geben und eines Tages hier stehen – oder auch nicht. Das war nicht mehr ihr Problem.</p>
+
+<p>Ash lief weiter, während hinter ihr das Licht der untergehenden Sonne langsam verblasste.</p>
+      </div>
+    </section>
+
+</main>
+
+<div class="wrapper">
+  <footer class="story-footer">
+    <div class="end-mark">◈ ◈ ◈</div>
+    <div class="end-text">ENDE</div>
+    <a href="index.html#shortstories" class="back-btn">[Zurück zur Übersicht]</a>
+  </footer>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+  });
+
+  // Console easter egg
+  console.log('%c No More Super ', 'background: #ff6b35; color: #060b10; font-size: 20px; font-family: Orbitron; padding: 6px 12px;');
+  console.log('%c Was bist du bereit, für sie zu geben? ', 'color: #ff6b35; font-family: "Share Tech Mono";');
+</script>
+
+</body>
+</html>
